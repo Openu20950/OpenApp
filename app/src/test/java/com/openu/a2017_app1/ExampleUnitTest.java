@@ -1,5 +1,7 @@
 package com.openu.a2017_app1;
 
+import android.app.ActivityManager;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
