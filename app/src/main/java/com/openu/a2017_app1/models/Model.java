@@ -1,4 +1,4 @@
-package com.opnu.a2017_app1.models;
+package com.openu.a2017_app1.models;
 
 import java.util.Map;
 
