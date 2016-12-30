@@ -49,6 +49,14 @@ public class MemoryDao implements Dao {
     }
 
     /**
+     * Removes all the data from the data store.
+     * The data store will be empty after this call returns.
+     */
+    public void clearDb() {
+        db.clear();
+    }
+
+    /**
      * Returns the database object.
      * @return
      */
