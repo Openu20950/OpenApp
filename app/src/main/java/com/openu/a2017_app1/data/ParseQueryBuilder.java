@@ -37,9 +37,12 @@ class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
     }
 
     @Override
-    public T find(String id) {
+    public T find(Object id) {
+        if (!(id instanceof String)) {
+            throw new IllegalArgumentException("The id must be a string");
+        }
         try {
-            return createModelFor(this.query.get(id));
+            return createModelFor(this.query.get((String)id));
         } catch (Exception e) {
             return null;
         }
