@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.data;
 
+import com.openu.a2017_app1.data.parse.Converters;
 import com.openu.a2017_app1.models.Model;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -137,12 +138,10 @@ class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
     private Map<String,Object> getAttributes(T model, ParseObject obj) {
         Map<String, Object> res = new HashMap<>();
         Object value;
+        Converters converters = Converters.getInstance();
         for (String key : obj.keySet()) {
             value = obj.get(key);
-            if (value == JSONObject.NULL) {
-                res.put(key, null);
-            }
-            res.put(key, value);
+            res.put(key, converters.convertBack(value));
         }
         return res;
     }
