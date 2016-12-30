@@ -6,7 +6,7 @@ import android.media.Image;
  * Created by noam on 29/12/2016.
  */
 
-public interface RecommendationModel {
+public interface Recommendation {
 
 
     /**
