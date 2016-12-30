@@ -18,7 +18,7 @@ public interface QueryBuilder<T extends Model> {
      * Find an object by his id.
      * @return
      */
-    T find(String id);
+    T find(Object id);
 
     /**
      * Get all results.
