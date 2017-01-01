@@ -23,6 +23,9 @@ public class MemoryDao implements Dao {
 
     @Override
     public boolean save(Model model) {
+        if (model.getAttribute(model.getPrimaryKey()) != null) {
+            return true;
+        }
         int id = addToTable(model.getTable(), model);
         model.setAttribute(model.getPrimaryKey(), id);
         return true;
@@ -33,6 +36,12 @@ public class MemoryDao implements Dao {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                if (model.getAttribute(model.getPrimaryKey()) != null) {
+                    if (callback != null) {
+                        callback.onFinish(true, model.getAttribute(model.getPrimaryKey()));
+                    }
+                    return null;
+                }
                 int id = addToTable(model.getTable(), model);
                 model.setAttribute(model.getPrimaryKey(), id);
                 if (callback != null) {
