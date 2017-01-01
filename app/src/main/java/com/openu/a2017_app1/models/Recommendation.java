@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.models;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 /**
@@ -49,11 +50,11 @@ public interface Recommendation {
      * return photo of the place from the recommendation
      * @return
      */
-    public Image getPhoto();
+    public Bitmap getPhoto();
 
     /**
      * set a photo of the place to the recommendation
      * @param photo
      */
-    public void setPhoto(Image photo);
+    public void setPhoto(Bitmap photo);
 }
