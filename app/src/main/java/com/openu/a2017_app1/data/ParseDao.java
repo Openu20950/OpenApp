@@ -1,6 +1,7 @@
 package com.openu.a2017_app1.data;
 
 import android.media.Image;
+import android.support.annotation.NonNull;
 
 import com.openu.a2017_app1.data.parse.Converters;
 import com.openu.a2017_app1.models.Model;
@@ -18,6 +19,9 @@ import java.util.Map;
  */
 
 public class ParseDao implements Dao {
+
+    /* package */ static final String PARSE_OBJECT_ATTRIBUTE = "_parse";
+
     @Override
     public boolean save(Model model) {
         ParseObject object = createObjectForModel(model);
@@ -50,7 +54,7 @@ public class ParseDao implements Dao {
     }
 
     private ParseObject createObjectForModel(Model model) {
-        ParseObject object = new ParseObject(model.getTable());
+        ParseObject object = getParseObject(model);
         Converters converters = Converters.getInstance();
         for (Map.Entry<String, Object> attribute : model.getAttributes().entrySet()) {
             if (attribute.getKey().equals(model.getPrimaryKey())) {
@@ -60,5 +64,11 @@ public class ParseDao implements Dao {
             }
         }
         return object;
+    }
+
+    @NonNull
+    private ParseObject getParseObject(Model model) {
+        Object parse = model.getAttribute(PARSE_OBJECT_ATTRIBUTE);
+        return parse != null ? (ParseObject)parse : new ParseObject(model.getTable());
     }
 }

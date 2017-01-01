@@ -132,6 +132,7 @@ class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
     private void fillModel(T model, ParseObject obj) {
         Map<String, Object> attributes = getAttributes(model, obj);
         attributes.put(model.getPrimaryKey(), obj.getObjectId());
+        attributes.put(ParseDao.PARSE_OBJECT_ATTRIBUTE, obj);
         model.fill(attributes);
     }
 
