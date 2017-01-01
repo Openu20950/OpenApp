@@ -1,7 +1,6 @@
 package com.openu.a2017_app1.models;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 
 /**
  * Created by noam on 29/12/2016.
