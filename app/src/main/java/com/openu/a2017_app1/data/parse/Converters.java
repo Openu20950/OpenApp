@@ -23,7 +23,6 @@ public class Converters {
 
     private void initializeConverters() {
         converters = new ArrayList<>();
-        converters.add(new NullConverter());
         converters.add(new ModelConverter());
         converters.add(new BitmapConverter());
         converters.add(new ListConverter());
