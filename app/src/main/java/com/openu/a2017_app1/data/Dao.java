@@ -27,5 +27,5 @@ public interface Dao {
      * @param <T>
      * @return
      */
-    <T extends Model> QueryBuilder query(Model model);
+    <T extends Model> QueryBuilder<T> query(Model model);
 }
