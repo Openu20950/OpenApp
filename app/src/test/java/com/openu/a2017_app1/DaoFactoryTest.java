@@ -1,7 +1,7 @@
 package com.openu.a2017_app1;
 
-import com.openu.a2017_app1.data.Dao;
 import com.openu.a2017_app1.data.DaoFactory;
+import com.openu.a2017_app1.data.Dao;
 
 import org.junit.Before;
 import org.junit.Test;
