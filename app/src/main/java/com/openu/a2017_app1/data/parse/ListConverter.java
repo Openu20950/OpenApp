@@ -17,14 +17,20 @@ import java.util.UUID;
  */
 
 /* package */ class ListConverter implements Converter {
+
+    private Converters converters;
+
+    public ListConverter(Converters converters) {
+        this.converters = converters;
+    }
+
     @Override
     public Object convert(Object value) {
         List<?> original = (List<?>) value;
         List<Object> converted = new ArrayList<>();
 
-        Converters converters = Converters.getInstance();
         for (Object item: original) {
-            converted.add(converters.convert(item));
+            converted.add(this.converters.convert(item));
         }
         return converted;
     }
@@ -39,9 +45,8 @@ import java.util.UUID;
         List<?> original = (List<?>) obj;
         List<Object> converted = new ArrayList<>();
 
-        Converters converters = Converters.getInstance();
         for (Object item : original) {
-            converted.add(converters.convertBack(item));
+            converted.add(this.converters.convertBack(item));
         }
         return converted;
     }

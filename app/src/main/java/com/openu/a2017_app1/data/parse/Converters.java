@@ -25,7 +25,7 @@ public class Converters {
         converters = new ArrayList<>();
         converters.add(new ModelConverter());
         converters.add(new BitmapConverter());
-        converters.add(new ListConverter());
+        converters.add(new ListConverter(this));
     }
 
     public static Converters getInstance() {
