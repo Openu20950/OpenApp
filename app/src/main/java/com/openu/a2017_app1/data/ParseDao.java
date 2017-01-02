@@ -1,6 +1,5 @@
 package com.openu.a2017_app1.data;
 
-import android.media.Image;
 import android.support.annotation.NonNull;
 
 import com.openu.a2017_app1.data.parse.Converters;
@@ -9,8 +8,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
-
-import org.json.JSONObject;
 
 import java.util.Map;
 
