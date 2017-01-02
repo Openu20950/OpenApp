@@ -50,12 +50,4 @@ import java.util.UUID;
     public boolean canConvertBack(Object obj) {
         return obj instanceof List;
     }
-
-    /**
-     * Creates an unique file name for the bitmap.
-     * @return unique file name.
-     */
-    private String createUniqueFileName() {
-        return UUID.randomUUID().toString() + ".bmp";
-    }
 }
