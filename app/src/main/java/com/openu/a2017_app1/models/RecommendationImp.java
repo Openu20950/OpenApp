@@ -3,7 +3,7 @@ package com.openu.a2017_app1.models;
 import android.graphics.Bitmap;
 
 
-import com.openu.a2017_app1.data.DaoFactory;
+
 
 /**
  * Created by noam on 28/12/2016.
@@ -62,12 +62,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public void setPlace(Place place)
     {
-        this.place.setName(place.getName());
-        this.place.setLocation(place.getLocation());
-        this.place.setRecommendation(this);
-        this.place.setCategory(place.getCategory());
-        this.place.setPhone(place.getPhone());
-        this.place.setDescription(place.getDescription());
+        this.place=place;
     }
 
     /**
@@ -103,6 +98,6 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public void setPhoto(Bitmap photo)
     {
-        this.photo=Bitmap.createBitmap(photo);
+        this.photo=photo;
     }
 }
