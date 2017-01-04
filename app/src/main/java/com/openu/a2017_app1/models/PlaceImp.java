@@ -1,9 +1,7 @@
 package com.openu.a2017_app1.models;
 
-import com.parse.ParseGeoPoint;
-
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,8 +65,8 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void setLocation(LocationPoint location)
     {
-        this.placeLocation.setLatitude(location.getLatitude());
-        this.placeLocation.setLongitude(location.getLongitude());
+        this.placeLocation=location;
+
     }
 
     /**
@@ -134,14 +132,14 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public List<Recommendation> getRecommendations()
     {
-        return recommendation;
+        return Collections.unmodifiableList(recommendation);
     }
 
     /**
      *
      * @param recommendation
      */
-    public void setRecommendation(Recommendation recommendation)
+    public void addRecommendation(Recommendation recommendation)
     {
         if(this.recommendation==null)
         {

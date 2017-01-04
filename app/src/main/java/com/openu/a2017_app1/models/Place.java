@@ -86,5 +86,7 @@ public interface Place {
      *
      * @param recommendation
      */
-    public void setRecommendation(Recommendation recommendation);
+    public void addRecommendation(Recommendation recommendation);
+
+    //public boolean removeRecommendation(Recommendation recommendation);
 }

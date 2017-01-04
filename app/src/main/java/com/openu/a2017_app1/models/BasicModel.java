@@ -133,12 +133,15 @@ public abstract class BasicModel implements Model {
         DaoFactory.getInstance().create().save(this);
     }
 
-    public void saveAsync()
+    public void saveAsync(final ModelSaveListener listener)
     {
         DaoFactory.getInstance().create().saveAsync(this, new SaveListener() {
             @Override
             public void onFinish(boolean succeeded, Object id) {
-
+                if(listener!=null)
+                {
+                    listener.onSave(succeeded,id);
+                }
             }
         });
     }
