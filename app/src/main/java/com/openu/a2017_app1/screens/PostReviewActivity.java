@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.Services.LocationService;
 import com.openu.a2017_app1.models.LocationPoint;
+import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Recommendation;
 
@@ -71,6 +72,7 @@ public class PostReviewActivity extends AppCompatActivity{
         myLocation = locservice.GetLocationPoint();
         place.setLocation(myLocation);
         rec.setPlace(place);
+        //((Model)rec).saveAsync();
     }
 
     public void setMyLocation(LocationPoint lcp){
