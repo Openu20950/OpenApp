@@ -22,5 +22,5 @@ public interface Model {
 
     public void save();
 
-    public void saveAsync();
+    public void saveAsync(final ModelSaveListener listener);
 }
