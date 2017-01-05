@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-
+import android.widget.Toast;
 
 
 import com.openu.a2017_app1.R;
-import com.openu.a2017_app1.Services.LocationService;
+import com.openu.a2017_app1.models.ModelSaveListener;
+import com.openu.a2017_app1.models.PlaceImp;
+import com.openu.a2017_app1.models.RecommendationImp;
+import com.openu.a2017_app1.services.LocationService;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
@@ -27,7 +30,7 @@ import java.util.Date;
 
 //import com.openu.a2017_app1.screens;
 
-public class PostReviewActivity extends AppCompatActivity{
+public class PostReviewActivity extends AppCompatActivity implements ModelSaveListener{
 
     private LocationService locservice;
     private Uri pictureUri;
@@ -64,15 +67,24 @@ public class PostReviewActivity extends AppCompatActivity{
     }
 
     public void btnPostClicked(View v) {
-        Recommendation rec = new Recommendation();
+        RecommendationImp rec = new RecommendationImp();
         rec.setTitle(titleText.getText().toString());
         rec.setDescription(descriptionText.getText().toString());
         rec.setPhoto(recommendationImage);
-        Place place = new Place();
+        PlaceImp place = new PlaceImp();
         myLocation = locservice.GetLocationPoint();
         place.setLocation(myLocation);
         rec.setPlace(place);
-        //((Model)rec).saveAsync();
+        rec.saveAsync(this);
+    }
+
+
+    public void onSave(boolean succeeded, Object id){
+        if(succeeded){
+            Toast.makeText(this, "Save successful", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "ERROR SAVING", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void setMyLocation(LocationPoint lcp){
