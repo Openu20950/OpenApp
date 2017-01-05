@@ -26,6 +26,7 @@ public class Converters {
         converters.add(new ModelConverter());
         converters.add(new BitmapConverter());
         converters.add(new ListConverter(this));
+        converters.add(new LocationConverter());
     }
 
     public static Converters getInstance() {
