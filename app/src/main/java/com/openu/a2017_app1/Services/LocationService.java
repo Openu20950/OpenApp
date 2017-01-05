@@ -1,8 +1,7 @@
-package com.openu.a2017_app1.Services;
+package com.openu.a2017_app1.services;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
