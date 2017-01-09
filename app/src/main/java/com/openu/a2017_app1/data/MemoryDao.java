@@ -21,7 +21,7 @@ public class MemoryDao implements Dao {
         db = new HashMap<>();
     }
 
-    public MemoryDao() {
+    /* package */ MemoryDao() {
     }
 
     @Override

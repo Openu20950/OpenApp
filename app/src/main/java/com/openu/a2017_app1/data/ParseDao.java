@@ -19,6 +19,11 @@ public class ParseDao implements Dao {
 
     /* package */ static final String PARSE_OBJECT_ATTRIBUTE = "_parse";
 
+
+    /* package */ ParseDao() {
+
+    }
+
     @Override
     public boolean save(Model model) {
         ParseObject object = createObjectForModel(model);
