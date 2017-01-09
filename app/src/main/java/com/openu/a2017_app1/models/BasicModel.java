@@ -2,7 +2,6 @@ package com.openu.a2017_app1.models;
 
 
 import com.openu.a2017_app1.data.DaoFactory;
-import com.openu.a2017_app1.data.ParseDao;
 import com.openu.a2017_app1.data.QueryBuilder;
 import com.openu.a2017_app1.data.SaveListener;
 
@@ -210,9 +209,9 @@ public abstract class BasicModel implements Model {
         T model = null;
         try {
             model = clas.newInstance();
-            return new ParseDao().query(model);
+            return DaoFactory.getInstance().create().query(model);
         } catch (InstantiationException e) {
-           return null;
+            return null;
         } catch (IllegalAccessException e) {
             return null;
         }
