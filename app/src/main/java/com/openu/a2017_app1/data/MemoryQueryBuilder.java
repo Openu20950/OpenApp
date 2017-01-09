@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
 
+    public static final int MAX_RESULTS = 1000;
     private static Map<String, SimpleComparator> comparators;
 
     static {
@@ -68,7 +69,7 @@ public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
     /* package */ MemoryQueryBuilder(List<T> table) {
         this.table = table;
         this.skip = 0;
-        this.limit = Integer.MAX_VALUE;
+        this.limit = MAX_RESULTS;
 
     }
 
@@ -121,6 +122,11 @@ public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
     }
 
     @Override
+    public QueryBuilder<T> where(String field, Object value) {
+        return where(field, "==", value);
+    }
+
+    @Override
     public QueryBuilder<T> whereContains(String field, String substring) {
         List<T> filteredTable = new ArrayList<>();
         for (T model : table) {
@@ -139,7 +145,7 @@ public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
     @Override
     public QueryBuilder<T> limit(int results) {
         if (results <= 0) {
-            this.limit = Integer.MAX_VALUE;
+            this.limit = MAX_RESULTS;
         } else {
             this.limit = results;
         }

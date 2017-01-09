@@ -90,6 +90,12 @@ class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
     }
 
     @Override
+    public QueryBuilder<T> where(String field, Object value) {
+        query.whereEqualTo(field, value);
+        return this;
+    }
+
+    @Override
     public QueryBuilder<T> whereContains(String field, String substring) {
         query.whereContains(field, substring);
         return this;

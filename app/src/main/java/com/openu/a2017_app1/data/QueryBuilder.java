@@ -36,6 +36,15 @@ public interface QueryBuilder<T extends Model> {
     QueryBuilder<T> where(String field, String operator, Object value);
 
     /**
+     * Filter the results by equals condition.
+     * This method is equals to {@code where(field, "==", value)}.
+     * @param field the field name
+     * @param value the value
+     * @return this
+     */
+    QueryBuilder<T> where(String field, Object value);
+
+    /**
      * Filter the results by checking if a field contains a substring.
      * @param field the field name
      * @param substring the substring

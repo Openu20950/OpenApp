@@ -4,20 +4,25 @@ import com.openu.a2017_app1.data.Dao;
 import com.openu.a2017_app1.data.DaoFactory;
 import com.openu.a2017_app1.models.Model;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -130,6 +135,14 @@ public class MemoryDaoTest extends UnitTest {
     }
 
     @Test
+    public void filter_with_short_equal_operation() {
+        Model model = createModels(10)[0];
+        int index = new Random().nextInt(10);
+
+        assertThat(dao.query(model).where("attr", index).getAll().size(), equalTo(1));
+    }
+
+    @Test
     public void filter_with_not_equal_operation() {
         Model model = createModels(10)[0];
         int index = new Random().nextInt(10);
@@ -138,7 +151,7 @@ public class MemoryDaoTest extends UnitTest {
     }
 
     @Test
-    public void filter_with_grater_then_operation() {
+    public void filter_with_greater_then_operation() {
         Model model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
@@ -146,7 +159,7 @@ public class MemoryDaoTest extends UnitTest {
     }
 
     @Test
-    public void filter_with_grater_then_equals_operation() {
+    public void filter_with_greater_then_equals_operation() {
         Model model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
@@ -167,5 +180,76 @@ public class MemoryDaoTest extends UnitTest {
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", "<=", index).getAll().size(), equalTo(index + 1));
+    }
+
+    @Test
+    public void filter_with_contains_operation() {
+        Model[] models = createModels(10);
+        String attr = "a";
+        for (Model model : models) {
+            model.setAttribute("attr", attr = (attr.equals("a") ? "b" : "a"));
+        }
+
+        assertThat(dao.query(models[0]).whereContains("attr", "a").getAll().size(), equalTo(5));
+    }
+
+    @Test
+    public void use_skip_with_results() {
+        Model[] models = createModels(10);
+        int index = new Random().nextInt(9) + 1;
+
+        List<Model> results = dao.query(models[0]).skip(index).getAll();
+        assertThat(results.size(), equalTo(10 - index));
+        for (Model model : results) {
+            assertTrue(model.getAttribute("attr") + " >= " + index, (int)model.getAttribute("attr") >= index);
+        }
+    }
+
+    @Test
+    public void use_limit_with_results() {
+        Model[] models = createModels(10);
+        int index = new Random().nextInt(9) + 1;
+
+        List<Model> results = dao.query(models[0]).limit(index).getAll();
+        assertThat(results.size(), equalTo(index));
+        for (Model model : results) {
+            assertTrue(model.getAttribute("attr") + " < " + index, (int)model.getAttribute("attr") < index);
+        }
+    }
+
+    @Test
+    public void use_sort_ascending_results() {
+        Model[] models = createModels(10);
+        String attr = "a";
+        for (Model model : models) {
+            model.setAttribute("attr", attr = (attr.equals("a") ? "b" : "a"));
+        }
+
+        List<Model> results = dao.query(models[0]).orderByAscending("attr").getAll();
+
+        for (int i = 0; i < 5; i++) {
+            assertThat((String)results.get(i).getAttribute("attr"), is("a"));
+        }
+        for (int i = 5; i < 10; i++) {
+            assertThat((String)results.get(i).getAttribute("attr"), is("b"));
+        }
+    }
+
+    @Test
+    public void use_sort_descending_results() {
+        Model[] models = createModels(10);
+        String attr = "a";
+        for (Model model : models) {
+            model.setAttribute("attr", attr = (attr.equals("a") ? "b" : "a"));
+        }
+
+        List<Model> results = dao.query(models[0]).orderByDescending("attr").getAll();
+
+        for (int i = 0; i < 5; i++) {
+            assertThat((String)results.get(i).getAttribute("attr"), is("b"));
+        }
+        for (int i = 5; i < 10; i++) {
+            assertThat((String)results.get(i).getAttribute("attr"), is("a"));
+        }
     }
 }
