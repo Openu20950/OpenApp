@@ -5,6 +5,7 @@ import com.openu.a2017_app1.data.MemoryDao;
 
 import org.junit.After;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -24,4 +25,7 @@ public class UnitTest {
     public void after() {
         MemoryDao.clearDb();
     }
+
+    @Test
+    public void fake_test() {}
 }
