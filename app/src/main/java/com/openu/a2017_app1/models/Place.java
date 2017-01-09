@@ -29,13 +29,13 @@ public interface Place {
      * retun the point of the place location
      * @return
      */
-    public ParseGeoPoint getLocation();
+    public LocationPoint getLocation();
 
     /**
      * set the point of the place location
      * @param location
      */
-    public void setLocation(ParseGeoPoint location);
+    public void setLocation(LocationPoint location);
 
     /**
      * return the phone number of the place
@@ -86,5 +86,7 @@ public interface Place {
      *
      * @param recommendation
      */
-    public void setRecommendation(Recommendation recommendation);
+    public void addRecommendation(Recommendation recommendation);
+
+    //public boolean removeRecommendation(Recommendation recommendation);
 }

@@ -2,6 +2,8 @@ package com.openu.a2017_app1;
 
 import android.app.Application;
 
+import com.openu.a2017_app1.data.DaoFactory;
+import com.openu.a2017_app1.data.ParseDao;
 import com.parse.Parse;
 
 /**
@@ -13,6 +15,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        DaoFactory.getInstance().setDefault(ParseDao.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
         .applicationId("testapp1-20950")
