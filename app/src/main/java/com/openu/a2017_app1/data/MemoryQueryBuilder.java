@@ -95,12 +95,13 @@ public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
     @Override
     public List<T> getAll() {
         sort();
-        return Collections.unmodifiableList(table.subList(this.skip, this.skip + this.limit));
+        int to = Math.min(this.skip + this.limit, table.size());
+        return Collections.unmodifiableList(table.subList(this.skip, to));
     }
 
     @Override
     public QueryBuilder<T> where(String field, String operator, Object value) {
-        if (comparators.containsKey(operator)) {
+        if (!comparators.containsKey(operator)) {
             new IllegalArgumentException("operator \"" + operator + "\" is not supported!");
         }
 

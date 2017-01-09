@@ -15,10 +15,13 @@ import java.util.Map;
 
 public class MemoryDao implements Dao {
 
-    Map<String, List<Model>> db;
+    private static final Map<String, List<Model>> db;
+
+    static {
+        db = new HashMap<>();
+    }
 
     public MemoryDao() {
-        db = new HashMap<>();
     }
 
     @Override
@@ -54,23 +57,19 @@ public class MemoryDao implements Dao {
 
     @Override
     public <T extends Model> QueryBuilder query(Model model) {
-        return null;
+        List<Model> table = db.get(model.getTable());
+        if (table == null) {
+            db.put(model.getTable(), table = new ArrayList<>());
+        }
+        return new MemoryQueryBuilder<>(table);
     }
 
     /**
      * Removes all the data from the data store.
      * The data store will be empty after this call returns.
      */
-    public void clearDb() {
+    public static void clearDb() {
         db.clear();
-    }
-
-    /**
-     * Returns the database object.
-     * @return
-     */
-    /* package */ Map<String, List<Model>> getDb() {
-        return db;
     }
 
     /**
