@@ -2,6 +2,7 @@ package com.openu.a2017_app1.models;
 
 
 import com.openu.a2017_app1.data.DaoFactory;
+import com.openu.a2017_app1.data.QueryBuilder;
 import com.openu.a2017_app1.data.SaveListener;
 
 import java.util.Arrays;
@@ -200,6 +201,12 @@ public abstract class BasicModel implements Model {
             return true;
         }
         return false;
+    }
+
+
+    public <T extends Model> QueryBuilder<T> getQuery()
+    {
+        return DaoFactory.getInstance().create().query(this);
     }
 
 }
