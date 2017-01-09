@@ -204,9 +204,9 @@ public abstract class BasicModel implements Model {
     }
 
 
-    public <T extends Model> QueryBuilder<T> getQuery()
+    public static <T extends Model> QueryBuilder<T> getQuery(T model)
     {
-        return DaoFactory.getInstance().create().query(this);
+        return DaoFactory.getInstance().create().query(model);
     }
 
 }
