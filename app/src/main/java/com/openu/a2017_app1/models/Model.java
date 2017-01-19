@@ -1,5 +1,4 @@
 package com.openu.a2017_app1.models;
-
 import java.util.Map;
 
 /**
@@ -23,4 +22,6 @@ public interface Model {
     public void save();
 
     public void saveAsync(final ModelSaveListener listener);
+
+
 }
