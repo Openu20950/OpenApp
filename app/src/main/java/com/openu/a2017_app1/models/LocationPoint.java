@@ -55,7 +55,7 @@ public class LocationPoint  {
      * @param location
      * @return the distance between 2 location in KM
      */
-    public double getDistance(LocationPoint location)
+    public double distanceTo(LocationPoint location)
     {
         Location location1=new Location("Point 1");
         location1.setLatitude(this.latitude);
