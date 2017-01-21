@@ -1,5 +1,7 @@
 package com.openu.a2017_app1.models;
 
+import android.location.Location;
+
 /**
  * Created by noam on 01/01/2017.
  */
@@ -46,5 +48,24 @@ public class LocationPoint  {
     public void setLongitude(double longitude)
     {
         this.longitude=longitude;
+    }
+
+    /**
+     *
+     * @param location
+     * @return the distance between 2 location in KM
+     */
+    public double distanceTo(LocationPoint location)
+    {
+        Location location1=new Location("Point 1");
+        location1.setLatitude(this.latitude);
+        location1.setLongitude(this.longitude);
+
+        Location location2=new Location("Point 2");
+        location1.setLatitude(location.getLatitude());
+        location1.setLongitude(location.getLongitude());
+
+        double distance=location1.distanceTo(location2)/1000;
+        return distance;
     }
 }
