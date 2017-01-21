@@ -1,8 +1,12 @@
 package com.openu.a2017_app1.data;
 
+import android.location.Location;
+
 import com.openu.a2017_app1.data.parse.Converters;
+import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -19,6 +23,8 @@ import java.util.Vector;
  */
 
 class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
+
+    private static final int METERS_TO_KILOMETERS = 100;
 
     private ParseQuery<ParseObject> query;
     private Class<T> clazz;
@@ -92,6 +98,14 @@ class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
     @Override
     public QueryBuilder<T> where(String field, Object value) {
         query.whereEqualTo(field, value);
+        return this;
+    }
+
+    @Override
+    public QueryBuilder<T> whereNear(String field, LocationPoint value, double radius) {
+        query.whereWithinKilometers(field,
+                new ParseGeoPoint(value.getLatitude(), value.getLongitude()),
+                radius / METERS_TO_KILOMETERS);
         return this;
     }
 

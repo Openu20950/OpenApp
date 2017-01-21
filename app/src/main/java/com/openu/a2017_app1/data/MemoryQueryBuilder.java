@@ -1,12 +1,10 @@
 package com.openu.a2017_app1.data;
 
-import com.android.internal.util.Predicate;
+import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,12 +125,28 @@ public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
     }
 
     @Override
+    public QueryBuilder<T> whereNear(String field, LocationPoint value, double radius) {
+        List<T> filteredTable = new ArrayList<>();
+        for (T model : table) {
+            Object modelValue = model.getAttribute(field);
+            if (!(modelValue instanceof LocationPoint)) {
+                new IllegalStateException("The field must be a location!");
+            }
+            if (value.distanceTo((LocationPoint)modelValue) <= radius) {
+                filteredTable.add(model);
+            }
+        }
+        this.table = filteredTable;
+        return this;
+    }
+
+    @Override
     public QueryBuilder<T> whereContains(String field, String substring) {
         List<T> filteredTable = new ArrayList<>();
         for (T model : table) {
             Object modelValue = model.getAttribute(field);
             if (!(modelValue instanceof String)) {
-                new IllegalStateException("The field must be string!");
+                new IllegalStateException("The field must be a string!");
             }
             if (((String)modelValue).contains(substring)) {
                 filteredTable.add(model);
