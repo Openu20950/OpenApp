@@ -22,6 +22,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public RecommendationImp()
     {
+        this.table="Recommendation";
         this.title="";
         this.place=new PlaceImp();
         this.description="";
