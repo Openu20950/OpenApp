@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.data;
 
+import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 
 import java.util.List;
@@ -43,6 +44,15 @@ public interface QueryBuilder<T extends Model> {
      * @return this
      */
     QueryBuilder<T> where(String field, Object value);
+
+    /**
+     * Filter the results by near location condition.
+     * @param field the field name
+     * @param value the value
+     * @param radius the radius to search in meters
+     * @return this
+     */
+    QueryBuilder<T> whereNear(String field, LocationPoint value, double radius);
 
     /**
      * Filter the results by checking if a field contains a substring.
