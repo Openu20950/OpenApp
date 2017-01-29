@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by noam on 28/12/2016.
  */
 
-public class PlaceImp extends BasicModel implements Place {
+public class PlaceImp extends BasicModel implements Place,Serializable {
 
     private String name;
     private LocationPoint placeLocation;
