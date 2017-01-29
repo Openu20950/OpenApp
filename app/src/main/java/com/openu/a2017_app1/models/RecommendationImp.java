@@ -2,14 +2,14 @@ package com.openu.a2017_app1.models;
 
 import android.graphics.Bitmap;
 
-
+import java.io.Serializable;
 
 
 /**
  * Created by noam on 28/12/2016.
  */
 
-public class RecommendationImp extends BasicModel implements Recommendation {
+public class RecommendationImp extends BasicModel implements Recommendation,Serializable {
 
 
     private String title;
