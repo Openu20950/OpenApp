@@ -7,11 +7,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.openu.a2017_app1.models.LocationPoint;
+import com.openu.a2017_app1.screens.PostReviewActivity;
 
 /**
  * Created by Emil on 1/5/2017.
@@ -22,14 +24,16 @@ public class LocationService implements
 
     public static final int LOCATION_REQUEST = 11;
     private ImageView imgSpecimenPhoto;
-    public GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
     AppCompatActivity myActivity;
+    //PostReviewActivity postact;
     public Location mLastLocation;
 
     public LocationPoint locpoint;
 
     public LocationService(AppCompatActivity activity){
         myActivity = activity;
+       // postact = (PostReviewActivity)activity;
         buildGoogleApiClient();
     }
 
@@ -53,21 +57,32 @@ public class LocationService implements
                     LOCATION_REQUEST );
         }else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                GetLocationPoint();
+            //if (mLastLocation != null) {
+                //GetLocationPoint();
                 //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
                 //mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-            }
+            //}
         }
     }
 
+
     public LocationPoint GetLocationPoint(){
+        if ( ContextCompat.checkSelfPermission( myActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            ActivityCompat.requestPermissions( myActivity, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
+                    LOCATION_REQUEST );
+        }else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
         locpoint = new LocationPoint();
         if(mLastLocation!=null) {
             locpoint.setLatitude(Double.parseDouble(String.valueOf(mLastLocation.getLatitude())));
             locpoint.setLongitude(Double.parseDouble(String.valueOf(mLastLocation.getLongitude())));
         }else{
             return null;
+            //Toast.makeText(this, "Couldn't get location", Toast.LENGTH_LONG).show();
+            //postact.DisplayMessage();
+
         }
         return locpoint;
     }
