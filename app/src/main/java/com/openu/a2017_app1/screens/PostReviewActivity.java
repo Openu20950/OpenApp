@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -37,27 +38,64 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
     public static final int CAMERA_REQUEST = 10;
     private ImageView imgSpecimenPhoto;
     private EditText titleText;
+    private EditText nameText;
     private EditText descriptionText;
+    private EditText locationText;
     private  LocationPoint myLocation;
-    Bitmap recommendationImage;
+    Bitmap recommendationImage = null;
 
+    boolean newlocation;
+    Place selectedplace = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_review);
 
+        locservice = new LocationService(this);
+        locservice.mGoogleApiClient.connect();
 
+        Button photobutton = (Button) findViewById(R.id.AddPhotoButton);
+        photobutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                btnTakePhotoClicked(v);
+            }
+        });
+        Button postbutton = (Button) findViewById(R.id.PostButton);
+        postbutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                btnPostClicked(v);
+            }
+        });
         imgSpecimenPhoto = (ImageView) findViewById(R.id.imgReviewPhoto);
         titleText = (EditText) findViewById(R.id.TitleEditText);
+        nameText = (EditText) findViewById(R.id.NameEditText);
+
         descriptionText = (EditText) findViewById(R.id.DescriptionEditText);
-        locservice = new LocationService(this);
+        locationText = (EditText) findViewById(R.id.LocationText);
+        /*if(locservice.mGoogleApiClient == null) {
+            //locservice = new LocationService(this);
+            locservice.mGoogleApiClient.connect();
+        }*/
+        Toast.makeText(this, "Connected to API client", Toast.LENGTH_LONG).show();
+
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+
+        newlocation = !((boolean) bundle.getBoolean("existinglocation"));
+        if(!newlocation) {
+            setLocationDataAndLock(bundle);
+        }
+
         //buildGoogleApiClient();
+        //setMyLocation(locservice.GetLocationPoint());
     }
 
 
     protected void onStart() {
-        locservice.mGoogleApiClient.connect();
+        //locservice.mGoogleApiClient.connect();
+        //Toast.makeText(this, "Connected to API client", Toast.LENGTH_LONG).show();
+
         super.onStart();
     }
 
@@ -67,16 +105,41 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
     }
 
     public void btnPostClicked(View v) {
+        Toast.makeText(this, "Starting post", Toast.LENGTH_LONG).show();
         RecommendationImp rec = new RecommendationImp();
-        rec.setTitle(titleText.getText().toString());
-        rec.setDescription(descriptionText.getText().toString());
-        rec.setPhoto(recommendationImage);
-        PlaceImp place = new PlaceImp();
-        myLocation = locservice.GetLocationPoint();
-        place.setLocation(myLocation);
-        rec.setPlace(place);
-        rec.saveAsync(this);
+
+        if(newlocation) {
+            rec.setTitle(titleText.getText().toString());
+            rec.setDescription(descriptionText.getText().toString());
+            //rec.setPhoto(recommendationImage);
+            Place place = new PlaceImp();
+            place.setName(nameText.getText().toString());
+            setMyLocation(locservice.GetLocationPoint());
+            Toast.makeText(this, "Valid location? " + (myLocation != null), Toast.LENGTH_LONG).show();
+            place.setLocation(myLocation);
+            place.setName(nameText.getText().toString());
+            rec.setPlace(place);
+        }else{
+            rec.setTitle(titleText.getText().toString());
+            rec.setDescription(descriptionText.getText().toString());
+            rec.setPlace(selectedplace);
+
+        }
+        //rec.save();
+        rec.saveAsync(this); //TODO unit test
     }
+
+    void setLocationDataAndLock(Bundle bundle){
+        selectedplace =
+                (Place) bundle.getSerializable("value");
+
+        locationText.setText(selectedplace.getLocation().getLatitude() + " , " + selectedplace.getLocation().getLongitude());
+        locationText.setKeyListener(null);
+        nameText.setText(selectedplace.getName());
+        nameText.setKeyListener(null);
+    }
+
+    //listOfPlaces = getQuery(Place.class).where("name", "==" , "falafal")..getAll();
 
 
     public void onSave(boolean succeeded, Object id){
@@ -89,6 +152,13 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
 
     public void setMyLocation(LocationPoint lcp){
         myLocation = lcp;
+        if(myLocation != null) {
+            locationText.setText(myLocation.getLatitude() + " , " + myLocation.getLongitude());
+        }
+        else{
+            Toast.makeText(this, "Failed To Get Location", Toast.LENGTH_LONG).show();
+
+        }
     }
 
     public void btnTakePhotoClicked(View v) {
@@ -122,6 +192,11 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
                 imgSpecimenPhoto.setImageBitmap(recommendationImage);
             }
         }
+    }
+
+    public void DisplayMessage(String message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
     }
 
     @Override
