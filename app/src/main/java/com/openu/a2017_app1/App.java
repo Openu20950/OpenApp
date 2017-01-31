@@ -20,7 +20,7 @@ public class App extends Application {
 
         Parse.initialize(new Parse.Configuration.Builder(this)
         .applicationId("testapp1-20950")
-        .server("https://testapp1-20950.herokuapp.com/")
+        .server("https://testapp1-20950.herokuapp.com/parse/")
         .clientKey("testapp1-20950-master")
         .build());
     }
