@@ -36,7 +36,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public String getTitle()
     {
-        return this.title;
+        return (String)this.getAttribute("Title");
     }
 
     /**
@@ -45,7 +45,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public void setTitle(String title)
     {
-        this.title=title;
+        this.setAttribute("Title",title);
     }
 
     /**
@@ -54,7 +54,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public Place getPlace()
     {
-        return this.place;
+        return (Place)this.getAttribute("Place");
     }
 
     /**
@@ -63,7 +63,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public void setPlace(Place place)
     {
-        this.place=place;
+        this.setAttribute("Place",place);
     }
 
     /**
@@ -72,7 +72,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public String getDescription()
     {
-        return this.description;
+        return (String)this.getAttribute("Description");
     }
 
     /**
@@ -81,7 +81,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public void setDescription(String description)
     {
-        this.description=description;
+        this.setAttribute("Description",description);
     }
 
     /**
@@ -90,7 +90,7 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public Bitmap getPhoto()
     {
-        return this.photo;
+        return (Bitmap)this.getAttribute("Photo");
     }
 
     /**
@@ -99,6 +99,6 @@ public class RecommendationImp extends BasicModel implements Recommendation {
      */
     public void setPhoto(Bitmap photo)
     {
-        this.photo=photo;
+        this.setAttribute("Photo",photo);
     }
 }

@@ -40,7 +40,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public String getName()
     {
-        return this.name;
+        return (String)this.getAttribute("Name");
     }
 
 
@@ -50,7 +50,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void setName(String name)
     {
-        this.name=name;
+        this.setAttribute("Name",name);
     }
 
     /**
@@ -59,7 +59,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public LocationPoint getLocation()
     {
-        return this.placeLocation;
+        return (LocationPoint)this.getAttribute("Location");
     }
 
     /**
@@ -68,7 +68,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void setLocation(LocationPoint location)
     {
-        this.placeLocation=location;
+        this.setAttribute("Location",location);
 
     }
 
@@ -78,7 +78,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public String getPhone()
     {
-        return this.phone;
+        return (String)this.getAttribute("Phone");
     }
 
     /**
@@ -87,7 +87,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void setPhone(String phoneNum)
     {
-        this.phone=phoneNum;
+        this.setAttribute("Phone",phoneNum);
     }
 
 
@@ -97,7 +97,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public String getDescription()
     {
-        return this.description;
+        return (String)this.getAttribute("Description");
     }
 
     /**
@@ -106,7 +106,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void setDescription(String description)
     {
-        this.description=description;
+        this.setAttribute("Description",description);
     }
 
 
@@ -116,7 +116,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public String getCategory()
     {
-        return this.category;
+        return (String)this.getAttribute("Category");
     }
 
 
@@ -126,7 +126,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void setCategory(String category)
     {
-        this.category=category;
+        this.setAttribute("Category",category);
     }
 
     /**
