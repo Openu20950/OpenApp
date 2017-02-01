@@ -1,15 +1,11 @@
 package com.openu.a2017_app1.models;
-
-import com.parse.ParseGeoPoint;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by noam on 29/12/2016.
  */
 
-public interface Place {
+public interface Place extends Model {
 
 
     /**

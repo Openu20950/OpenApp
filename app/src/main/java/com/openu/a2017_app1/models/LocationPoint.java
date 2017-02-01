@@ -2,11 +2,13 @@ package com.openu.a2017_app1.models;
 
 import android.location.Location;
 
+import java.io.Serializable;
+
 /**
  * Created by noam on 01/01/2017.
  */
 
-public class LocationPoint  {
+public class LocationPoint implements Serializable {
 
     private double latitude;
     private double longitude;

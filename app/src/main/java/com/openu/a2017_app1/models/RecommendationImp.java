@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by noam on 28/12/2016.
  */
 
-public class RecommendationImp extends BasicModel implements Recommendation,Serializable {
+public class RecommendationImp extends BasicModel implements Recommendation {
 
 
     private String title;

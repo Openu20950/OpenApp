@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * Created by noam on 29/12/2016.
  */
 
-public interface Recommendation {
+public interface Recommendation extends Model{
 
 
     /**
