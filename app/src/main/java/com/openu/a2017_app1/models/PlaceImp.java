@@ -24,6 +24,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public PlaceImp()
     {
+
         this.table="Place";
         this.name="";
         this.placeLocation=new LocationPoint();
