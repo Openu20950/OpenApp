@@ -89,7 +89,7 @@ public class LocationService implements
 
 
     public LocationPoint onRequestPermissionsResultHandler(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                                           String permissions[], int[] grantResults) {
         switch (requestCode) {
             case LOCATION_REQUEST: {
                 // If request is cancelled, the result arrays are empty.
