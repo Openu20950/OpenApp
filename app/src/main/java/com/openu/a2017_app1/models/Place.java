@@ -9,7 +9,7 @@ import java.util.List;
  * Created by noam on 29/12/2016.
  */
 
-public interface Place {
+public interface Place extends Model {
 
 
     /**

@@ -1,11 +1,12 @@
 package com.openu.a2017_app1.models;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by noam on 29/12/2016.
  */
 
-public interface Model {
+public interface Model extends Serializable {
 
     public Object getAttribute(String attributeName);
 

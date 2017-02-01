@@ -9,7 +9,7 @@ import java.util.List;
  * Created by noam on 28/12/2016.
  */
 
-public class PlaceImp extends BasicModel implements Place,Serializable {
+public class PlaceImp  implements Place {
 
     private String name;
     private LocationPoint placeLocation;
