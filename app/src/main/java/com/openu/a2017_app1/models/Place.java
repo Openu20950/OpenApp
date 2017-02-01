@@ -76,13 +76,13 @@ public interface Place extends Model {
      *
      * @return
      */
-    public List<Recommendation> getRecommendations();
+    public List<RecommendationImp> getRecommendations();
 
     /**
      *
      * @param recommendation
      */
-    public void addRecommendation(Recommendation recommendation);
+    public void addRecommendation(RecommendationImp recommendation);
 
     //public boolean removeRecommendation(Recommendation recommendation);
 }

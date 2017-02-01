@@ -16,7 +16,7 @@ public class PlaceImp extends BasicModel implements Place {
     private String phone;
     private String description;
     private String category;
-    private List<Recommendation> recommendation;
+    private List<RecommendationImp> recommendation;
 
 
     /**
@@ -31,7 +31,7 @@ public class PlaceImp extends BasicModel implements Place {
         this.phone="";
         this.description="";
         this.category="";
-        this.recommendation=new ArrayList<Recommendation>();
+        this.recommendation=new ArrayList<RecommendationImp>();
     }
 
     /**
@@ -133,7 +133,7 @@ public class PlaceImp extends BasicModel implements Place {
      *
      * @return
      */
-    public List<Recommendation> getRecommendations()
+    public List<RecommendationImp> getRecommendations()
     {
         return Collections.unmodifiableList(recommendation);
     }
@@ -142,11 +142,11 @@ public class PlaceImp extends BasicModel implements Place {
      *
      * @param recommendation
      */
-    public void addRecommendation(Recommendation recommendation)
+    public void addRecommendation(RecommendationImp recommendation)
     {
         if(this.recommendation==null)
         {
-            this.recommendation=new ArrayList<Recommendation>();
+            this.recommendation=new ArrayList<RecommendationImp>();
             this.recommendation.add(recommendation);
         }else{
             this.recommendation.add(recommendation);
