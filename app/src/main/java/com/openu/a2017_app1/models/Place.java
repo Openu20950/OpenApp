@@ -1,8 +1,4 @@
 package com.openu.a2017_app1.models;
-
-import com.parse.ParseGeoPoint;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**

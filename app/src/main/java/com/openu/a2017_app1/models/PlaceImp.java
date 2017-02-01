@@ -9,7 +9,7 @@ import java.util.List;
  * Created by noam on 28/12/2016.
  */
 
-public class PlaceImp  implements Place {
+public class PlaceImp extends BasicModel implements Place {
 
     private String name;
     private LocationPoint placeLocation;
@@ -39,7 +39,7 @@ public class PlaceImp  implements Place {
      */
     public String getName()
     {
-        return (String)this.getAttribute("Name");
+        return this.name;
     }
 
 
@@ -49,7 +49,7 @@ public class PlaceImp  implements Place {
      */
     public void setName(String name)
     {
-        this.setAttribute("Name",name);
+        this.name=name;
     }
 
     /**
@@ -58,7 +58,7 @@ public class PlaceImp  implements Place {
      */
     public LocationPoint getLocation()
     {
-        return (LocationPoint)this.getAttribute("Location");
+        return this.placeLocation;
     }
 
     /**
@@ -67,7 +67,7 @@ public class PlaceImp  implements Place {
      */
     public void setLocation(LocationPoint location)
     {
-        this.setAttribute("Location",location);
+        this.placeLocation=location;
 
     }
 
@@ -77,7 +77,7 @@ public class PlaceImp  implements Place {
      */
     public String getPhone()
     {
-        return (String)this.getAttribute("Phone");
+        return this.phone;
     }
 
     /**
@@ -86,7 +86,7 @@ public class PlaceImp  implements Place {
      */
     public void setPhone(String phoneNum)
     {
-        this.setAttribute("Phone",phoneNum);
+        this.phone=phoneNum;
     }
 
 
@@ -96,7 +96,7 @@ public class PlaceImp  implements Place {
      */
     public String getDescription()
     {
-        return (String)this.getAttribute("Description");
+        return this.description;
     }
 
     /**
@@ -105,7 +105,7 @@ public class PlaceImp  implements Place {
      */
     public void setDescription(String description)
     {
-        this.setAttribute("Description",description);
+        this.description=description;
     }
 
 
@@ -115,7 +115,7 @@ public class PlaceImp  implements Place {
      */
     public String getCategory()
     {
-        return (String)this.getAttribute("Category");
+        return this.category;
     }
 
 
@@ -125,7 +125,7 @@ public class PlaceImp  implements Place {
      */
     public void setCategory(String category)
     {
-        this.setAttribute("Category",category);
+        this.category=category;
     }
 
     /**
