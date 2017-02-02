@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by noam on 28/12/2016.
  */
 
-public class RecommendationImp extends BasicModel implements Recommendation,Serializable {
+public class RecommendationImp extends BasicModel implements Recommendation {
 
 
     private String title;
@@ -36,7 +36,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public String getTitle()
     {
-        return this.title;
+        return (String)this.getAttribute("Title");
     }
 
     /**
@@ -45,7 +45,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public void setTitle(String title)
     {
-        this.title=title;
+        this.setAttribute("Title",title);
     }
 
     /**
@@ -54,7 +54,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public Place getPlace()
     {
-        return this.place;
+        return (Place)this.getAttribute("Place");
     }
 
     /**
@@ -63,7 +63,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public void setPlace(Place place)
     {
-        this.place=place;
+        this.setAttribute("Place",place);
     }
 
     /**
@@ -72,7 +72,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public String getDescription()
     {
-        return this.description;
+        return (String)this.getAttribute("Description");
     }
 
     /**
@@ -81,7 +81,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public void setDescription(String description)
     {
-        this.description=description;
+        this.setAttribute("Description",description);
     }
 
     /**
@@ -90,7 +90,7 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public Bitmap getPhoto()
     {
-        return this.photo;
+        return (Bitmap)this.getAttribute("Photo");
     }
 
     /**
@@ -99,6 +99,6 @@ public class RecommendationImp extends BasicModel implements Recommendation,Seri
      */
     public void setPhoto(Bitmap photo)
     {
-        this.photo=photo;
+        this.setAttribute("Photo",photo);
     }
 }
