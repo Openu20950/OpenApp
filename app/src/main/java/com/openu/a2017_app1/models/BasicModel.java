@@ -29,25 +29,6 @@ public abstract class BasicModel implements Model {
 
     protected String table;
 
-
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected Set<String> fillable = new HashSet<>();
-
-
-    /**
-     * The attributes that aren't mass assignable.
-     */
-    protected Set<String> guarded = new HashSet<>(Arrays.asList("*"));
-
-    /**
-     * Indicates if all mass assignment is enabled.
-     */
-    protected boolean unguarded = false;
-
-
-
     /**
      * Get an attribute from the model.
      * @param attributeName
@@ -93,33 +74,10 @@ public abstract class BasicModel implements Model {
 
     public void fill(Map<String,Object> attributes)
     {
-        boolean totallyGuarded = this.totallyGuarded();
-        for (Map.Entry<String, Object> map : this.fillableAttributes(attributes).entrySet()) {
+        for (Map.Entry<String, Object> map : attributes.entrySet()) {
             String key = this.removeTableFromKey(map.getKey());
-            if (this.isFillable(key)) {
-                this.setAttribute(key, map.getValue());
-            } else if (totallyGuarded) {
-                throw new MassAssignmentException(key);
-            }
+            this.setAttribute(key, map.getValue());
         }
-    }
-
-
-    /**
-     * Determine if the model is totally guarded.
-     * @return state
-     */
-    public boolean totallyGuarded() {
-        return this.getFillable().size() == 0 && this.getGuarded().contains("*");
-    }
-
-
-    /**
-     * Get the guarded attributes for the model.
-     * @return
-     */
-    public Set<String> getGuarded() {
-        return guarded;
     }
 
 
@@ -130,7 +88,6 @@ public abstract class BasicModel implements Model {
 
     public void save()
     {
-
         DaoFactory.getInstance().create().save(this);
     }
 
@@ -147,34 +104,6 @@ public abstract class BasicModel implements Model {
         });
     }
 
-
-    protected Map<String, Object> fillableAttributes(Map<String, Object> attributes) {
-        if (this.getFillable().size() > 0 && !this.isUnguarded()) {
-            Map<String, Object> results = new HashMap<>(attributes);
-            results.keySet().retainAll(this.getFillable());
-            return results;
-        }
-        return attributes;
-    }
-
-    /**
-     * Determine if current state is "unguarded".
-     * @return state
-     */
-    public boolean isUnguarded() {
-        return unguarded;
-    }
-
-    /**
-     * Get the fillable attributes for the model.
-     * @return
-     */
-    public Set<String> getFillable() {
-        return fillable;
-    }
-
-
-
     /**
      * Remove the table name from a given key.
      * @param key
@@ -187,22 +116,6 @@ public abstract class BasicModel implements Model {
         String[] parts = key.split("\\.");
         return parts[parts.length - 1];
     }
-
-
-
-
-    /**
-     * Determine if the given attribute may be mass assigned.
-     * @param key
-     * @return
-     */
-    public boolean isFillable(String key) {
-        if (this.unguarded) {
-            return true;
-        }
-        return false;
-    }
-
 
     public static <T extends Model> QueryBuilder<T> getQuery(Class<T> clas)
     {
