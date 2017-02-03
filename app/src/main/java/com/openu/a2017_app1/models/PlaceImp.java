@@ -135,7 +135,7 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public List<Recommendation> getRecommendations()
     {
-        //return Collections.unmodifiableList(recommendation);
+
         return Collections.unmodifiableList((List<Recommendation>)this.getAttribute("Recommendations"));
     }
 
