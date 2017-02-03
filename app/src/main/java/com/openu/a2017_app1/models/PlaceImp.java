@@ -135,7 +135,8 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public List<Recommendation> getRecommendations()
     {
-        return Collections.unmodifiableList(recommendation);
+        //return Collections.unmodifiableList(recommendation);
+        return Collections.unmodifiableList((List<Recommendation>)this.getAttribute("Recommendations"));
     }
 
     /**
@@ -144,13 +145,22 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void addRecommendation(Recommendation recommendation)
     {
-        if(this.recommendation==null)
+        List<Recommendation> recommendationList;
+        if(recommendation!=null)
         {
-            this.recommendation=new ArrayList<Recommendation>();
-            this.recommendation.add(recommendation);
-        }else{
-            this.recommendation.add(recommendation);
+            recommendationList=(List<Recommendation>)this.getAttribute("Recommendations");
+            if(recommendationList!=null)
+            {
+                recommendationList.add(recommendation);
+                this.setAttribute("Recommendations",recommendationList);
+            }else{
+                recommendationList=new ArrayList<Recommendation>();
+                recommendationList.add(recommendation);
+                this.setAttribute("Recommendations",recommendationList);
+            }
         }
+
+
     }
 
 
