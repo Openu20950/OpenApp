@@ -1,32 +1,26 @@
 package com.openu.a2017_app1.models;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by noam on 28/12/2016.
  */
 
 public class PlaceImp extends BasicModel implements Place {
-
-
-    private LocationPoint placeLocation;
-
-
-
-
     /**
      * default constructor
      */
     public PlaceImp()
     {
-
         this.table="Place";
-        this.placeLocation=new LocationPoint();
-
-
     }
 
     /**
@@ -130,8 +124,11 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public List<Recommendation> getRecommendations()
     {
-
-        return Collections.unmodifiableList((List<Recommendation>)this.getAttribute("Recommendations"));
+        List<Recommendation> recommendationList = (List<Recommendation>)this.getAttribute("Recommendations");
+        if (recommendationList == null) {
+            return Collections.unmodifiableList(new ArrayList<Recommendation>());
+        }
+        return Collections.unmodifiableList(recommendationList);
     }
 
     /**
@@ -140,22 +137,18 @@ public class PlaceImp extends BasicModel implements Place {
      */
     public void addRecommendation(Recommendation recommendation)
     {
-        List<Recommendation> recommendationList;
-        if(recommendation!=null)
-        {
-            recommendationList=(List<Recommendation>)this.getAttribute("Recommendations");
-            if(recommendationList!=null)
-            {
-                recommendationList.add(recommendation);
-                this.setAttribute("Recommendations",recommendationList);
-            }else{
-                recommendationList=new ArrayList<Recommendation>();
-                recommendationList.add(recommendation);
-                this.setAttribute("Recommendations",recommendationList);
-            }
+        if (recommendation == null) {
+            return;
         }
 
+        List<Recommendation> recommendationList = (List<Recommendation>)this.getAttribute("Recommendations");
 
+        if (recommendationList == null) {
+            recommendationList = new ArrayList<>();
+            setAttribute("Recommendations", recommendationList);
+        }
+
+        recommendationList.add(recommendation);
     }
 
 
