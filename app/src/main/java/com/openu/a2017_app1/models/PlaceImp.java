@@ -11,12 +11,10 @@ import java.util.List;
 
 public class PlaceImp extends BasicModel implements Place {
 
-    private String name;
+
     private LocationPoint placeLocation;
-    private String phone;
-    private String description;
-    private String category;
-    private List<Recommendation> recommendation;
+
+
 
 
     /**
@@ -26,12 +24,9 @@ public class PlaceImp extends BasicModel implements Place {
     {
 
         this.table="Place";
-        this.name="";
         this.placeLocation=new LocationPoint();
-        this.phone="";
-        this.description="";
-        this.category="";
-        this.recommendation=new ArrayList<Recommendation>();
+
+
     }
 
     /**
