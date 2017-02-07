@@ -9,9 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.openu.a2017_app1.R;
-import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Recommendation;
-import com.openu.a2017_app1.models.RecommendationImp;
 
 import java.util.List;
 

@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.models.Place;
-import com.openu.a2017_app1.models.PlaceImp;
 import com.openu.a2017_app1.models.Recommendation;
-import com.openu.a2017_app1.models.RecommendationImp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +29,7 @@ public class ReccomendationListActivity extends AppCompatActivity {
     }*/
 
     ListView list;
-    PlaceImp selectedplace;
+    Place selectedplace;
     RecommendationsListViewAdapter listviewadapter;
     List<Recommendation> recommendationList = new ArrayList<Recommendation>();;
 
@@ -46,7 +43,7 @@ public class ReccomendationListActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
 
         selectedplace =
-                (PlaceImp) bundle.getSerializable("value");
+                (Place) bundle.getSerializable("value");
 
         list = (ListView) findViewById(R.id.recommendationList);
 
@@ -60,8 +57,7 @@ public class ReccomendationListActivity extends AppCompatActivity {
             places.add(p);
         }*/
 
-        listviewadapter = new RecommendationsListViewAdapter(this, R.layout.recommendation_listview_item,
-                recommendationList);
+        listviewadapter = new RecommendationsListViewAdapter(this, R.layout.recommendation_listview_item,recommendationList);
 
         // Binds the Adapter to the ListView
         list.setAdapter(listviewadapter);

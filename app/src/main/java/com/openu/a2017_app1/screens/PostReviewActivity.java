@@ -16,13 +16,10 @@ import android.widget.Toast;
 
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.models.ModelSaveListener;
-import com.openu.a2017_app1.models.PlaceImp;
-import com.openu.a2017_app1.models.RecommendationImp;
-import com.openu.a2017_app1.services.LocationService;
-import com.openu.a2017_app1.models.LocationPoint;
-import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Recommendation;
+import com.openu.a2017_app1.services.LocationService;
+import com.openu.a2017_app1.models.LocationPoint;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -106,13 +103,13 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
 
     public void btnPostClicked(View v) {
         Toast.makeText(this, "Starting post", Toast.LENGTH_LONG).show();
-        RecommendationImp rec = new RecommendationImp();
+        Recommendation rec = new Recommendation();
 
         if(newlocation) {
             rec.setTitle(titleText.getText().toString());
             rec.setDescription(descriptionText.getText().toString());
             //rec.setPhoto(recommendationImage);
-            Place place = new PlaceImp();
+            Place place = new Place();
             place.setName(nameText.getText().toString());
             setMyLocation(locservice.GetLocationPoint());
             Toast.makeText(this, "Valid location? " + (myLocation != null), Toast.LENGTH_LONG).show();

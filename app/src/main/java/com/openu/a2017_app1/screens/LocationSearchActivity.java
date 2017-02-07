@@ -1,28 +1,18 @@
 package com.openu.a2017_app1.screens;
 
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.openu.a2017_app1.R;
-import com.openu.a2017_app1.data.QueryBuilder;
-import com.openu.a2017_app1.models.BasicModel;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
-import com.openu.a2017_app1.models.PlaceImp;
-import com.openu.a2017_app1.models.Recommendation;
-import com.openu.a2017_app1.models.RecommendationImp;
 import com.openu.a2017_app1.services.LocationService;
 
 import java.util.ArrayList;
@@ -62,7 +52,7 @@ public class LocationSearchActivity extends AppCompatActivity {
         }*/
 
         list = (ListView) findViewById(R.id.LocationList);
-        places.addAll(BasicModel.getQuery(Place.class).whereNear("Location",currentloc, (double) 500));
+        places.addAll(Model.getQuery(Place.class).whereNear("Location",currentloc, (double) 500));
 
         Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
 
@@ -84,8 +74,7 @@ public class LocationSearchActivity extends AppCompatActivity {
             places.add(p);
         }*/
 
-        listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,
-                places);
+        listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,places);
 
         // Binds the Adapter to the ListView
         list.setAdapter(listviewadapter);

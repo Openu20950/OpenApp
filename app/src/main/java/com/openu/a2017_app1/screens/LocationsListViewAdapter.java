@@ -4,7 +4,6 @@ package com.openu.a2017_app1.screens;
  * Created by Emil on 1/24/2017.
  */
 
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.models.Place;
-import com.openu.a2017_app1.models.PlaceImp;
 
 public class LocationsListViewAdapter extends ArrayAdapter<Place> {
     // Declare Variables
