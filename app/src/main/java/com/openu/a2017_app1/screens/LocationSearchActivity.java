@@ -52,7 +52,7 @@ public class LocationSearchActivity extends AppCompatActivity {
         }*/
 
         list = (ListView) findViewById(R.id.LocationList);
-        places.addAll(Model.getQuery(Place.class).whereNear("Location",currentloc, (double) 500));
+        places.addAll(Model.getQuery(Place.class).whereNear("Location",currentloc, (double) 500).getAll());
 
         Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
 
