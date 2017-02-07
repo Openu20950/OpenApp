@@ -34,6 +34,7 @@ public class LocationSearchActivity extends AppCompatActivity {
     LocationsListViewAdapter listviewadapter;
     List<Place> places = new ArrayList<Place>();;
     private LocationService locservice;
+    int attempts = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +43,12 @@ public class LocationSearchActivity extends AppCompatActivity {
 
         locservice = new LocationService(this);
         locservice.mGoogleApiClient.connect();
-        currentloc = locservice.GetLocationPoint();
+        //currentloc = locservice.GetLocationPoint();
         //places = getformserver; TODO get places from server here
         //places = getQuery(Place.class).where("name", "==" , "falafal")..getAll();
 
-        /*long t= System.currentTimeMillis();
-        long end = t+100000;
+       /* long t= System.currentTimeMillis();
+        long end = t+500*60;
         while(System.currentTimeMillis() < end) {
             // do something
             // pause to avoid churning
@@ -60,9 +61,11 @@ public class LocationSearchActivity extends AppCompatActivity {
                 else break;
             } catch (InterruptedException ex) {}
         }*/
-
+        /*
         list = (ListView) findViewById(R.id.LocationList);
-        places.addAll(BasicModel.getQuery(Place.class).whereNear("Location",currentloc, (double) 500));
+        places.addAll(BasicModel.getQuery(Place.class)
+                .whereNear("Location",currentloc, (double) 500)
+                .getAll());
 
         Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
 
@@ -83,7 +86,7 @@ public class LocationSearchActivity extends AppCompatActivity {
 
             places.add(p);
         }*/
-
+/*
         listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,
                 places);
 
@@ -113,11 +116,19 @@ public class LocationSearchActivity extends AppCompatActivity {
 
             }
         });
+        */
 
         Button newbutton = (Button) findViewById(R.id.newButton);
         newbutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 btnNewClicked(v);
+            }
+        });
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                btnGetLocationClicked(v);
             }
         });
     }
@@ -130,6 +141,51 @@ public class LocationSearchActivity extends AppCompatActivity {
         //bundle.putSerializable("value", selectedplace);
         i.putExtras(bundle);
         startActivity(i);
+    }
+
+    void btnGetLocationClicked(View v) {
+        places = new ArrayList<Place>();
+        LocationPoint currentloc = new LocationPoint();//locservice.GetLocationPoint();
+        currentloc.setLatitude(32.018018);
+        currentloc.setLongitude(34.744788 );
+        Toast.makeText(this, "Attempting to get location. Succeeded? " + (currentloc != null), Toast.LENGTH_LONG).show();
+        /*if(attempts == 2){
+            currentloc = new LocationPoint();
+            currentloc.setLatitude(0);
+            currentloc.setLongitude(0);
+        }else{
+            attempts++;
+        }*/
+        if (currentloc != null) {
+            list = (ListView) findViewById(R.id.LocationList);
+            places.addAll(BasicModel.getQuery(PlaceImp.class)
+                    .whereNear("Location", currentloc, (double) 500)
+                    .getAll());
+            //places.add(new PlaceImp());
+            Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
+
+            Toast.makeText(this, "First Place had " + (places.get(0).getRecommendations().size() +" recommendations"), Toast.LENGTH_LONG).show();
+
+            //Toast.makeText(this, "I name valid? " + (places.get(0).getName() != null), Toast.LENGTH_LONG).show();
+
+            listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,
+                    places);
+            list.setAdapter(listviewadapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    Place selectedplace = listviewadapter.getPlaces().get(position);
+                    Intent i = new Intent(getApplicationContext(), ReccomendationListActivity.class); //SingleListItem
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("value", selectedplace);
+                    i.putExtras(bundle);
+                    startActivity(i);
+
+                }
+            });
+
+        }
     }
 
 }
