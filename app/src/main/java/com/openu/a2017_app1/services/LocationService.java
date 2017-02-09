@@ -61,14 +61,17 @@ public class LocationService implements
         }
     }
 
-    public LocationPoint GetLocationPoint(){
+    public LocationPoint GetLocationPoint(){ //This returns a locpoinr with (1,1) for now so we can test in emulator too
         locpoint = new LocationPoint();
+        locpoint.setLatitude(1);
+        locpoint.setLongitude(1);
+        /*return locpoint;
         if(mLastLocation!=null) {
             locpoint.setLatitude(Double.parseDouble(String.valueOf(mLastLocation.getLatitude())));
             locpoint.setLongitude(Double.parseDouble(String.valueOf(mLastLocation.getLongitude())));
         }else{
             return null;
-        }
+        }*/
         return locpoint;
     }
 

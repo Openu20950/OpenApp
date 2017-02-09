@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.QueryBuilder;
-import com.openu.a2017_app1.models.BasicModel;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
@@ -143,9 +142,10 @@ public class LocationSearchActivity extends AppCompatActivity {
 
     void btnGetLocationClicked(View v) {
         places = new ArrayList<Place>();
-        LocationPoint currentloc = new LocationPoint();//locservice.GetLocationPoint();
-        currentloc.setLatitude(32.018018);
-        currentloc.setLongitude(34.744788 );
+        LocationPoint currentloc = //new LocationPoint();//
+                locservice.GetLocationPoint();
+        //currentloc.setLatitude(32.018018);
+        //currentloc.setLongitude(34.744788 );
         Toast.makeText(this, "Attempting to get location. Succeeded? " + (currentloc != null), Toast.LENGTH_LONG).show();
         /*if(attempts == 2){
             currentloc = new LocationPoint();
@@ -159,9 +159,9 @@ public class LocationSearchActivity extends AppCompatActivity {
             places.addAll(Model.getQuery(Place.class).whereNear("Location", currentloc, (double) 500).getAll());
             //places.add(new PlaceImp());
             Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
-
-            Toast.makeText(this, "First Place had " + (places.get(0).getRecommendations().size() +" recommendations"), Toast.LENGTH_LONG).show();
-
+            if(places.size() > 0) {
+                Toast.makeText(this, "First Place had " + (places.get(0).getRecommendations().size() + " recommendations"), Toast.LENGTH_LONG).show();
+            }
             //Toast.makeText(this, "I name valid? " + (places.get(0).getName() != null), Toast.LENGTH_LONG).show();
 
             listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,places);
