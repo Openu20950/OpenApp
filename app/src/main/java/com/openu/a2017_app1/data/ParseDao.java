@@ -3,7 +3,8 @@ package com.openu.a2017_app1.data;
 import android.support.annotation.NonNull;
 
 import com.openu.a2017_app1.data.parse.Converters;
-import com.openu.a2017_app1.models.Model;
+import com.openu.a2017_app1.models.IModel;
+
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -25,7 +26,7 @@ public class ParseDao implements Dao {
     }
 
     @Override
-    public boolean save(Model model) {
+    public boolean save(IModel model) {
         ParseObject object = createObjectForModel(model);
         try {
             object.save();
@@ -37,7 +38,7 @@ public class ParseDao implements Dao {
     }
 
     @Override
-    public void saveAsync(final Model model, final SaveListener callback) {
+    public void saveAsync(final IModel model, final SaveListener callback) {
         final ParseObject object = createObjectForModel(model);
         object.saveInBackground(new SaveCallback() {
             @Override
@@ -51,11 +52,11 @@ public class ParseDao implements Dao {
     }
 
     @Override
-    public <T extends Model> QueryBuilder<T> query(Model model) {
+    public <T extends IModel> QueryBuilder<T> query(IModel model) {
         return new ParseQueryBuilder(ParseQuery.getQuery(model.getTable()), model.getClass());
     }
 
-    private ParseObject createObjectForModel(Model model) {
+    private ParseObject createObjectForModel(IModel model) {
         ParseObject object = getParseObject(model);
         Converters converters = Converters.getInstance();
         for (Map.Entry<String, Object> attribute : model.getAttributes().entrySet()) {
@@ -69,7 +70,7 @@ public class ParseDao implements Dao {
     }
 
     @NonNull
-    private ParseObject getParseObject(Model model) {
+    private ParseObject getParseObject(IModel model) {
         Object parse = model.getAttribute(PARSE_OBJECT_ATTRIBUTE);
         return parse != null ? (ParseObject)parse : new ParseObject(model.getTable());
     }

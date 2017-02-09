@@ -1,7 +1,8 @@
 package com.openu.a2017_app1.data.parse;
 
 import com.openu.a2017_app1.data.Converter;
-import com.openu.a2017_app1.models.Model;
+import com.openu.a2017_app1.models.IModel;
+
 
 /**
  * Created by Raz on 30/12/2016.
@@ -11,14 +12,14 @@ import com.openu.a2017_app1.models.Model;
 /* package */ class ModelConverter implements Converter {
     @Override
     public Object convert(Object value) {
-        Model model = (Model) value;
+        IModel model = (IModel) value;
         model.save();
         return model.getAttribute(model.getPrimaryKey());
     }
 
     @Override
     public boolean canConvert(Object value) {
-        return value instanceof Model;
+        return value instanceof IModel;
     }
 
     @Override

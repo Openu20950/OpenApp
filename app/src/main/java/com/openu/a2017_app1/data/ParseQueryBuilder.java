@@ -1,28 +1,24 @@
 package com.openu.a2017_app1.data;
 
-import android.location.Location;
-
 import com.openu.a2017_app1.data.parse.Converters;
+import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
-import com.openu.a2017_app1.models.Model;
+
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * Created by Raz on 01/12/2016.
  */
 
-class ParseQueryBuilder<T extends Model> implements QueryBuilder<T> {
+class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
 
     private static final int METERS_TO_KILOMETERS = 100;
 

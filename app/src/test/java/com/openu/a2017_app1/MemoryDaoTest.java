@@ -4,11 +4,8 @@ import com.openu.a2017_app1.data.Dao;
 import com.openu.a2017_app1.data.DaoFactory;
 import com.openu.a2017_app1.models.Model;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
-import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

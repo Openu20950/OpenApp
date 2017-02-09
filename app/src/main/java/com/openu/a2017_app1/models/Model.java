@@ -1,28 +1,131 @@
 package com.openu.a2017_app1.models;
-import java.io.Serializable;
+
+
+import com.openu.a2017_app1.data.DaoFactory;
+import com.openu.a2017_app1.data.QueryBuilder;
+import com.openu.a2017_app1.data.SaveListener;
+import java.util.HashMap;
 import java.util.Map;
 
+
 /**
- * Created by noam on 29/12/2016.
+ * Created by noam on 28/12/2016.
  */
 
-public interface Model extends Serializable {
+public abstract class Model implements IModel {
 
-    public Object getAttribute(String attributeName);
+    /**
+     * The modle attributs
+     */
+    protected Map<String, Object> attributes = new HashMap<>();
 
-    public void setAttribute(String attributeName,Object attributeValue);
+    /**
+     * The primary key for the model
+     */
+    protected String primaryKay="id";
 
-    public String getPrimaryKey();
+    protected String table;
 
-    public Map<String,Object> getAttributes();
+    /**
+     * Get an attribute from the model.
+     * @param attributeName
+     * @return
+     */
+    public Object getAttribute(String attributeName)
+    {
+        if(this.attributes.containsKey(attributeName))
+        {
+            return this.attributes.get(attributeName);
+        }
+        return null;
+    }
 
-    public void fill(Map<String,Object> attributes);
+    /**
+     * Set a given attribute on the model.
+     * @param attributeName
+     * @param attributeValue
+     */
+    public void setAttribute(String attributeName,Object attributeValue)
+    {
 
-    public String getTable();
+        this.attributes.put(attributeName,attributeValue);
+    }
 
-    public void save();
+    /**
+     * Get the primary key of the model
+     * @return
+     */
+    public String getPrimaryKey()
+    {
+        return this.primaryKay;
+    }
 
-    public void saveAsync(final ModelSaveListener listener);
+    /**
+     * Get the all attributes from the model
+     * @return
+     */
+    public Map<String,Object> getAttributes()
+    {
+        return this.attributes;
+    }
 
+    public void fill(Map<String,Object> attributes)
+    {
+        for (Map.Entry<String, Object> map : attributes.entrySet()) {
+            String key = this.removeTableFromKey(map.getKey());
+            this.setAttribute(key, map.getValue());
+        }
+    }
+
+
+    public String getTable()
+    {
+        return table;
+    }
+
+    public void save()
+    {
+        DaoFactory.getInstance().create().save(this);
+    }
+
+    public void saveAsync(final ModelSaveListener listener)
+    {
+        DaoFactory.getInstance().create().saveAsync(this, new SaveListener() {
+            @Override
+            public void onFinish(boolean succeeded, Object id) {
+                if(listener!=null)
+                {
+                    listener.onSave(succeeded,id);
+                }
+            }
+        });
+    }
+
+    /**
+     * Remove the table name from a given key.
+     * @param key
+     * @return key
+     */
+    private String removeTableFromKey(String key) {
+        if (!key.contains(".")) {
+            return key;
+        }
+        String[] parts = key.split("\\.");
+        return parts[parts.length - 1];
+    }
+
+    public static <T extends IModel> QueryBuilder<T> getQuery(Class<T> clas)
+    {
+        T model = null;
+        try {
+            model = clas.newInstance();
+            return DaoFactory.getInstance().create().query(model);
+        } catch (InstantiationException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+
+    }
 
 }

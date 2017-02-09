@@ -2,7 +2,8 @@ package com.openu.a2017_app1.data;
 
 import android.os.AsyncTask;
 
-import com.openu.a2017_app1.models.Model;
+import com.openu.a2017_app1.models.IModel;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 public class MemoryDao implements Dao {
 
-    private static final Map<String, List<Model>> db;
+    private static final Map<String, List<IModel>> db;
 
     static {
         db = new HashMap<>();
@@ -25,7 +26,7 @@ public class MemoryDao implements Dao {
     }
 
     @Override
-    public boolean save(Model model) {
+    public boolean save(IModel model) {
         if (model.getAttribute(model.getPrimaryKey()) != null) {
             return true;
         }
@@ -35,7 +36,7 @@ public class MemoryDao implements Dao {
     }
 
     @Override
-    public void saveAsync(final Model model, final SaveListener callback) {
+    public void saveAsync(final IModel model, final SaveListener callback) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -56,8 +57,8 @@ public class MemoryDao implements Dao {
     }
 
     @Override
-    public <T extends Model> QueryBuilder query(Model model) {
-        List<Model> table = db.get(model.getTable());
+    public <T extends IModel> QueryBuilder query(IModel model) {
+        List<IModel> table = db.get(model.getTable());
         if (table == null) {
             db.put(model.getTable(), table = new ArrayList<>());
         }
@@ -78,8 +79,8 @@ public class MemoryDao implements Dao {
      * @param model
      * @return
      */
-    private int addToTable(String tableName, Model model) {
-        List<Model> table;
+    private int addToTable(String tableName, IModel model) {
+        List<IModel> table;
         if (db.containsKey(tableName)) {
             table = db.get(tableName);
         } else {

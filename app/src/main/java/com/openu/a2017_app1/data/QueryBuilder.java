@@ -1,14 +1,15 @@
 package com.openu.a2017_app1.data;
 
+import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
-import com.openu.a2017_app1.models.Model;
+
 
 import java.util.List;
 
 /**
  * Created by Raz on 01/12/2016.
  */
-public interface QueryBuilder<T extends Model> {
+public interface QueryBuilder<T extends IModel> {
     /**
      * Get one result.
      * @return

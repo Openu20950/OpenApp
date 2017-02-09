@@ -1,7 +1,8 @@
 package com.openu.a2017_app1.data;
 
+import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
-import com.openu.a2017_app1.models.Model;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.Map;
  * Created by Raz on 30/12/2016.
  */
 
-public class MemoryQueryBuilder<T extends Model> implements QueryBuilder<T> {
+public class MemoryQueryBuilder<T extends IModel> implements QueryBuilder<T> {
 
     public static final int MAX_RESULTS = 1000;
     private static Map<String, SimpleComparator> comparators;
