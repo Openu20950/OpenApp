@@ -158,9 +158,7 @@ public class LocationSearchActivity extends AppCompatActivity {
         }*/
         if (currentloc != null) {
             list = (ListView) findViewById(R.id.LocationList);
-            places.addAll(BasicModel.getQuery(PlaceImp.class)
-                    .whereNear("Location", currentloc, (double) 500)
-                    .getAll());
+            places.addAll(BasicModel.getQuery(PlaceImp.class).whereNear("Location", currentloc, (double) 500).getAll());
             //places.add(new PlaceImp());
             Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
 
@@ -168,8 +166,7 @@ public class LocationSearchActivity extends AppCompatActivity {
 
             //Toast.makeText(this, "I name valid? " + (places.get(0).getName() != null), Toast.LENGTH_LONG).show();
 
-            listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,
-                    places);
+            listviewadapter = new LocationsListViewAdapter(this, R.layout.location_listview_item,places);
             list.setAdapter(listviewadapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
