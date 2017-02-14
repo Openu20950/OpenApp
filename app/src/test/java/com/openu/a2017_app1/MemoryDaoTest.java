@@ -2,7 +2,7 @@ package com.openu.a2017_app1;
 
 import com.openu.a2017_app1.data.Dao;
 import com.openu.a2017_app1.data.DaoFactory;
-import com.openu.a2017_app1.models.Model;
+import com.openu.a2017_app1.models.IModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,8 +43,8 @@ public class MemoryDaoTest extends UnitTest {
         tableName = UUID.randomUUID().toString();
     }
 
-    private Model createModel() {
-        final Model model = mock(Model.class);
+    private IModel createModel() {
+        final IModel model = mock(IModel.class);
         when(model.getPrimaryKey()).thenReturn("id");
         when(model.getTable()).thenReturn(tableName);
         doAnswer(new Answer() {
@@ -76,8 +76,8 @@ public class MemoryDaoTest extends UnitTest {
         return model;
     }
 
-    private Model[] createModels(int howMuch) {
-        Model[] models = new Model[howMuch];
+    private IModel[] createModels(int howMuch) {
+        IModel[] models = new IModel[howMuch];
         for (int i = 0; i < howMuch; i++) {
             models[i] = createModel();
             models[i].setAttribute("attr", i);
@@ -89,7 +89,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void save_one_model() {
-        Model model = createModel();
+        IModel model = createModel();
         model.save();
 
         assertThat(dao.query(model).getAll().size(), equalTo(1));
@@ -98,7 +98,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void save_many_models() {
-        Model model = null;
+        IModel model = null;
         for (int i = 0; i < 10; i++) {
             model = createModel();
             model.save();
@@ -109,7 +109,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void find_model_return_same_instance() {
-        Model model = createModel();
+        IModel model = createModel();
         model.save();
 
         assertThat(dao.query(model).find(model.getAttribute(model.getPrimaryKey())), sameInstance(model));
@@ -117,7 +117,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void find_model_with_wrong_id_return_null() {
-        Model model = createModel();
+        IModel model = createModel();
         model.save();
 
         assertThat(dao.query(model).find(Math.random()), nullValue());
@@ -125,7 +125,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_equal_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", "==", index).getAll().size(), equalTo(1));
@@ -133,7 +133,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_short_equal_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", index).getAll().size(), equalTo(1));
@@ -141,7 +141,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_not_equal_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", "!=", index).getAll().size(), equalTo(9));
@@ -149,7 +149,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_greater_then_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", ">", index).getAll().size(), equalTo(9 - index));
@@ -157,7 +157,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_greater_then_equals_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", ">=", index).getAll().size(), equalTo(10 - index));
@@ -165,7 +165,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_less_then_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", "<", index).getAll().size(), equalTo(index));
@@ -173,7 +173,7 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_less_then_equals_operation() {
-        Model model = createModels(10)[0];
+        IModel model = createModels(10)[0];
         int index = new Random().nextInt(10);
 
         assertThat(dao.query(model).where("attr", "<=", index).getAll().size(), equalTo(index + 1));
@@ -181,9 +181,9 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void filter_with_contains_operation() {
-        Model[] models = createModels(10);
+        IModel[] models = createModels(10);
         String attr = "a";
-        for (Model model : models) {
+        for (IModel model : models) {
             model.setAttribute("attr", attr = (attr.equals("a") ? "b" : "a"));
         }
 
@@ -192,37 +192,37 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void use_skip_with_results() {
-        Model[] models = createModels(10);
+        IModel[] models = createModels(10);
         int index = new Random().nextInt(9) + 1;
 
-        List<Model> results = dao.query(models[0]).skip(index).getAll();
+        List<IModel> results = dao.query(models[0]).skip(index).getAll();
         assertThat(results.size(), equalTo(10 - index));
-        for (Model model : results) {
+        for (IModel model : results) {
             assertTrue(model.getAttribute("attr") + " >= " + index, (int)model.getAttribute("attr") >= index);
         }
     }
 
     @Test
     public void use_limit_with_results() {
-        Model[] models = createModels(10);
+        IModel[] models = createModels(10);
         int index = new Random().nextInt(9) + 1;
 
-        List<Model> results = dao.query(models[0]).limit(index).getAll();
+        List<IModel> results = dao.query(models[0]).limit(index).getAll();
         assertThat(results.size(), equalTo(index));
-        for (Model model : results) {
+        for (IModel model : results) {
             assertTrue(model.getAttribute("attr") + " < " + index, (int)model.getAttribute("attr") < index);
         }
     }
 
     @Test
     public void use_sort_ascending_results() {
-        Model[] models = createModels(10);
+        IModel[] models = createModels(10);
         String attr = "a";
-        for (Model model : models) {
+        for (IModel model : models) {
             model.setAttribute("attr", attr = (attr.equals("a") ? "b" : "a"));
         }
 
-        List<Model> results = dao.query(models[0]).orderByAscending("attr").getAll();
+        List<IModel> results = dao.query(models[0]).orderByAscending("attr").getAll();
 
         for (int i = 0; i < 5; i++) {
             assertThat((String)results.get(i).getAttribute("attr"), is("a"));
@@ -234,13 +234,13 @@ public class MemoryDaoTest extends UnitTest {
 
     @Test
     public void use_sort_descending_results() {
-        Model[] models = createModels(10);
+        IModel[] models = createModels(10);
         String attr = "a";
-        for (Model model : models) {
+        for (IModel model : models) {
             model.setAttribute("attr", attr = (attr.equals("a") ? "b" : "a"));
         }
 
-        List<Model> results = dao.query(models[0]).orderByDescending("attr").getAll();
+        List<IModel> results = dao.query(models[0]).orderByDescending("attr").getAll();
 
         for (int i = 0; i < 5; i++) {
             assertThat((String)results.get(i).getAttribute("attr"), is("b"));
