@@ -116,15 +116,15 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
             selectedplace.setLocation(myLocation);
             selectedplace.setName(nameText.getText().toString());
             selectedplace.addRecommendation(rec);
-            rec.setPlace(selectedplace);
+            //rec.setPlace(selectedplace);
         }else{
             rec.setTitle(titleText.getText().toString());
             rec.setDescription(descriptionText.getText().toString());
-            rec.setPlace(selectedplace);
+            //rec.setPlace(selectedplace);
 
         }
         //Are we supposed to save the place or the recommendation or both? we are getting an error here: at com.openu.a2017_app1.data.DaoFactory.create(DaoFactory.java:46)
-        rec.saveAsync(this);
+        //rec.save();
         selectedplace.saveAsync(this);
 
     }
