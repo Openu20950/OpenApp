@@ -1,16 +1,7 @@
-package com.openu.a2017_app1.data.parse;
+package com.openu.a2017_app1.data;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import com.openu.a2017_app1.data.Converter;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Raz on 30/12/2016.

@@ -1,4 +1,4 @@
-package com.openu.a2017_app1.data.parse;
+package com.openu.a2017_app1.data;
 
 import com.openu.a2017_app1.data.Converter;
 import com.openu.a2017_app1.models.LocationPoint;

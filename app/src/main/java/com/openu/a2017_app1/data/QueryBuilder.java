@@ -29,6 +29,12 @@ public interface QueryBuilder<T extends IModel> {
     List<T> getAll();
 
     /**
+     * Get the number of results.
+     * @return
+     */
+    long count();
+
+    /**
      * Filter the results by condition
      * @param field the field name
      * @param operator one of the operators "==", "!=", ">", ">=", "<", "<=". Other operator will cause to exception

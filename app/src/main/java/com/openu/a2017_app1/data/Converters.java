@@ -1,16 +1,13 @@
-package com.openu.a2017_app1.data.parse;
-
-import com.openu.a2017_app1.data.Converter;
+package com.openu.a2017_app1.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by Raz on 30/12/2016.
  */
 
-public class Converters {
+/* package */ class Converters {
 
     private static Converters sInstance;
 

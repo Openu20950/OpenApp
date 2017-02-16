@@ -100,6 +100,11 @@ public class MemoryQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     }
 
     @Override
+    public long count() {
+        return Math.min(this.limit, table.size());
+    }
+
+    @Override
     public QueryBuilder<T> where(String field, String operator, Object value) {
         if (!comparators.containsKey(operator)) {
             new IllegalArgumentException("operator \"" + operator + "\" is not supported!");

@@ -1,6 +1,5 @@
 package com.openu.a2017_app1.data;
 
-import com.openu.a2017_app1.data.parse.Converters;
 import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
 
@@ -10,9 +9,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Raz on 01/12/2016.
@@ -33,7 +30,7 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     @Override
     public T get() {
         try {
-            return createModelFor(this.query.getFirst());
+            return (T)ModelCreator.createModelFromParse(this.query.getFirst(), clazz);
         } catch (Exception e) {
             return null;
         }
@@ -45,7 +42,7 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
             throw new IllegalArgumentException("The id must be a string");
         }
         try {
-            return createModelFor(this.query.get((String)id));
+            return (T)ModelCreator.createModelFromParse(this.query.get((String)id), clazz);
         } catch (Exception e) {
             return null;
         }
@@ -56,7 +53,7 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
         try {
             List<T> res = new ArrayList<>();
             for (ParseObject obj : query.find()) {
-                res.add(createModelFor(obj));
+                res.add((T)ModelCreator.createModelFromParse(obj, clazz));
             }
             return res;
         } catch (ParseException e) {
@@ -65,7 +62,18 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     }
 
     @Override
+    public long count() {
+        try {
+            return query.count();
+        }
+        catch (ParseException e) {
+            return -1;
+        }
+    }
+
+    @Override
     public QueryBuilder<T> where(String field, String operator, Object value) {
+        value = Converters.getInstance().convert(value);
         switch (operator) {
             case "==":
                 query.whereEqualTo(field, value);
@@ -93,8 +101,7 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
 
     @Override
     public QueryBuilder<T> where(String field, Object value) {
-        query.whereEqualTo(field, value);
-        return this;
+        return where(field, "==", value);
     }
 
     @Override
@@ -133,33 +140,5 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     public QueryBuilder<T> orderByDescending(String field) {
         query.orderByDescending(field);
         return this;
-    }
-
-    private T createModelFor(ParseObject obj) {
-        try {
-            T model = clazz.newInstance();
-            fillModel(model, obj);
-            return model;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private void fillModel(T model, ParseObject obj) {
-        Map<String, Object> attributes = getAttributes(model, obj);
-        attributes.put(model.getPrimaryKey(), obj.getObjectId());
-        attributes.put(ParseDao.PARSE_OBJECT_ATTRIBUTE, obj);
-        model.fill(attributes);
-    }
-
-    private Map<String,Object> getAttributes(T model, ParseObject obj) {
-        Map<String, Object> res = new HashMap<>();
-        Object value;
-        Converters converters = Converters.getInstance();
-        for (String key : obj.keySet()) {
-            value = obj.get(key);
-            res.put(key, converters.convertBack(value));
-        }
-        return res;
     }
 }
