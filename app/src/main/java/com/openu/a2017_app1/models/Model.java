@@ -61,6 +61,16 @@ public abstract class Model implements IModel {
     }
 
     /**
+     * Get the primary key of the model
+     * @return
+     */
+    public String getId()
+    {
+        Object id = this.getAttribute(this.getPrimaryKey());
+        return id == null ? null : id;
+    }
+
+    /**
      * Get the all attributes from the model
      * @return
      */
