@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.openu.a2017_app1.R;
+import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Recommendation;
 
@@ -41,12 +43,20 @@ public class ReccomendationListActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
+        if(bundle.getString("value") != null) {
+            Toast.makeText(this, "ID is " + bundle.getString("value"), Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "ID is was null", Toast.LENGTH_LONG).show();
+
+        }
 
         selectedplace =
-                (Place) bundle.getSerializable("value");
+               Model.getQuery(Place.class).find(bundle.getString("value"));//.where(new Place().getPrimaryKey() ,"==" ,bundle.getString("value")).get();
+       //bundle.getSerializable("value");
 
         list = (ListView) findViewById(R.id.recommendationList);
 
+        Toast.makeText(this, "Place gotten was valid? " + (selectedplace != null), Toast.LENGTH_LONG).show();
         recommendationList = selectedplace.getRecommendations();
 
         /*for (int i = 0; i < 5; i++){
@@ -68,29 +78,6 @@ public class ReccomendationListActivity extends AppCompatActivity {
                 btnNewClicked(v);
             }
         });
-        //list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        // Capture ListView item click
-
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // selected item
-                Place selectedplace = listviewadapter.getPlaces().get(position);
-
-                // Launching new Activity on selecting single List Item
-                //SingleListItem will be changed to the name of the activity displaying the recommendations
-                Intent i = new Intent(getApplicationContext(), ReccomendationListActivity.class); //SingleListItem
-                // sending data to new activity
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("value", selectedplace);
-                i.putExtras(bundle);
-                //i.putExtra("com.openu.a2017_app1.screens.Place", selectedplace);
-                //i.putExtra("Place", selectedplace);
-                startActivity(i);
-
-            }
-        });*/
     }
 
     void btnNewClicked(View v) {

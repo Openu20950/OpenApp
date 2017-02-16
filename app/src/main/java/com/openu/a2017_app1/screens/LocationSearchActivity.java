@@ -173,7 +173,8 @@ public class LocationSearchActivity extends AppCompatActivity {
                     Place selectedplace = listviewadapter.getPlaces().get(position);
                     Intent i = new Intent(getApplicationContext(), ReccomendationListActivity.class); //SingleListItem
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("value", selectedplace);
+                    //bundle.putSerializable("value", selectedplace);
+                    bundle.putString("value", selectedplace.getId());
                     i.putExtras(bundle);
                     startActivity(i);
 
