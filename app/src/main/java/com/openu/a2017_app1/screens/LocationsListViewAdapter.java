@@ -59,7 +59,7 @@ public class LocationsListViewAdapter extends ArrayAdapter<Place> {
 
         holder.name.setText(placelist.get(position).getName());
         holder.category.setText(placelist.get(position).getCategory());
-        holder.recnum.setText("" + placelist.get(position).getRecommendations().size());
+        holder.recnum.setText("" + placelist.get(position).getRecommendations().count());
         // Capture position and set to the ImageView
         //holder.flag.setImageResource(placelist.get(position).getFlag());
         return view;

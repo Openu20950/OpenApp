@@ -4,9 +4,8 @@ package com.openu.a2017_app1.models;
 
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.openu.a2017_app1.data.DaoFactory;
+import com.openu.a2017_app1.data.QueryBuilder;
 
 
 /**
@@ -14,12 +13,12 @@ import java.util.List;
  */
 
 public class Place extends Model implements IPlace {
+
     /**
      * default constructor
      */
     public Place()
     {
-        this.table="Place";
     }
 
     /**
@@ -121,35 +120,10 @@ public class Place extends Model implements IPlace {
      *
      * @return
      */
-    public List<Recommendation> getRecommendations()
+    public QueryBuilder<Recommendation> getRecommendations()
     {
-        List<Recommendation> recommendationList = (List<Recommendation>)this.getAttribute("Recommendations");
-        if (recommendationList == null) {
-            return Collections.unmodifiableList(new ArrayList<Recommendation>());
-        }
-        return Collections.unmodifiableList(recommendationList);
+        return Model.getQuery(Recommendation.class).where("Place", this);
     }
-
-    /**
-     *
-     * @param recommendation
-     */
-    public void addRecommendation(Recommendation recommendation)
-    {
-        if (recommendation == null) {
-            return;
-        }
-
-        List<Recommendation> recommendationList = (List<Recommendation>)this.getAttribute("Recommendations");
-
-        if (recommendationList == null) {
-            recommendationList = new ArrayList<>();
-            setAttribute("Recommendations", recommendationList);
-        }
-
-        recommendationList.add(recommendation);
-    }
-
 
 }
 

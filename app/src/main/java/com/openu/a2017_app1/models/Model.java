@@ -24,8 +24,6 @@ public abstract class Model implements IModel {
      */
     protected String primaryKay="id";
 
-    protected String table;
-
     /**
      * Get an attribute from the model.
      * @param attributeName
@@ -90,7 +88,7 @@ public abstract class Model implements IModel {
 
     public String getTable()
     {
-        return table;
+        return getClass().getSimpleName();
     }
 
     public void save()

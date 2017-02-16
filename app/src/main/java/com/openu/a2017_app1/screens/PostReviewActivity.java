@@ -115,7 +115,6 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
             Toast.makeText(this, "Valid location? " + (myLocation != null), Toast.LENGTH_LONG).show();
             selectedplace.setLocation(myLocation);
             selectedplace.setName(nameText.getText().toString());
-            selectedplace.addRecommendation(rec);
             //rec.setPlace(selectedplace);
         }else{
             rec.setTitle(titleText.getText().toString());
@@ -123,9 +122,10 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
             //rec.setPlace(selectedplace);
 
         }
-        //Are we supposed to save the place or the recommendation or both? we are getting an error here: at com.openu.a2017_app1.data.DaoFactory.create(DaoFactory.java:46)
+        rec.setPlace(selectedplace);
+        //Are we supposed to save the place or the recommendation or both? we are getting an error here: at com.openu.a2017_app1.data.DaoFactory.createModelFromParse(DaoFactory.java:46)
         //rec.save();
-        selectedplace.saveAsync(this);
+        rec.saveAsync(this);
 
     }
 

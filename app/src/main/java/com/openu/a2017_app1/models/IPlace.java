@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.models;
-import java.util.List;
+
+import com.openu.a2017_app1.data.QueryBuilder;
 
 /**
  * Created by noam on 29/12/2016.
@@ -76,13 +77,5 @@ public interface IPlace extends IModel {
      *
      * @return
      */
-    public List<Recommendation> getRecommendations();
-
-    /**
-     *
-     * @param recommendation
-     */
-    public void addRecommendation(Recommendation recommendation);
-
-    //public boolean removeRecommendation(Recommendation recommendation);
+    public QueryBuilder<Recommendation> getRecommendations();
 }
