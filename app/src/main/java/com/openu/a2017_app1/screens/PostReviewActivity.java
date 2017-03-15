@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 import com.openu.a2017_app1.R;
+import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.ModelSaveListener;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Recommendation;
@@ -130,9 +131,8 @@ public class PostReviewActivity extends AppCompatActivity implements ModelSaveLi
     }
 
     void setLocationDataAndLock(Bundle bundle){
-        selectedplace =
-                (Place) bundle.getSerializable("value");
-
+        String id=bundle.getString("id");
+        selectedplace = Model.getQuery(Place.class).find(id);
         locationText.setText(selectedplace.getLocation().getLatitude() + " , " + selectedplace.getLocation().getLongitude());
         locationText.setKeyListener(null);
         nameText.setText(selectedplace.getName());
