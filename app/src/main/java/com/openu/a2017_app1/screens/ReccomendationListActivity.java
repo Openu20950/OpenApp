@@ -85,7 +85,7 @@ public class ReccomendationListActivity extends AppCompatActivity {
         // sending data to new activity
         Bundle bundle = new Bundle();
         bundle.putBoolean("existinglocation", true);
-        bundle.putSerializable("value", selectedplace);
+        bundle.putString("id", selectedplace.getId());
         i.putExtras(bundle);
         startActivity(i);
     }

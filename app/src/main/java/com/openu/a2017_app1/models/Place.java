@@ -1,10 +1,4 @@
 package com.openu.a2017_app1.models;
-
-
-
-
-
-import com.openu.a2017_app1.data.DaoFactory;
 import com.openu.a2017_app1.data.QueryBuilder;
 
 
