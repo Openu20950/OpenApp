@@ -18,7 +18,6 @@ public class Recommendation extends Model implements IRecommendation {
      */
     public Recommendation()
     {
-        this.table="Recommendation";
 
     }
 

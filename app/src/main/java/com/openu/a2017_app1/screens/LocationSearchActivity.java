@@ -160,7 +160,7 @@ public class LocationSearchActivity extends AppCompatActivity {
             //places.add(new PlaceImp());
             Toast.makeText(this, "We got data from the server it contained " + places.size() + " Places", Toast.LENGTH_LONG).show();
             if(places.size() > 0) {
-                Toast.makeText(this, "First Place had " + (places.get(0).getRecommendations().size() + " recommendations"), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "First Place had " + (places.get(0).getRecommendations().count() + " recommendations"), Toast.LENGTH_LONG).show();
             }
             //Toast.makeText(this, "I name valid? " + (places.get(0).getName() != null), Toast.LENGTH_LONG).show();
 

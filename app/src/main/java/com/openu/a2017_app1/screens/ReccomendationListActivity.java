@@ -57,7 +57,7 @@ public class ReccomendationListActivity extends AppCompatActivity {
         list = (ListView) findViewById(R.id.recommendationList);
 
         Toast.makeText(this, "Place gotten was valid? " + (selectedplace != null), Toast.LENGTH_LONG).show();
-        recommendationList = selectedplace.getRecommendations();
+        recommendationList = selectedplace.getRecommendations().getAll();
 
         /*for (int i = 0; i < 5; i++){
             Place p = new PlaceImp();

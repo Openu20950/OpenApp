@@ -1,4 +1,4 @@
-package com.openu.a2017_app1.data.parse;
+package com.openu.a2017_app1.data;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
