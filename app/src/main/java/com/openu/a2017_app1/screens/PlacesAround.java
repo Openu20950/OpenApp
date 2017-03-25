@@ -127,7 +127,6 @@ public class PlacesAround extends AppCompatActivity implements
         //noinspection MissingPermission
         mLocation = LocationPoint.fromLocation(FusedLocationApi.getLastLocation(mGoogleApiClient));
         if (mLocation != null) {
-            Toast.makeText(this, "load places", Toast.LENGTH_SHORT).show();
             loadPlaces();
         }
     }
