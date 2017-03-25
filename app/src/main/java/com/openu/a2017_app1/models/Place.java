@@ -8,6 +8,13 @@ import com.openu.a2017_app1.data.QueryBuilder;
 
 public class Place extends Model implements IPlace {
 
+    public static final String FIELD_NAME = "name";
+    public static final String FIELD_LOCATION = "location";
+    public static final String FIELD_PHONE = "phone";
+    public static final String FIELD_DESCRIPTION = "description";
+    public static final String FIELD_CATEGORY = "category";
+
+
     /**
      * default constructor
      */
@@ -21,7 +28,7 @@ public class Place extends Model implements IPlace {
      */
     public String getName()
     {
-        return (String)this.getAttribute("Name");
+        return (String)this.getAttribute(FIELD_NAME);
     }
 
 
@@ -31,7 +38,7 @@ public class Place extends Model implements IPlace {
      */
     public void setName(String name)
     {
-        this.setAttribute("Name",name);
+        this.setAttribute(FIELD_NAME,name);
     }
 
     /**
@@ -40,7 +47,7 @@ public class Place extends Model implements IPlace {
      */
     public LocationPoint getLocation()
     {
-        return (LocationPoint)this.getAttribute("Location");
+        return (LocationPoint)this.getAttribute(FIELD_LOCATION);
     }
 
     /**
@@ -49,7 +56,7 @@ public class Place extends Model implements IPlace {
      */
     public void setLocation(LocationPoint location)
     {
-        this.setAttribute("Location",location);
+        this.setAttribute(FIELD_LOCATION, location);
 
     }
 
@@ -59,7 +66,7 @@ public class Place extends Model implements IPlace {
      */
     public String getPhone()
     {
-        return (String)this.getAttribute("Phone");
+        return (String)this.getAttribute(FIELD_PHONE);
     }
 
     /**
@@ -68,7 +75,7 @@ public class Place extends Model implements IPlace {
      */
     public void setPhone(String phoneNum)
     {
-        this.setAttribute("Phone",phoneNum);
+        this.setAttribute(FIELD_PHONE,phoneNum);
     }
 
 
@@ -78,7 +85,7 @@ public class Place extends Model implements IPlace {
      */
     public String getDescription()
     {
-        return (String)this.getAttribute("Description");
+        return (String)this.getAttribute(FIELD_DESCRIPTION);
     }
 
     /**
@@ -87,7 +94,7 @@ public class Place extends Model implements IPlace {
      */
     public void setDescription(String description)
     {
-        this.setAttribute("Description",description);
+        this.setAttribute(FIELD_DESCRIPTION,description);
     }
 
 
@@ -97,7 +104,7 @@ public class Place extends Model implements IPlace {
      */
     public String getCategory()
     {
-        return (String)this.getAttribute("Category");
+        return (String)this.getAttribute(FIELD_CATEGORY);
     }
 
 
@@ -107,16 +114,16 @@ public class Place extends Model implements IPlace {
      */
     public void setCategory(String category)
     {
-        this.setAttribute("Category",category);
+        this.setAttribute(FIELD_CATEGORY,category);
     }
 
     /**
      *
      * @return
      */
-    public QueryBuilder<Recommendation> getRecommendations()
+    public QueryBuilder<Review> getReviews()
     {
-        return Model.getQuery(Recommendation.class).where("Place", this);
+        return Model.getQuery(Review.class).where(getTable(), this);
     }
 
 }

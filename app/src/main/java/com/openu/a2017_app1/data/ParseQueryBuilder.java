@@ -3,6 +3,7 @@ package com.openu.a2017_app1.data;
 import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -51,14 +52,30 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     @Override
     public List<T> getAll() {
         try {
-            List<T> res = new ArrayList<>();
-            for (ParseObject obj : query.find()) {
-                res.add((T)ModelCreator.createModelFromParse(obj, clazz));
-            }
-            return res;
+            return prepareObjects(query.find());
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    @Override
+    public void getAllAsync(final GetAllListener<T> listener) {
+        if (listener == null) return;
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                listener.onItemsReceived(prepareObjects(objects));
+            }
+        });
+    }
+
+    private List<T> prepareObjects(List<ParseObject> objects) {
+        List<T> res = new ArrayList<>();
+        for (ParseObject obj : objects) {
+            res.add((T)ModelCreator.createModelFromParse(obj, clazz));
+        }
+        return res;
     }
 
     @Override

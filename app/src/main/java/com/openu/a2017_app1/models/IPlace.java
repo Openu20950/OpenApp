@@ -77,5 +77,5 @@ public interface IPlace extends IModel {
      *
      * @return
      */
-    public QueryBuilder<Recommendation> getRecommendations();
+    public QueryBuilder<Review> getReviews();
 }

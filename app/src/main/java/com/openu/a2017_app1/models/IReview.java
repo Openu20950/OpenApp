@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * Created by noam on 29/12/2016.
  */
 
-public interface IRecommendation extends IModel{
+public interface IReview extends IModel {
 
 
     /**
@@ -46,14 +46,26 @@ public interface IRecommendation extends IModel{
     public void setDescription(String description);
 
     /**
-     * return photo of the place from the recommendation
+     * return photo of the place from the review
      * @return
      */
     public Bitmap getPhoto();
 
     /**
-     * set a photo of the place to the recommendation
+     * set a photo of the place to the review
      * @param photo
      */
     public void setPhoto(Bitmap photo);
+
+    /**
+     * return the conclusion of the review
+     * @return
+     */
+    public ReviewConclusion getConclusion();
+
+    /**
+     * set a conclusion for the review
+     * @param conclusion
+     */
+    public void setConclusion(ReviewConclusion conclusion);
 }

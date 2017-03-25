@@ -29,6 +29,12 @@ public interface QueryBuilder<T extends IModel> {
     List<T> getAll();
 
     /**
+     * Get all results asynchronously.
+     * @return
+     */
+    void getAllAsync(GetAllListener<T> listener);
+
+    /**
      * Get the number of results.
      * @return
      */

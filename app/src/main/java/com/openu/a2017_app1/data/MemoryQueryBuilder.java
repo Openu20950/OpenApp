@@ -100,6 +100,12 @@ public class MemoryQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     }
 
     @Override
+    public void getAllAsync(GetAllListener<T> listener) {
+        if (listener == null) return;
+        listener.onItemsReceived(getAll());
+    }
+
+    @Override
     public long count() {
         return Math.min(this.limit, table.size());
     }

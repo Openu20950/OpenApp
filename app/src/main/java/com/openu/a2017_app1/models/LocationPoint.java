@@ -1,6 +1,7 @@
 package com.openu.a2017_app1.models;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
@@ -69,5 +70,17 @@ public class LocationPoint implements Serializable {
 
         double distance=location1.distanceTo(location2)/1000;
         return distance;
+    }
+
+    /**
+     * Convert a Location to a LocationPoint
+     * @param location the location
+     * @return the location as LocationPoint
+     */
+    public static LocationPoint fromLocation(@NonNull Location location) {
+        LocationPoint lp = new LocationPoint();
+        lp.setLatitude(location.getLatitude());
+        lp.setLongitude(location.getLongitude());
+        return lp;
     }
 }

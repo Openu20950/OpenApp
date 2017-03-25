@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:background="@color/primary_light"
+        android:foreground="@drawable/rounded_fg"
+        app:srcCompat="@drawable/ic_place" />
+
+    <TextView
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Small" />
+
+    <TextView
+        android:id="@+id/place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="56dp"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance" />
+
+    <ImageView
+        android:id="@+id/like"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/place_name"
+        android:layout_alignStart="@+id/place_name"
+        android:layout_alignTop="@+id/likes"
+        android:adjustViewBounds="false"
+        app:srcCompat="@drawable/ic_thumb_up" />
+
+    <TextView
+        android:id="@+id/likes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp"
+        android:layout_toEndOf="@+id/like"
+        android:layout_toRightOf="@+id/like"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Small" />
+
+    <ImageView
+        android:id="@+id/dislike"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="false"
+        app:srcCompat="@drawable/ic_thumb_down"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/likes"
+        android:layout_toEndOf="@+id/likes"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_alignTop="@+id/likes" />
+
+    <TextView
+        android:id="@+id/dislikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp"
+        android:layout_toEndOf="@+id/dislike"
+        android:layout_toRightOf="@+id/dislike"
+        android:text="TextView"
+        android:textAppearance="@android:style/TextAppearance.Small" />
+</RelativeLayout>
