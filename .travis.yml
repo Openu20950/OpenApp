@@ -19,6 +19,6 @@ notifications:
 
 sudo: required
 
- script:
+script:
    - chmod +x gradlew
    - ./gradlew clean build
