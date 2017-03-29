@@ -23,6 +23,10 @@ android {
     defaultConfig {
         multiDexEnabled true
     }
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
