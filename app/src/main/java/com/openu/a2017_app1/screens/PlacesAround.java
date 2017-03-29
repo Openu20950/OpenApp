@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.screens;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -61,8 +63,9 @@ public class PlacesAround extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent myIntent = new Intent(PlacesAround.this, AddPlace.class);
+                myIntent.putExtra(AddPlace.EXTRA_LOCATION, mLocation);
+                PlacesAround.this.startActivity(myIntent);
             }
         });
 
@@ -72,6 +75,25 @@ public class PlacesAround extends AppCompatActivity implements
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mSpinner = (Spinner) findViewById(R.id.radius_spinner);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, R.layout.drop_title);
+        adapter.setDropDownViewResource(R.layout.drop_list);
+
+        mSpinner.setAdapter(adapter);
+
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                loadPlaces();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
@@ -85,6 +107,13 @@ public class PlacesAround extends AppCompatActivity implements
     }
 
     private void loadPlaces() {
+        if (mLocation == null) {
+            return;
+        }
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+
         int radius = getResources().getIntArray(R.array.place_around_radius)[mSpinner.getSelectedItemPosition()];
         Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, mLocation, radius).getAllAsync(new GetAllListener<Place>() {
             @Override
@@ -107,19 +136,6 @@ public class PlacesAround extends AppCompatActivity implements
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_places_around, menu);
-
-        MenuItem item = menu.findItem(R.id.radius_spinner);
-        mSpinner = (Spinner) MenuItemCompat.getActionView(item);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(adapter);
-        return true;
     }
 
     @Override
@@ -184,8 +200,8 @@ public class PlacesAround extends AppCompatActivity implements
             IPlace place = mPlacesList.get(position);
             holder.placeName.setText(place.getName());
             holder.category.setText(place.getCategory());
-            holder.likes.setText((int) place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Like).count());
-            holder.dislikes.setText((int) place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Dislike).count());
+            holder.likes.setText(String.valueOf(place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Like.name()).count()));
+            holder.dislikes.setText(String.valueOf(place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Dislike.name()).count()));
         }
 
         @Override

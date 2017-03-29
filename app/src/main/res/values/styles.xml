@@ -12,7 +12,7 @@
         <item name="dividerVertical">@color/divider</item>
     </style>
 
-    <style name="AppTheme.Toolbar" parent="Widget.AppCompat.ActionBar">
+    <style name="AppTheme.Toolbar" parent="Widget.AppCompat.Light.ActionBar">
         <item name="android:textColorPrimary">@color/icons</item>
         <item name="android:textColorSecondary">@color/primary_light</item>
     </style>
