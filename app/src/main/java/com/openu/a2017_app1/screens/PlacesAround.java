@@ -73,14 +73,12 @@ public class PlacesAround extends AppCompatActivity implements
 
         mRecyclerView = (RecyclerView) findViewById(R.id.places_list);
         mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
 
         mSpinner = (Spinner) findViewById(R.id.radius_spinner);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, R.layout.drop_title);
         adapter.setDropDownViewResource(R.layout.drop_list);
-
         mSpinner.setAdapter(adapter);
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -118,7 +116,16 @@ public class PlacesAround extends AppCompatActivity implements
         Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, mLocation, radius).getAllAsync(new GetAllListener<Place>() {
             @Override
             public void onItemsReceived(List<Place> items) {
-                mRecyclerView.setAdapter(new PlacesAdapter(items));
+                PlacesAdapter adapter = new PlacesAdapter(items);
+                adapter.setOnClickListener(new PlacesAdapter.OnPlaceClickListener() {
+                    @Override
+                    public void OnPlaceClicked(String placeId) {
+                        Intent myIntent = new Intent(PlacesAround.this, PlaceInfo.class);
+                        myIntent.putExtra(PlaceInfo.EXTRA_PLACE, placeId);
+                        PlacesAround.this.startActivity(myIntent);
+                    }
+                });
+                mRecyclerView.setAdapter(adapter);
 
                 mProgressBar.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
@@ -166,22 +173,11 @@ public class PlacesAround extends AppCompatActivity implements
         }
     }
 
-    private class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHolder> {
+    private static class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHolder> {
 
         private List<Place> mPlacesList;
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView placeName, likes, dislikes, category;
-
-            public MyViewHolder(View view) {
-                super(view);
-                placeName = (TextView) view.findViewById(R.id.place_name);
-                likes = (TextView) view.findViewById(R.id.likes);
-                dislikes = (TextView) view.findViewById(R.id.dislikes);
-                category = (TextView) view.findViewById(R.id.category);
-            }
-        }
-
+        private OnPlaceClickListener mClickListener;
 
         public PlacesAdapter(List<Place> placesList) {
             this.mPlacesList = placesList;
@@ -197,16 +193,47 @@ public class PlacesAround extends AppCompatActivity implements
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
-            IPlace place = mPlacesList.get(position);
+            final Place place = mPlacesList.get(position);
             holder.placeName.setText(place.getName());
             holder.category.setText(place.getCategory());
             holder.likes.setText(String.valueOf(place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Like.name()).count()));
             holder.dislikes.setText(String.valueOf(place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Dislike.name()).count()));
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null) {
+                        mClickListener.OnPlaceClicked(place.getId());
+                    }
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return mPlacesList.size();
+        }
+
+        public void setOnClickListener(OnPlaceClickListener mClickListener) {
+            this.mClickListener = mClickListener;
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public TextView placeName, likes, dislikes, category;
+
+            public MyViewHolder(View view) {
+                super(view);
+                placeName = (TextView) view.findViewById(R.id.place_name);
+                likes = (TextView) view.findViewById(R.id.likes);
+                dislikes = (TextView) view.findViewById(R.id.dislikes);
+                category = (TextView) view.findViewById(R.id.category);
+            }
+
+
+        }
+
+        public interface OnPlaceClickListener {
+            void OnPlaceClicked(String placeId);
         }
     }
 

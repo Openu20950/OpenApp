@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -29,7 +30,11 @@
         </activity>
         <activity
             android:name=".screens.AddPlace"
-            android:label="@string/title_activity_add_place"></activity>
+            android:label="@string/title_activity_add_place" />
+        <activity
+            android:name=".screens.PlaceInfo"
+            android:label="@string/title_activity_place_info"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
