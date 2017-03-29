@@ -23,6 +23,9 @@ android {
     defaultConfig {
         multiDexEnabled true
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
