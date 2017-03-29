@@ -18,7 +18,3 @@ notifications:
   email: false
 
 sudo: required
-
-script:
-  - chmod +x gradlew
-  - ./gradlew clean build
