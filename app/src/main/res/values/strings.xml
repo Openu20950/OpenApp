@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">2017-app1</string>
     <string name="title_activity_places_around">Places Around</string>
+    <string name="title_activity_add_place">Add Place</string>
+
+    <string name="place_name">Place name</string>
+    <string name="description">Description (optional)</string>
+    <string name="phone">Phone (optional)</string>
+    <string name="add_place">Add place</string>
+    <string name="place_name_cannot_be_empty">Place name cannot be empty!</string>
+    <string name="failed_to_save_place">Failed to save the place. Try again later.</string>
 </resources>
