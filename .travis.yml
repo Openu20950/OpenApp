@@ -18,6 +18,3 @@ notifications:
   email: false
 
 sudo: required
-
-script:
-  - ./gradlew clean build
