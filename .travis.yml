@@ -17,6 +17,10 @@ android:
     
 jdk: oraclejdk8
 
+notifications:
+  email:
+    on_success: never
+
 sudo: required
 
 script:
