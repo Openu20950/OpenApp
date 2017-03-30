@@ -10,7 +10,7 @@ public class Review extends Model implements IReview {
 
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_PLACE = "place";
-    public static final String FIELD_DESCRIPTION = "Description";
+    public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_PHOTO = "photo";
     public static final String FIELD_CONCLUSION = "conclusion";
 
