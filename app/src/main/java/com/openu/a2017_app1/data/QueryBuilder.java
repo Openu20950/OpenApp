@@ -22,6 +22,8 @@ public interface QueryBuilder<T extends IModel> {
      */
     T find(Object id);
 
+    void findAsync(Object id, FindListener callback);
+
     /**
      * Get all results.
      * @return

@@ -4,6 +4,7 @@ import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
@@ -47,6 +48,24 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public void findAsync(Object id, final FindListener callback) {
+        if (!(id instanceof String)) {
+            throw new IllegalArgumentException("The id must be a string");
+        }
+        if (callback == null) { return; }
+        this.query.getInBackground((String) id, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (object == null || e!= null) {
+                    callback.onItemFound(null);
+                } else {
+                    callback.onItemFound((T) ModelCreator.createModelFromParse(object, clazz));
+                }
+            }
+        });
     }
 
     @Override
