@@ -2,18 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:background="@color/primary_light"
-        android:foreground="@drawable/rounded_fg"
-        app:srcCompat="@drawable/ic_place" />
+        android:layout_height="40dp"
+        android:src="@drawable/ic_place" />
 
     <TextView
         android:id="@+id/category"

@@ -93,6 +93,12 @@ public class MemoryQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     }
 
     @Override
+    public void findAsync(Object id, FindListener callback) {
+        if (callback == null) { return; }
+        callback.onItemFound(find(id));
+    }
+
+    @Override
     public List<T> getAll() {
         sort();
         int to = Math.min(this.skip + this.limit, table.size());

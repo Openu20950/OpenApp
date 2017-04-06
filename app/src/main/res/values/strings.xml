@@ -8,5 +8,9 @@
     <string name="phone">Phone (optional)</string>
     <string name="add_place">Add place</string>
     <string name="place_name_cannot_be_empty">Place name cannot be empty!</string>
+    <string name="location_service_off">The app needs a location service turned on</string>
+    <string name="turn_on">turn on</string>
     <string name="failed_to_save_place">Failed to save the place. Try again later.</string>
+    <string name="title_activity_place_info">Place Info</string>
+    <string name="action_settings">Settings</string>
 </resources>
