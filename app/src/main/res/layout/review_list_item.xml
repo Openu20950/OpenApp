@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,33 +20,49 @@
         android:id="@+id/since"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/title"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:text="Since"
-        android:textAppearance="@android:style/TextAppearance.Small" />
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:layout_alignBottom="@+id/rating"
+        android:layout_toRightOf="@+id/rating"
+        android:layout_toEndOf="@+id/rating"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="-2dp"/>
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_toEndOf="@+id/icon"
         android:layout_toRightOf="@+id/icon"
-        android:text="Title"
+        android:text="Author"
+        android:textStyle="bold"
         android:textAppearance="@android:style/TextAppearance" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/title"
-        android:layout_alignStart="@+id/title"
-        android:layout_below="@+id/since"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="Description"
-        android:textAppearance="@android:style/TextAppearance.Small" />
+        android:textAppearance="@android:style/TextAppearance.Small"
+        tools:text="long longlong longlong longlong longlong longlong longlong longlong long"
+        android:textColor="@color/primary_text"
+        android:layout_below="@+id/rating"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/rating"
+        android:layout_alignStart="@+id/rating" />
+
+    <RatingBar
+        android:id="@+id/rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/icon"
+        android:layout_alignLeft="@+id/author"
+        android:layout_alignStart="@+id/author" />
 
 </RelativeLayout>

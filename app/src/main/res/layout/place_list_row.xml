@@ -35,50 +35,13 @@
         android:text="TextView"
         android:textAppearance="@android:style/TextAppearance" />
 
-    <ImageView
-        android:id="@+id/like"
-        android:layout_width="10dp"
+    <RatingBar
+        android:id="@+id/rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/icon"
         android:layout_alignLeft="@+id/place_name"
-        android:layout_alignStart="@+id/place_name"
-        android:layout_alignTop="@+id/likes"
-        android:adjustViewBounds="false"
-        app:srcCompat="@drawable/ic_thumb_up" />
+        android:layout_alignStart="@+id/place_name" />
 
-    <TextView
-        android:id="@+id/likes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_toEndOf="@+id/like"
-        android:layout_toRightOf="@+id/like"
-        android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Small" />
-
-    <ImageView
-        android:id="@+id/dislike"
-        android:layout_width="10dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="false"
-        app:srcCompat="@drawable/ic_thumb_down"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/likes"
-        android:layout_toEndOf="@+id/likes"
-        android:layout_marginLeft="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_alignTop="@+id/likes" />
-
-    <TextView
-        android:id="@+id/dislikes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_toEndOf="@+id/dislike"
-        android:layout_toRightOf="@+id/dislike"
-        android:text="TextView"
-        android:textAppearance="@android:style/TextAppearance.Small" />
 </RelativeLayout>

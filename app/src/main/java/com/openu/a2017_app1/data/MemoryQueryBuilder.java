@@ -117,6 +117,17 @@ public class MemoryQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     }
 
     @Override
+    public double average(String field) {
+        int count = 0;
+        double sum = 0;
+        for (T item: getAll()) {
+            sum += (Double) item.getAttribute(field);
+            count++;
+        }
+        return count == 0 ? 0 : sum / count;
+    }
+
+    @Override
     public QueryBuilder<T> where(String field, String operator, Object value) {
         if (!comparators.containsKey(operator)) {
             new IllegalArgumentException("operator \"" + operator + "\" is not supported!");

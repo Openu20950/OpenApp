@@ -36,7 +36,9 @@
             android:name=".screens.PlaceInfo"
             android:label="@string/title_activity_place_info"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity android:name=".screens.AddReview"
+            android:label="@string/title_activity_add_review"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

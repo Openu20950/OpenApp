@@ -1,9 +1,13 @@
 package com.openu.a2017_app1.models;
 
 
+import android.support.annotation.Nullable;
+
 import com.openu.a2017_app1.data.DaoFactory;
 import com.openu.a2017_app1.data.QueryBuilder;
 import com.openu.a2017_app1.data.SaveListener;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +18,8 @@ import java.util.Map;
 
 public abstract class Model implements IModel {
 
+    private static final String FIELD_CREATED_AT = "created_at";
+    private static final String FIELD_UPDATED_AT = "updated_at";
     /**
      * The modle attributs
      */
@@ -45,7 +51,6 @@ public abstract class Model implements IModel {
      */
     public void setAttribute(String attributeName,Object attributeValue)
     {
-
         this.attributes.put(attributeName,attributeValue);
     }
 
@@ -69,6 +74,24 @@ public abstract class Model implements IModel {
     }
 
     /**
+     * Get the create time of the object
+     * @return
+     */
+    public Date getCreatedAt()
+    {
+        return (Date) this.getAttribute(FIELD_CREATED_AT);
+    }
+
+    /**
+     * Get the last update time of the object
+     * @return
+     */
+    public Date getUpdatedAt()
+    {
+        return (Date) this.getAttribute(FIELD_UPDATED_AT);
+    }
+
+    /**
      * Get the all attributes from the model
      * @return
      */
@@ -84,7 +107,6 @@ public abstract class Model implements IModel {
             this.setAttribute(key, map.getValue());
         }
     }
-
 
     public String getTable()
     {
@@ -122,6 +144,7 @@ public abstract class Model implements IModel {
         return parts[parts.length - 1];
     }
 
+    @Nullable
     public static <T extends IModel> QueryBuilder<T> getQuery(Class<T> clas)
     {
         T model = null;

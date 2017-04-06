@@ -44,39 +44,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/place_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/place_name"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <Spinner
-                    android:id="@+id/category"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="10dp"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                <android.widget.RatingBar
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="false"
+                    android:layout_gravity="center"
+                    android:numStars="5"
+                    android:stepSize="1"/>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:id="@+id/description"
+                        android:id="@+id/comment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/description_optional"
+                        android:hint="@string/comment"
                         android:inputType="text|textMultiLine" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -85,42 +70,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/phone"
-                        android:inputType="phone"
-                        android:singleLine="true" />
-
                 </android.support.design.widget.TextInputLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal|center"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/divider"
-                    android:padding="1dp">
-
-                    <ImageView
-                        android:id="@+id/photo"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-
-                        android:background="@color/primary_light"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
-
-                </LinearLayout>
-
                 <Button
-                    android:id="@+id/add_place_button"
+                    android:id="@+id/add_review_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/add_place"
+                    android:text="@string/add_review"
                     android:textStyle="bold" />
 
             </LinearLayout>
