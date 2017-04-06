@@ -105,6 +105,7 @@ public class AddPlace extends AppCompatActivity {
                 place.setDescription(mDescription.getText().toString().trim());
                 place.setPhone(mPhone.getText().toString().trim());
                 place.setLocation(mLocation);
+                place.setPhoto(mCapturedPhoto);
 
                 place.saveAsync(new ModelSaveListener() {
                     @Override

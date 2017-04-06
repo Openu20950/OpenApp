@@ -1,22 +1,27 @@
 package com.openu.a2017_app1.screens;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.openu.a2017_app1.R;
@@ -26,19 +31,28 @@ import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
 
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PlaceInfo extends AppCompatActivity {
 
     public static final String EXTRA_PLACE_ID = "place_id";
-    public static final String EXTRA_PLACE_NAME = "place_title";
 
     private static final int PAGE_SIZE = 50;
 
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private ReviewsAdapter mAdapter;
+    private ImageView mBackdrop;
+    private RatingBar mRating;
+    private TextView mCategory;
+    private TextView mRatingText;
+    private TextView mDescription;
+    private TextView mPhone;
+    private RelativeLayout mDetails;
+    private CollapsingToolbarLayout mCollapsingToolbar;
     private EndlessRecyclerViewScrollListener mScroller;
     private String mPlaceId;
 
@@ -48,21 +62,33 @@ public class PlaceInfo extends AppCompatActivity {
         setContentView(R.layout.activity_place_info);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getIntent().getExtras().getString(EXTRA_PLACE_NAME));
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(null);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TOOD: add a new review activity
+                Intent myIntent = new Intent(PlaceInfo.this, AddReview.class);
+                myIntent.putExtra(AddReview.EXTRA_PLACE_ID, mPlaceId);
+                PlaceInfo.this.startActivity(myIntent);
             }
         });
 
         mPlaceId = getIntent().getExtras().getString(EXTRA_PLACE_ID);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
+        mBackdrop = (ImageView) findViewById(R.id.backdrop);
+
+        mRating = (RatingBar) findViewById(R.id.rating);
+        mRatingText = (TextView) findViewById(R.id.score_text);
+        mCategory = (TextView) findViewById(R.id.category);
+        mDescription = (TextView) findViewById(R.id.description);
+        mPhone = (TextView) findViewById(R.id.phone);
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mDetails = (RelativeLayout) findViewById(R.id.place_details);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.reviews_list);
         mRecyclerView.setHasFixedSize(true);
@@ -75,14 +101,14 @@ public class PlaceInfo extends AppCompatActivity {
             }
         };
         mRecyclerView.addOnScrollListener(mScroller);
-        DividerItemDecoration horizontalDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                DividerItemDecoration.VERTICAL);
-        Drawable horizontalDivider = ContextCompat.getDrawable(this, R.drawable.horizontal_divider);
-        horizontalDecoration.setDrawable(horizontalDivider);
-        mRecyclerView.addItemDecoration(horizontalDecoration);
         mAdapter = new ReviewsAdapter();
         mRecyclerView.setAdapter(mAdapter);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAdapter.getItems().clear();
         loadReviews(0);
     }
 
@@ -98,10 +124,31 @@ public class PlaceInfo extends AppCompatActivity {
     private void loadReviews(final int offset) {
         mProgressBar.setVisibility(View.VISIBLE);
 
-        Model.getQuery(Place.class).findAsync(mPlaceId, new FindListener() {
+        Model.getQuery(Place.class).findAsync(mPlaceId, new FindListener<Place>() {
             @Override
-            public void onItemFound(final Object item) {
-                Place place = (Place) item;
+            public void onItemFound(final Place place) {
+
+                mBackdrop.setImageBitmap(place.getPhoto());
+                getSupportActionBar().setTitle(place.getName());
+                double rating = place.getReviews().average(Review.FIELD_SCORE);
+                mRating.setRating((float)rating);
+                mRatingText.setText(String.format("%.1f", rating));
+                if (place.getDescription() != null && place.getDescription().length() != 0) {
+                    mDescription.setText(place.getDescription());
+                    mDescription.setVisibility(View.VISIBLE);
+                }
+                mCategory.setText(place.getCategory());
+                if (place.getPhone() != null && place.getPhone().length() != 0) {
+                    mPhone.setText(place.getPhone());
+                    mPhone.setVisibility(View.VISIBLE);
+                }
+
+                mDetails.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCollapsingToolbar.setExpandedTitleMarginBottom(mDetails.getHeight() + 2 * getResources().getDimensionPixelOffset(R.dimen.fab_margin));
+                    }
+                });
 
                 place.getReviews().skip(offset).limit(PAGE_SIZE).getAllAsync(new GetAllListener<Review>() {
                     @Override
@@ -109,9 +156,8 @@ public class PlaceInfo extends AppCompatActivity {
                         mProgressBar.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
 
-                        if (items.isEmpty()) {
+                        if (items.size() < PAGE_SIZE) {
                             mRecyclerView.removeOnScrollListener(mScroller);
-                            return;
                         }
 
                         mAdapter.getItems().addAll(items);
@@ -137,7 +183,7 @@ public class PlaceInfo extends AppCompatActivity {
         @Override
         public PlaceInfo.ReviewsAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.place_list_row, parent, false);
+                    .inflate(R.layout.review_list_item, parent, false);
 
             return new PlaceInfo.ReviewsAdapter.MyViewHolder(itemView);
         }
@@ -145,8 +191,10 @@ public class PlaceInfo extends AppCompatActivity {
         @Override
         public void onBindViewHolder(PlaceInfo.ReviewsAdapter.MyViewHolder holder, int position) {
             final Review review = mReviewsList.get(position);
-            holder.title.setText(review.getTitle());
-            holder.description.setText(review.getDescription());
+            //holder.author.setText(review.getAuthor());
+            holder.description.setText(review.getComment());
+            holder.since.setText(DateUtils.getRelativeTimeSpanString(review.getCreatedAt().getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
+            holder.ratingBar.setRating(review.getScore());
         }
 
         @Override
@@ -159,15 +207,17 @@ public class PlaceInfo extends AppCompatActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView since, title, description;
-            public ImageView icon;
+            public TextView since, author, description;
+            public ImageView user;
+            public RatingBar ratingBar;
 
             public MyViewHolder(View view) {
                 super(view);
                 since = (TextView) view.findViewById(R.id.since);
-                title = (TextView) view.findViewById(R.id.title);
+                author = (TextView) view.findViewById(R.id.author);
                 description = (TextView) view.findViewById(R.id.description);
-                icon = (ImageView) view.findViewById(R.id.icon);
+                user = (ImageView) view.findViewById(R.id.icon);
+                ratingBar = (RatingBar) view.findViewById(R.id.rating);
             }
         }
     }

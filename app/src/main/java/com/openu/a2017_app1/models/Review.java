@@ -6,13 +6,11 @@ import android.graphics.Bitmap;
  * Created by noam on 28/12/2016.
  */
 
-public class Review extends Model implements IReview {
+public class Review extends Model {
 
-    public static final String FIELD_TITLE = "title";
     public static final String FIELD_PLACE = "place";
-    public static final String FIELD_DESCRIPTION = "description";
-    public static final String FIELD_PHOTO = "photo";
-    public static final String FIELD_CONCLUSION = "conclusion";
+    public static final String FIELD_COMMENT = "comment";
+    public static final String FIELD_SCORE = "score";
 
     /**
      * default constructor
@@ -20,24 +18,6 @@ public class Review extends Model implements IReview {
     public Review()
     {
 
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getTitle()
-    {
-        return (String)this.getAttribute(FIELD_TITLE);
-    }
-
-    /**
-     *
-     * @param title
-     */
-    public void setTitle(String title)
-    {
-        this.setAttribute(FIELD_TITLE,title);
     }
 
     /**
@@ -59,48 +39,26 @@ public class Review extends Model implements IReview {
     }
 
     /**
-     * return the description of the place
      * @return
      */
-    public String getDescription()
+    public String getComment()
     {
-        return (String)this.getAttribute(FIELD_DESCRIPTION);
+        return (String)this.getAttribute(FIELD_COMMENT);
     }
 
     /**
-     * set the description of the place
-     * @param description
+     * @param cooment
      */
-    public void setDescription(String description)
+    public void setComment(String cooment)
     {
-        this.setAttribute(FIELD_DESCRIPTION,description);
+        this.setAttribute(FIELD_COMMENT,cooment);
     }
 
-    /**
-     * return photo of the place from the recommendation
-     * @return
-     */
-    public Bitmap getPhoto()
-    {
-        return (Bitmap)this.getAttribute(FIELD_PHOTO);
+    public int getScore() {
+        return (int) this.getAttribute(FIELD_SCORE);
     }
 
-    /**
-     * set a photo of the place to the recommendation
-     * @param photo
-     */
-    public void setPhoto(Bitmap photo)
-    {
-        this.setAttribute(FIELD_PHOTO,photo);
-    }
-
-    @Override
-    public ReviewConclusion getConclusion() {
-        return ReviewConclusion.valueOf((String) this.getAttribute(FIELD_CONCLUSION));
-    }
-
-    @Override
-    public void setConclusion(ReviewConclusion conclusion) {
-        this.setAttribute(FIELD_CONCLUSION, conclusion.name());
+    public void setScore(int score) {
+        this.setAttribute(FIELD_SCORE, score);
     }
 }

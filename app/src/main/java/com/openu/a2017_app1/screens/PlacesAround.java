@@ -20,7 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,6 @@ import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
-import com.openu.a2017_app1.models.ReviewConclusion;
 import com.openu.a2017_app1.services.LocationService;
 
 import java.util.List;
@@ -133,7 +134,6 @@ public class PlacesAround extends AppCompatActivity implements
                     public void OnPlaceClicked(Place place) {
                         Intent myIntent = new Intent(PlacesAround.this, PlaceInfo.class);
                         myIntent.putExtra(PlaceInfo.EXTRA_PLACE_ID, place.getId());
-                        myIntent.putExtra(PlaceInfo.EXTRA_PLACE_NAME, place.getName());
                         PlacesAround.this.startActivity(myIntent);
                     }
                 });
@@ -203,8 +203,8 @@ public class PlacesAround extends AppCompatActivity implements
             final Place place = mPlacesList.get(position);
             holder.placeName.setText(place.getName());
             holder.category.setText(place.getCategory());
-            holder.likes.setText(String.valueOf(place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Like.name()).count()));
-            holder.dislikes.setText(String.valueOf(place.getReviews().where(Review.FIELD_CONCLUSION, ReviewConclusion.Dislike.name()).count()));
+            holder.rating.setRating((float) place.getReviews().average(Review.FIELD_SCORE));
+            holder.photo.setImageBitmap(place.getPhoto());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -226,14 +226,16 @@ public class PlacesAround extends AppCompatActivity implements
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView placeName, likes, dislikes, category;
+            public TextView placeName, category;
+            public RatingBar rating;
+            public ImageView photo;
 
             public MyViewHolder(View view) {
                 super(view);
                 placeName = (TextView) view.findViewById(R.id.place_name);
-                likes = (TextView) view.findViewById(R.id.likes);
-                dislikes = (TextView) view.findViewById(R.id.dislikes);
+                rating = (RatingBar) view.findViewById(R.id.rating);
                 category = (TextView) view.findViewById(R.id.category);
+                photo = (ImageView) view.findViewById(R.id.icon);
             }
 
 

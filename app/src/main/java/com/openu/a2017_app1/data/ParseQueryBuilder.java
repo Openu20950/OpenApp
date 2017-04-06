@@ -108,6 +108,21 @@ class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
     }
 
     @Override
+    public double average(String field) {
+        try {
+            double sum = 0;
+            long count = 0;
+            for (ParseObject object : query.find()) {
+                sum += object.getDouble(field);
+                count++;
+            }
+            return count == 0 ? 0 : sum / count;
+        } catch (ParseException e) {
+            return 0;
+        }
+    }
+
+    @Override
     public QueryBuilder<T> where(String field, String operator, Object value) {
         value = Converters.getInstance().convert(value);
         switch (operator) {

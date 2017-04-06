@@ -43,6 +43,13 @@ public interface QueryBuilder<T extends IModel> {
     long count();
 
     /**
+     * Get the average of the values of a field.
+     * @param field the field name
+     * @return the the average of the values of a field.
+     */
+    double average(String field);
+
+    /**
      * Filter the results by condition
      * @param field the field name
      * @param operator one of the operators "==", "!=", ">", ">=", "<", "<=". Other operator will cause to exception

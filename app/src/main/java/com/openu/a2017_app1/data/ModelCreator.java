@@ -15,6 +15,9 @@ import java.util.Map;
 
 /* package */ class ModelCreator {
 
+    /* package */ static final String CREATED_AT_ATTRIBUTE = "created_at";
+    /* package */ static final String UPDATED_AT_ATTRIBUTE = "updated_at";
+
     public static IModel createModelFromParse(ParseObject obj, Class<? extends IModel> modelClass) {
         try {
             IModel model = modelClass.newInstance();
@@ -45,6 +48,8 @@ import java.util.Map;
         Map<String, Object> attributes = getAttributes(model, obj);
         attributes.put(model.getPrimaryKey(), obj.getObjectId());
         attributes.put(ParseDao.PARSE_OBJECT_ATTRIBUTE, obj);
+        attributes.put(CREATED_AT_ATTRIBUTE, obj.getCreatedAt());
+        attributes.put(UPDATED_AT_ATTRIBUTE, obj.getUpdatedAt());
         model.fill(attributes);
     }
 
