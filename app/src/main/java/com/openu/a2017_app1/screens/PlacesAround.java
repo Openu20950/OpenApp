@@ -5,19 +5,17 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,19 +26,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
-import com.openu.a2017_app1.models.IPlace;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.models.ReviewConclusion;
+import com.openu.a2017_app1.services.LocationService;
 
 import java.util.List;
-
-import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
 public class PlacesAround extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
@@ -50,8 +45,9 @@ public class PlacesAround extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Spinner mSpinner;
-    private GoogleApiClient mGoogleApiClient;
     private LocationPoint mLocation;
+    private LocationService mService;
+    private Snackbar mNoLocationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +87,11 @@ public class PlacesAround extends AppCompatActivity implements
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                loadPlaces();
+                loadPlaces(false);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -104,16 +99,25 @@ public class PlacesAround extends AppCompatActivity implements
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
         }
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addApi(LocationServices.API)
-                .build();
-
+        mService = new LocationService(this, this);
     }
 
-    private void loadPlaces() {
+    private void loadPlaces(boolean shouldWarn) {
         if (mLocation == null) {
+            if (shouldWarn) {
+                mNoLocationService = Snackbar.make(mRecyclerView, R.string.location_service_off, Snackbar.LENGTH_INDEFINITE);
+                mNoLocationService.setAction(R.string.turn_on, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+                    }
+                });
+                mNoLocationService.show();
+            }
             return;
+        }
+        if (mNoLocationService != null) {
+            mNoLocationService.dismiss();
         }
 
         mProgressBar.setVisibility(View.VISIBLE);
@@ -126,9 +130,10 @@ public class PlacesAround extends AppCompatActivity implements
                 PlacesAdapter adapter = new PlacesAdapter(items);
                 adapter.setOnClickListener(new PlacesAdapter.OnPlaceClickListener() {
                     @Override
-                    public void OnPlaceClicked(String placeId) {
+                    public void OnPlaceClicked(Place place) {
                         Intent myIntent = new Intent(PlacesAround.this, PlaceInfo.class);
-                        myIntent.putExtra(PlaceInfo.EXTRA_PLACE, placeId);
+                        myIntent.putExtra(PlaceInfo.EXTRA_PLACE_ID, place.getId());
+                        myIntent.putExtra(PlaceInfo.EXTRA_PLACE_NAME, place.getName());
                         PlacesAround.this.startActivity(myIntent);
                     }
                 });
@@ -141,29 +146,24 @@ public class PlacesAround extends AppCompatActivity implements
     }
 
     protected void onStart() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
-            mGoogleApiClient.connect();
-        }
+        mService.connect();
         super.onStart();
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        mService.disconnect();
         super.onStop();
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        //noinspection MissingPermission
-        mLocation = LocationPoint.fromLocation(FusedLocationApi.getLastLocation(mGoogleApiClient));
-        if (mLocation != null) {
-            loadPlaces();
-        }
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocation = mService.lastLocation();
+        loadPlaces(true);
     }
 
     @Override
     public void onConnectionSuspended(int cause) {
-        mGoogleApiClient.connect();
+        mService.connect();
     }
 
     @Override
@@ -171,7 +171,7 @@ public class PlacesAround extends AppCompatActivity implements
         switch (requestCode) {
             case LOCATION_REQUEST: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mGoogleApiClient.connect();
+                    mService.connect();
                 } else {
                     Toast.makeText(this, "Cannot continue without location permission!", Toast.LENGTH_SHORT).show();
                     finish();
@@ -210,7 +210,7 @@ public class PlacesAround extends AppCompatActivity implements
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        mClickListener.OnPlaceClicked(place.getId());
+                        mClickListener.OnPlaceClicked(place);
                     }
                 }
             });
@@ -240,7 +240,7 @@ public class PlacesAround extends AppCompatActivity implements
         }
 
         public interface OnPlaceClickListener {
-            void OnPlaceClicked(String placeId);
+            void OnPlaceClicked(Place place);
         }
     }
 

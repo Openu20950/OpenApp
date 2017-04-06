@@ -30,11 +30,13 @@
         </activity>
         <activity
             android:name=".screens.AddPlace"
-            android:label="@string/title_activity_add_place" />
+            android:label="@string/title_activity_add_place"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screens.PlaceInfo"
             android:label="@string/title_activity_place_info"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>
