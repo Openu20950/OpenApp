@@ -55,6 +55,8 @@ public class PlaceInfo extends AppCompatActivity {
     private CollapsingToolbarLayout mCollapsingToolbar;
     private EndlessRecyclerViewScrollListener mScroller;
     private String mPlaceId;
+    private String myFacebookId;
+    private String myFacebookName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +74,14 @@ public class PlaceInfo extends AppCompatActivity {
             public void onClick(View view) {
                 Intent myIntent = new Intent(PlaceInfo.this, AddReview.class);
                 myIntent.putExtra(AddReview.EXTRA_PLACE_ID, mPlaceId);
+                myIntent.putExtra(Place.FIELD_FACEBOOK_ID, myFacebookId);
+                myIntent.putExtra(Review.FIELD_FACEBOOK_NAME, myFacebookName);
                 PlaceInfo.this.startActivity(myIntent);
             }
         });
 
+        myFacebookId=(String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+        myFacebookName=(String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
         mPlaceId = getIntent().getExtras().getString(EXTRA_PLACE_ID);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -191,7 +197,7 @@ public class PlaceInfo extends AppCompatActivity {
         @Override
         public void onBindViewHolder(PlaceInfo.ReviewsAdapter.MyViewHolder holder, int position) {
             final Review review = mReviewsList.get(position);
-            //holder.author.setText(review.getAuthor());
+            holder.author.setText(review.getAuthor());
             holder.description.setText(review.getComment());
             holder.since.setText(DateUtils.getRelativeTimeSpanString(review.getCreatedAt().getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
             holder.ratingBar.setRating(review.getScore());

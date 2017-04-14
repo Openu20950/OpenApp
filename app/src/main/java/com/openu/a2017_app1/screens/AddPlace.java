@@ -60,7 +60,7 @@ public class AddPlace extends AppCompatActivity {
     private ImageView mPhoto;
 
     private LocationPoint mLocation;
-
+    private String myFacebookId;
     private Bitmap mCapturedPhoto;
 
     @Override
@@ -69,7 +69,7 @@ public class AddPlace extends AppCompatActivity {
         setContentView(R.layout.activity_add_place);
 
         mLocation = (LocationPoint) getIntent().getExtras().get(EXTRA_LOCATION);
-
+        myFacebookId=(String) getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
         mPlaceName = (EditText) findViewById(R.id.place_name);
 
         mCategory = (Spinner) findViewById(R.id.category);
@@ -105,7 +105,9 @@ public class AddPlace extends AppCompatActivity {
                 place.setDescription(mDescription.getText().toString().trim());
                 place.setPhone(mPhone.getText().toString().trim());
                 place.setLocation(mLocation);
+                place.setFacebookId(myFacebookId);
                 place.setPhoto(mCapturedPhoto);
+
 
                 place.saveAsync(new ModelSaveListener() {
                     @Override

@@ -27,6 +27,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
@@ -36,6 +42,10 @@ import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.services.LocationService;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlacesAround extends AppCompatActivity implements
@@ -49,14 +59,47 @@ public class PlacesAround extends AppCompatActivity implements
     private LocationPoint mLocation;
     private LocationService mService;
     private Snackbar mNoLocationService;
-
+    private String friendListString;
+    private JSONArray friendListJSONArray;
+    private String myFacebookId;
+    private String myFacebookName;
+    private boolean friendFilter=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_around);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
+        myFacebookId=(String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+
+        if(myFacebookId.equals("guest"))
+        {
+            myFacebookName="Guest";
+        }else{
+            ProfileTracker mProfileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+                    if(newProfile!=null)
+                     myFacebookName=newProfile.getName();
+
+
+                }
+            };
+        }
+
+
+        if(friendListString!=null)
+        {
+            try {
+                friendListJSONArray = new JSONArray(friendListString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +107,42 @@ public class PlacesAround extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent myIntent = new Intent(PlacesAround.this, AddPlace.class);
                 myIntent.putExtra(AddPlace.EXTRA_LOCATION, mLocation);
+                myIntent.putExtra(Place.FIELD_FACEBOOK_ID, myFacebookId);
                 PlacesAround.this.startActivity(myIntent);
+            }
+        });
+
+        FloatingActionButton searchFbutton=(FloatingActionButton) findViewById(R.id.search);
+
+        searchFbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(friendListJSONArray!=null)
+                {
+                    friendFilter=true;
+                    loadPlaces(false);
+                }else{
+                    new GraphRequest(
+                            AccessToken.getCurrentAccessToken(),
+                            "me/friends",
+                            null,
+                            HttpMethod.GET,
+                            new GraphRequest.Callback() {
+                                public void onCompleted(GraphResponse response) {
+                                    try {
+                                        friendListJSONArray=response.getJSONObject().getJSONArray("data");//.getJSONObject(0).getString("name");
+                                        friendFilter=true;
+                                        loadPlaces(false);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                    ).executeAsync();
+
+
+                }
+
             }
         });
 
@@ -123,17 +201,57 @@ public class PlacesAround extends AppCompatActivity implements
 
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-
         int radius = getResources().getIntArray(R.array.place_around_radius)[mSpinner.getSelectedItemPosition()];
+        //friendListJSONArray
+
+
         Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, mLocation, radius).getAllAsync(new GetAllListener<Place>() {
             @Override
             public void onItemsReceived(List<Place> items) {
-                PlacesAdapter adapter = new PlacesAdapter(items);
+                PlacesAdapter adapter;
+                if(friendFilter)
+                {
+                    List<Place> newItems=new ArrayList<Place>();
+                    List<Review> reviews=new ArrayList<Review>();
+                    for(Place p:items)
+                    {
+                        reviews=p.getReviews().getAll();
+                        for (int i=0;i<friendListJSONArray.length();i++)
+                        {
+                            String id="";
+                            try {
+                                id =friendListJSONArray.getJSONObject(i).getString("id");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if(p.getFacebookId().equals(id))
+                            {
+                                newItems.add(p);
+                            }
+
+                            for(Review r:reviews)
+                            {
+                                if(r.getFacebookId().equals(id))
+                                {
+                                    newItems.add(p);
+                                }
+                            }
+                        }
+                    }
+                    adapter = new PlacesAdapter(newItems);
+                    friendFilter=false;
+                }else{
+                    adapter = new PlacesAdapter(items);
+                }
+
                 adapter.setOnClickListener(new PlacesAdapter.OnPlaceClickListener() {
                     @Override
                     public void OnPlaceClicked(Place place) {
                         Intent myIntent = new Intent(PlacesAround.this, PlaceInfo.class);
                         myIntent.putExtra(PlaceInfo.EXTRA_PLACE_ID, place.getId());
+                        myIntent.putExtra(Place.FIELD_FACEBOOK_ID,myFacebookId);
+
+                        myIntent.putExtra(Review.FIELD_FACEBOOK_NAME,myFacebookName);
                         PlacesAround.this.startActivity(myIntent);
                     }
                 });
@@ -143,6 +261,8 @@ public class PlacesAround extends AppCompatActivity implements
                 mRecyclerView.setVisibility(View.VISIBLE);
             }
         });
+
+
     }
 
     protected void onStart() {
@@ -157,7 +277,10 @@ public class PlacesAround extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        mLocation = mService.lastLocation();
+       // mLocation = mService.lastLocation();
+        mLocation=new LocationPoint();
+        mLocation.setLatitude(1.0);
+        mLocation.setLongitude(1.0);
         loadPlaces(true);
     }
 
