@@ -277,10 +277,8 @@ public class PlacesAround extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-       // mLocation = mService.lastLocation();
-        mLocation=new LocationPoint();
-        mLocation.setLatitude(1.0);
-        mLocation.setLongitude(1.0);
+        mLocation = mService.lastLocation();
+
         loadPlaces(true);
     }
 
