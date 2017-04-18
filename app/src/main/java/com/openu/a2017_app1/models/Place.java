@@ -16,13 +16,14 @@ public class Place extends Model {
     public static final String FIELD_PHOTO = "photo";
     public static final String FIELD_DESCRIPTION = "description";
     public static final String FIELD_CATEGORY = "category";
-
+    public static final String FIELD_FACEBOOK_ID= "facebook_user_id";
 
     /**
      * default constructor
      */
     public Place()
     {
+
     }
 
     public String getName()
@@ -84,6 +85,13 @@ public class Place extends Model {
     public void setCategory(String category)
     {
         this.setAttribute(FIELD_CATEGORY,category);
+    }
+
+    public  String getFacebookId(){return (String)this.getAttribute(FIELD_FACEBOOK_ID);}
+
+    public void setFacebookId(String myFacebookId)
+    {
+        this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);
     }
 
     public QueryBuilder<Review> getReviews()

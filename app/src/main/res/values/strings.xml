@@ -2,7 +2,7 @@
     <string name="app_name">2017-app1</string>
     <string name="title_activity_places_around">Places Around</string>
     <string name="title_activity_add_place">Add Place</string>
-
+    <string name="title_activity_facebook_friend_list">Facebook Friends</string>
     <string name="place_name">Place name</string>
     <string name="description_optional">Description (optional)</string>
     <string name="phone">Phone (optional)</string>
@@ -20,4 +20,6 @@
     <string name="add_review">Add review</string>
     <string name="saving">Saving...</string>
     <string name="comment">Comment</string>
+    <string name="facebook_app_id">824975167660275</string>
+    <string name="title_activity_facebook_login">FacebookLogin</string>
 </resources>

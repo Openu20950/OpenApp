@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -18,16 +20,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity
             android:name=".screens.PlacesAround"
             android:label="@string/title_activity_places_around"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".screens.AddPlace"
             android:label="@string/title_activity_add_place"
@@ -36,9 +36,20 @@
             android:name=".screens.PlaceInfo"
             android:label="@string/title_activity_place_info"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".screens.AddReview"
+        <activity
+            android:name=".screens.AddReview"
             android:label="@string/title_activity_add_review"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".screens.FacebookLogin"
+            android:label="@string/title_activity_facebook_login"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

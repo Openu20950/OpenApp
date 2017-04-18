@@ -11,7 +11,8 @@ public class Review extends Model {
     public static final String FIELD_PLACE = "place";
     public static final String FIELD_COMMENT = "comment";
     public static final String FIELD_SCORE = "score";
-
+    public static final String FIELD_FACEBOOK_ID= "facebook_user_id";
+    public static final String FIELD_FACEBOOK_NAME="name";
     /**
      * default constructor
      */
@@ -61,4 +62,15 @@ public class Review extends Model {
     public void setScore(int score) {
         this.setAttribute(FIELD_SCORE, score);
     }
+
+    public  String getFacebookId(){return (String)this.getAttribute(FIELD_FACEBOOK_ID);}
+
+    public void setFacebookId(String myFacebookId)
+    {
+        this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);
+    }
+
+    public String getAuthor(){return (String)this.getAttribute(FIELD_FACEBOOK_NAME);}
+
+    public void setAuthor(String author){this.setAttribute(FIELD_FACEBOOK_NAME,author);}
 }

@@ -31,6 +31,8 @@ public class AddReview extends AppCompatActivity {
     private Place mPlace;
     private Button mAddBtn;
     private boolean mShouldSave = false;
+    private String myFacebookId;
+    private String myFacebookName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class AddReview extends AppCompatActivity {
             }
         });
 
+        myFacebookId=(String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+        myFacebookName=(String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
         mComment = (EditText) findViewById(R.id.comment);
         mRating = (RatingBar) findViewById(R.id.rating);
 
@@ -72,6 +76,9 @@ public class AddReview extends AppCompatActivity {
         review.setComment(mComment.getText().toString().trim());
         review.setScore((int)mRating.getRating());
         review.setPlace(mPlace);
+        review.setFacebookId(myFacebookId);
+        review.setAuthor(myFacebookName);
+
 
         review.saveAsync(new ModelSaveListener() {
             @Override
