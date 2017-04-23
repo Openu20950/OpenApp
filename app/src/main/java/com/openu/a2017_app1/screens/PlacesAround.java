@@ -117,11 +117,8 @@ public class PlacesAround extends AppCompatActivity implements
         searchFbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(friendListJSONArray!=null)
+                if(!myFacebookName.equals("Guest"))
                 {
-                    friendFilter=true;
-                    loadPlaces(false);
-                }else{
                     new GraphRequest(
                             AccessToken.getCurrentAccessToken(),
                             "me/friends",
@@ -142,6 +139,7 @@ public class PlacesAround extends AppCompatActivity implements
 
 
                 }
+
 
             }
         });
@@ -277,6 +275,7 @@ public class PlacesAround extends AppCompatActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+
         mLocation = mService.lastLocation();
 
         loadPlaces(true);
