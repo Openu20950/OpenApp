@@ -187,6 +187,7 @@ public class PlacesAround extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+                        mNoLocationService.dismiss();
                     }
                 });
                 mNoLocationService.show();
@@ -357,8 +358,6 @@ public class PlacesAround extends AppCompatActivity implements
                 category = (TextView) view.findViewById(R.id.category);
                 photo = (ImageView) view.findViewById(R.id.icon);
             }
-
-
         }
 
         public interface OnPlaceClickListener {
