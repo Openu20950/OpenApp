@@ -65,11 +65,30 @@ public class LocationPoint implements Serializable {
         location1.setLongitude(this.longitude);
 
         Location location2=new Location("Point 2");
-        location1.setLatitude(location.getLatitude());
-        location1.setLongitude(location.getLongitude());
+        location2.setLatitude(location.getLatitude());
+        location2.setLongitude(location.getLongitude());
 
         double distance=location1.distanceTo(location2)/1000;
         return distance;
+    }
+
+    /**
+     *
+     * @param location
+     * @return the bearing between 2 locations
+     */
+    public double bearingTo(LocationPoint location)
+    {
+        Location location1=new Location("Point 1");
+        location1.setLatitude(this.latitude);
+        location1.setLongitude(this.longitude);
+
+        Location location2=new Location("Point 2");
+        location1.setLatitude(location.getLatitude());
+        location1.setLongitude(location.getLongitude());
+
+        double bearing=location1.bearingTo(location2);
+        return bearing;
     }
 
     /**
