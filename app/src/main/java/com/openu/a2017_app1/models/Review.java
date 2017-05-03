@@ -1,6 +1,7 @@
 package com.openu.a2017_app1.models;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 /**
  * Created by noam on 28/12/2016.
@@ -11,8 +12,9 @@ public class Review extends Model {
     public static final String FIELD_PLACE = "place";
     public static final String FIELD_COMMENT = "comment";
     public static final String FIELD_SCORE = "score";
-    public static final String FIELD_FACEBOOK_ID= "facebook_user_id";
-    public static final String FIELD_FACEBOOK_NAME="name";
+    public static final String FIELD_FACEBOOK_ID = "facebook_user_id";
+    public static final String FIELD_FACEBOOK_NAME = "name";
+    public static final String FIELD_USER_PICTURE = "user_picture";
     /**
      * default constructor
      */
@@ -73,4 +75,8 @@ public class Review extends Model {
     public String getAuthor(){return (String)this.getAttribute(FIELD_FACEBOOK_NAME);}
 
     public void setAuthor(String author){this.setAttribute(FIELD_FACEBOOK_NAME,author);}
+
+    public void setUserPic(String userPic){this.setAttribute(FIELD_USER_PICTURE,userPic);}
+
+    public String getUserPic(){return (String)this.getAttribute(FIELD_USER_PICTURE);}
 }
