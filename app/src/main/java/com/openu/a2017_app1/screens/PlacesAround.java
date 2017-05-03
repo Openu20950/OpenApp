@@ -4,18 +4,27 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,77 +36,151 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
+
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
+import com.openu.a2017_app1.services.CircleTransform;
 import com.openu.a2017_app1.services.LocationService;
+import com.openu.a2017_app1.services.UserLoginService;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 public class PlacesAround extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
 
     private static final int LOCATION_REQUEST = 0;
 
+    // index to identify current nav menu item
+    public static int navItemIndex = 0;
+
+    // tags used to attach the fragments
+    private static final String TAG_HOME = "home";
+
+
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Spinner mSpinner;
+
     private LocationPoint mLocation;
     private LocationService mService;
     private Snackbar mNoLocationService;
-    private String friendListString;
-    private JSONArray friendListJSONArray;
-    private String myFacebookId;
-    private String myFacebookName;
+     private UserLoginService user;
     private boolean friendFilter=false;
+
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    private View navHeader;
+    private ImageView imgProfile;
+    private TextView txtName;
+    private Toolbar toolbar;
+    private ProfileTracker mProfileTracker;
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_around);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        myFacebookId=(String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
-
-        if(myFacebookId.equals("guest"))
-        {
-            myFacebookName="Guest";
-        }else{
-            ProfileTracker mProfileTracker = new ProfileTracker() {
-                @Override
-                protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                    if(newProfile!=null)
-                     myFacebookName=newProfile.getName();
+        LoginManager.getInstance().logOut();
 
 
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navHeader = navigationView.getHeaderView(0);
+        txtName = (TextView) navHeader.findViewById(R.id.name);
+
+        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
+
+
+
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton)navHeader.findViewById(R.id.login_button);
+        user=new UserLoginService(this);
+
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+
+                if (currentAccessToken == null){
+                    user.setMyFacebookName("Guest");
+                    loadNavHeader();
                 }
-            };
-        }
-
-
-        if(friendListString!=null)
-        {
-            try {
-                friendListJSONArray = new JSONArray(friendListString);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
+        };
+
+        mProfileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
+                if(newProfile!=null)
+
+                {
+                    user.setMyFacebookName(newProfile.getFirstName());
+                    user.setMyProfilePicture(newProfile.getProfilePictureUri(150,150));
+
+                    loadNavHeader();
+                }
+
+
+            }
+        };
+
+        loginButton.setReadPermissions("user_friends");
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(final LoginResult loginResult) {
+
+                user.setMyFacebookId(loginResult.getAccessToken().getUserId());
+                user.graphRequest();
+                mProfileTracker.startTracking();
+            }
+
+            @Override
+            public void onCancel() {
+
+
+                Toast.makeText(drawer.getContext(),"Login attempt canceled.", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+
+                Toast.makeText(drawer.getContext(),"Login attempt failed.", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
 
 
 
@@ -107,7 +190,7 @@ public class PlacesAround extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent myIntent = new Intent(PlacesAround.this, AddPlace.class);
                 myIntent.putExtra(AddPlace.EXTRA_LOCATION, mLocation);
-                myIntent.putExtra(Place.FIELD_FACEBOOK_ID, myFacebookId);
+                myIntent.putExtra(Place.FIELD_FACEBOOK_ID, user.getMyFacebookId());
                 PlacesAround.this.startActivity(myIntent);
             }
         });
@@ -117,32 +200,18 @@ public class PlacesAround extends AppCompatActivity implements
         searchFbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!myFacebookName.equals("Guest"))
+                if(!user.getMyFacebookName().equals("Guest"))
                 {
-                    new GraphRequest(
-                            AccessToken.getCurrentAccessToken(),
-                            "me/friends",
-                            null,
-                            HttpMethod.GET,
-                            new GraphRequest.Callback() {
-                                public void onCompleted(GraphResponse response) {
-                                    try {
-                                        friendListJSONArray=response.getJSONObject().getJSONArray("data");//.getJSONObject(0).getString("name");
-                                        friendFilter=true;
-                                        loadPlaces(false);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                    ).executeAsync();
-
+                    friendFilter=true;
+                    loadPlaces(false);
 
                 }
 
 
             }
         });
+
+
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -156,7 +225,11 @@ public class PlacesAround extends AppCompatActivity implements
         horizontalDecoration.setDrawable(horizontalDivider);
         mRecyclerView.addItemDecoration(horizontalDecoration);
 
+
+
+
         mSpinner = (Spinner) findViewById(R.id.radius_spinner);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, R.layout.drop_title);
         adapter.setDropDownViewResource(R.layout.drop_list);
         mSpinner.setAdapter(adapter);
@@ -176,8 +249,144 @@ public class PlacesAround extends AppCompatActivity implements
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
         }
 
+
+
+
+
+        loadNavHeader();
+        setUpNavigationView();
         mService = new LocationService(this, this);
+
+
     }
+    private void selectNavMenu() {
+        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+    }
+
+
+
+
+    private void setUpNavigationView() {
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                //Check to see which item was being clicked and perform appropriate action
+                switch (menuItem.getItemId()) {
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.nav_home:
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_map:
+                        drawer.closeDrawers();
+                        return true;
+
+                    case R.id.nav_settings:
+                        startActivity(new Intent(PlacesAround.this, SettingsActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_about_us:
+                        // launch new intent
+                       // startActivity(new Intent(MainActivity.this, AboutUsActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_privacy_policy:
+                        // launch new intent instead of loading fragment
+                       //    startActivity(new Intent(MainActivity.this, PrivacyPolicyActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+
+                }
+
+                //Checking if the item is in checked state or not, if not make it in checked state
+                if (menuItem.isChecked()) {
+                    menuItem.setChecked(false);
+                } else {
+                    menuItem.setChecked(true);
+                }
+               // menuItem.setChecked(true);
+
+
+
+                return true;
+            }
+        });
+
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+
+        drawer.addDrawerListener(actionBarDrawerToggle);
+        //calling sync state is necessary or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawers();
+            return;
+        }
+
+        // This code loads home fragment when back key is pressed
+        // when user is in other fragment than home
+
+
+        super.onBackPressed();
+    }
+
+
+
+
+
+    public void loadNavHeader() {
+
+        // name, website
+         txtName.setText(user.getMyFacebookName());
+
+
+        if(user.getMyFacebookName().equals("Guest"))
+        {
+            Glide.with(this).load(R.drawable.ic_user)
+                    .crossFade()
+                    .thumbnail(0.5f)
+                    .bitmapTransform(new CircleTransform(this))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imgProfile);
+        }else{
+            // navigationView.
+            // Loading profile image
+            Glide.with(this).load(user.getMyProfilePicture())
+                    .crossFade()
+                    .thumbnail(0.5f)
+                    .bitmapTransform(new CircleTransform(this))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imgProfile);
+
+        }
+
+
+    }
+
+
+
 
     private void loadPlaces(boolean shouldWarn) {
         if (mLocation == null) {
@@ -200,7 +409,7 @@ public class PlacesAround extends AppCompatActivity implements
 
         mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-        int radius = getResources().getIntArray(R.array.place_around_radius)[mSpinner.getSelectedItemPosition()];
+         int radius = getResources().getIntArray(R.array.place_around_radius)[mSpinner.getSelectedItemPosition()];
         //friendListJSONArray
 
 
@@ -215,14 +424,10 @@ public class PlacesAround extends AppCompatActivity implements
                     for(Place p:items)
                     {
                         reviews=p.getReviews().getAll();
-                        for (int i=0;i<friendListJSONArray.length();i++)
+                        for (int i=0;i<user.getFreindsList().size();i++)
                         {
-                            String id="";
-                            try {
-                                id =friendListJSONArray.getJSONObject(i).getString("id");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                            String id=user.getFreindsList().get(i);
+
                             if(p.getFacebookId().equals(id))
                             {
                                 newItems.add(p);
@@ -248,9 +453,9 @@ public class PlacesAround extends AppCompatActivity implements
                     public void OnPlaceClicked(Place place) {
                         Intent myIntent = new Intent(PlacesAround.this, PlaceInfo.class);
                         myIntent.putExtra(PlaceInfo.EXTRA_PLACE_ID, place.getId());
-                        myIntent.putExtra(Place.FIELD_FACEBOOK_ID,myFacebookId);
-
-                        myIntent.putExtra(Review.FIELD_FACEBOOK_NAME,myFacebookName);
+                        myIntent.putExtra(Place.FIELD_FACEBOOK_ID,user.getMyFacebookId());
+                        myIntent.putExtra(Review.FIELD_FACEBOOK_NAME,user.getMyFacebookName());
+                        myIntent.putExtra(Review.FIELD_USER_PICTURE,user.getMyProfilePicture().toString());
                         PlacesAround.this.startActivity(myIntent);
                     }
                 });
@@ -363,6 +568,12 @@ public class PlacesAround extends AppCompatActivity implements
         public interface OnPlaceClickListener {
             void OnPlaceClicked(Place place);
         }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 }

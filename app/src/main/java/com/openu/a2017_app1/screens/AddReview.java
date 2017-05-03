@@ -2,7 +2,12 @@ package com.openu.a2017_app1.screens;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.FindListener;
 import com.openu.a2017_app1.models.LocationPoint;
@@ -21,6 +29,16 @@ import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.ModelSaveListener;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
+import com.openu.a2017_app1.services.CircleTransform;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class AddReview extends AppCompatActivity {
 
@@ -33,6 +51,7 @@ public class AddReview extends AppCompatActivity {
     private boolean mShouldSave = false;
     private String myFacebookId;
     private String myFacebookName;
+    private String myPicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +68,12 @@ public class AddReview extends AppCompatActivity {
             }
         });
 
-        myFacebookId=(String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
-        myFacebookName=(String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
+        myFacebookId = (String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+        myFacebookName  =(String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
+        myPicture = (String)getIntent().getExtras().get(Review.FIELD_USER_PICTURE);
         mComment = (EditText) findViewById(R.id.comment);
         mRating = (RatingBar) findViewById(R.id.rating);
+
 
         mAddBtn = (Button) findViewById(R.id.add_review_button);
         mAddBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +99,8 @@ public class AddReview extends AppCompatActivity {
         review.setPlace(mPlace);
         review.setFacebookId(myFacebookId);
         review.setAuthor(myFacebookName);
-
+        if(myPicture!=null)
+            review.setUserPic(myPicture);
 
         review.saveAsync(new ModelSaveListener() {
             @Override
@@ -107,4 +129,10 @@ public class AddReview extends AppCompatActivity {
         }
         return errors;
     }
+
+
+
+
+
+
 }

@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -27,7 +26,13 @@
         <activity
             android:name=".screens.PlacesAround"
             android:label="@string/title_activity_places_around"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".screens.AddPlace"
             android:label="@string/title_activity_add_place"
@@ -43,13 +48,12 @@
         <activity
             android:name=".screens.FacebookLogin"
             android:label="@string/title_activity_facebook_login"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screens.AboutUsActivity" />
+        <activity android:name=".screens.PrivacyPolicyActivity" />
+        <activity
+            android:name=".screens.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

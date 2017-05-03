@@ -1,4 +1,6 @@
 <resources>
+
+
     <string-array name="place_around_radius_text">
         <item>100m</item>
         <item>300m</item>
@@ -35,5 +37,20 @@
         <item>Museum</item>
         <item>Cinema</item>
         <item>Nightclub</item>
+    </string-array>
+
+
+    <string-array name="listentries">
+        <item>100m</item>
+        <item>300m</item>
+        <item>500m</item>
+        <item>1000m</item>
+    </string-array>
+
+    <string-array name="listvalues">
+        <item>100</item>
+        <item>300</item>
+        <item>500</item>
+        <item>1000</item>
     </string-array>
 </resources>

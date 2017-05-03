@@ -2,6 +2,7 @@ package com.openu.a2017_app1.screens;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -24,12 +25,15 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.FindListener;
 import com.openu.a2017_app1.data.GetAllListener;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
+import com.openu.a2017_app1.services.CircleTransform;
 
 
 import java.util.ArrayList;
@@ -57,7 +61,7 @@ public class PlaceInfo extends AppCompatActivity {
     private String mPlaceId;
     private String myFacebookId;
     private String myFacebookName;
-
+    private String myPicture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,12 +80,14 @@ public class PlaceInfo extends AppCompatActivity {
                 myIntent.putExtra(AddReview.EXTRA_PLACE_ID, mPlaceId);
                 myIntent.putExtra(Place.FIELD_FACEBOOK_ID, myFacebookId);
                 myIntent.putExtra(Review.FIELD_FACEBOOK_NAME, myFacebookName);
+                myIntent.putExtra(Review.FIELD_USER_PICTURE, myPicture);
                 PlaceInfo.this.startActivity(myIntent);
             }
         });
 
-        myFacebookId=(String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
-        myFacebookName=(String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
+        myFacebookId = (String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+        myFacebookName = (String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
+        myPicture = (String)getIntent().getExtras().get(Review.FIELD_USER_PICTURE);
         mPlaceId = getIntent().getExtras().getString(EXTRA_PLACE_ID);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -201,6 +207,16 @@ public class PlaceInfo extends AppCompatActivity {
             holder.description.setText(review.getComment());
             holder.since.setText(DateUtils.getRelativeTimeSpanString(review.getCreatedAt().getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
             holder.ratingBar.setRating(review.getScore());
+            if(review.getUserPic()!=null && !review.getUserPic().equals(Uri.EMPTY.toString()))
+            {
+                Glide.with(holder.user.getContext()).load(Uri.parse(review.getUserPic()))
+                        .crossFade()
+                        .thumbnail(0.5f)
+                        .bitmapTransform(new CircleTransform(holder.user.getContext()))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(holder.user);
+            }
+
         }
 
         @Override
