@@ -24,6 +24,7 @@ import java.util.List;
         converters.add(new BitmapConverter());
         converters.add(new ListConverter(this));
         converters.add(new LocationConverter());
+        converters.add(new NullConverter());
     }
 
     public static Converters getInstance() {
