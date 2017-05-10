@@ -32,8 +32,6 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
 
-
-
                 <Spinner
                     android:id="@+id/radius_spinner"
                     android:layout_width="wrap_content"
@@ -90,7 +88,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/main_drawer" />
 
 
 

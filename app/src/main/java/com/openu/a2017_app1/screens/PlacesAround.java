@@ -211,8 +211,6 @@ public class PlacesAround extends AppCompatActivity implements
             }
         });
 
-
-
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.places_list);
@@ -224,10 +222,6 @@ public class PlacesAround extends AppCompatActivity implements
         Drawable horizontalDivider = ContextCompat.getDrawable(this, R.drawable.horizontal_divider);
         horizontalDecoration.setDrawable(horizontalDivider);
         mRecyclerView.addItemDecoration(horizontalDecoration);
-
-
-
-
         mSpinner = (Spinner) findViewById(R.id.radius_spinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, R.layout.drop_title);
@@ -249,10 +243,6 @@ public class PlacesAround extends AppCompatActivity implements
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
         }
 
-
-
-
-
         loadNavHeader();
         setUpNavigationView();
         mService = new LocationService(this, this);
@@ -262,9 +252,6 @@ public class PlacesAround extends AppCompatActivity implements
     private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
-
-
-
 
     private void setUpNavigationView() {
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
@@ -283,7 +270,10 @@ public class PlacesAround extends AppCompatActivity implements
                     case R.id.nav_map:
                         drawer.closeDrawers();
                         return true;
-
+                    case R.id.nab_augmented_reality:
+                        startActivity(new Intent(PlacesAround.this, AugmentedReality.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_settings:
                         startActivity(new Intent(PlacesAround.this, SettingsActivity.class));
                         drawer.closeDrawers();
@@ -298,7 +288,6 @@ public class PlacesAround extends AppCompatActivity implements
                        //    startActivity(new Intent(MainActivity.this, PrivacyPolicyActivity.class));
                         drawer.closeDrawers();
                         return true;
-
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state
