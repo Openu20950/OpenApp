@@ -58,7 +58,6 @@ import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.utils.LocationService;
 import com.openu.a2017_app1.services.CircleTransform;
-import com.openu.a2017_app1.services.LocationService;
 import com.openu.a2017_app1.services.UserLoginService;
 
 
