@@ -8,7 +8,7 @@
             android:title="@string/nav_home" />
         <item
             android:id="@+id/nav_map"
-            android:icon="@drawable/ic_photo_library"
+            android:icon="@drawable/ic_map"
             android:title="@string/nav_photos" />
         <item
             android:id="@+id/nab_augmented_reality"

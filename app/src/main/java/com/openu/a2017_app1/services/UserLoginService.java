@@ -37,10 +37,6 @@ import java.util.List;
 
 public class UserLoginService implements Serializable {
 
-
-    private LoginButton loginButton;
-
-    private Context mContext;
     private String facebookId;
     private String facebookName;
     private List<String> friendsList;
@@ -50,7 +46,6 @@ public class UserLoginService implements Serializable {
         friendsList=new ArrayList<String>();
         facebookId = "";
         facebookName="Guest";
-        mContext = context;
         myProfilePicture = Uri.EMPTY;
 
     }
@@ -68,18 +63,17 @@ public class UserLoginService implements Serializable {
     {
         facebookId = fcId;
     }
+
     public String getMyFacebookName()
     {
         return facebookName;
     }
+
     public void setMyFacebookName(String name)
     {
         facebookName = name;
     }
-    public void setFriendsList(List<String> list)
-    {
-        friendsList = list;
-    }
+
     public List<String> getFreindsList()
     {
        return friendsList;
@@ -111,9 +105,6 @@ public class UserLoginService implements Serializable {
                             {
                                 friendsList.add(friendListJSONArray.getJSONObject(i).getString("id"));
                             }
-
-
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();

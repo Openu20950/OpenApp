@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,7 +32,6 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.AccessToken;
@@ -51,7 +47,6 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
-
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
@@ -59,36 +54,26 @@ import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.utils.LocationService;
 import com.openu.a2017_app1.services.CircleTransform;
 import com.openu.a2017_app1.services.UserLoginService;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 
 public class PlacesAround extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
 
     private static final int LOCATION_REQUEST = 0;
-
     // index to identify current nav menu item
     public static int navItemIndex = 0;
-
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
-
-
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Spinner mSpinner;
-
     private LocationPoint mLocation;
     private LocationService mService;
     private Snackbar mNoLocationService;
-     private UserLoginService user;
+    private UserLoginService user;
     private boolean friendFilter=false;
-
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
@@ -104,25 +89,27 @@ public class PlacesAround extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_around);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
-        LoginManager.getInstance().logOut();
-
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.name);
-
         imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
-
-
-
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)navHeader.findViewById(R.id.login_button);
         user=new UserLoginService(this);
+
+
+        if(Profile.getCurrentProfile()!=null)
+        {
+            user.graphRequest();
+            user.setMyFacebookId(Profile.getCurrentProfile().getId());
+            user.setMyFacebookName(Profile.getCurrentProfile().getName());
+            user.setMyProfilePicture(Profile.getCurrentProfile().getProfilePictureUri(150,150));
+            loadNavHeader();
+        }
 
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -143,7 +130,8 @@ public class PlacesAround extends AppCompatActivity implements
                 if(newProfile!=null)
 
                 {
-                    user.setMyFacebookName(newProfile.getFirstName());
+                    user.setMyFacebookId(newProfile.getId());
+                    user.setMyFacebookName(newProfile.getName());
                     user.setMyProfilePicture(newProfile.getProfilePictureUri(150,150));
 
                     loadNavHeader();
@@ -165,23 +153,16 @@ public class PlacesAround extends AppCompatActivity implements
 
             @Override
             public void onCancel() {
-
-
                 Toast.makeText(drawer.getContext(),"Login attempt canceled.", Toast.LENGTH_SHORT).show();
-
-
             }
 
             @Override
             public void onError(FacebookException e) {
-
                 Toast.makeText(drawer.getContext(),"Login attempt failed.", Toast.LENGTH_SHORT).show();
-
             }
+
+
         });
-
-
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -207,7 +188,6 @@ public class PlacesAround extends AppCompatActivity implements
 
                 }
 
-
             }
         });
 
@@ -223,11 +203,9 @@ public class PlacesAround extends AppCompatActivity implements
         horizontalDecoration.setDrawable(horizontalDivider);
         mRecyclerView.addItemDecoration(horizontalDecoration);
         mSpinner = (Spinner) findViewById(R.id.radius_spinner);
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, R.layout.drop_title);
         adapter.setDropDownViewResource(R.layout.drop_list);
         mSpinner.setAdapter(adapter);
-
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -242,12 +220,9 @@ public class PlacesAround extends AppCompatActivity implements
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
         }
-
         loadNavHeader();
         setUpNavigationView();
         mService = new LocationService(this, this);
-
-
     }
     private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
@@ -296,9 +271,6 @@ public class PlacesAround extends AppCompatActivity implements
                 } else {
                     menuItem.setChecked(true);
                 }
-               // menuItem.setChecked(true);
-
-
 
                 return true;
             }
@@ -321,7 +293,6 @@ public class PlacesAround extends AppCompatActivity implements
         };
 
         //Setting the actionbarToggle to drawer layout
-
         drawer.addDrawerListener(actionBarDrawerToggle);
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
@@ -334,23 +305,14 @@ public class PlacesAround extends AppCompatActivity implements
             return;
         }
 
-        // This code loads home fragment when back key is pressed
-        // when user is in other fragment than home
-
-
         super.onBackPressed();
     }
 
 
-
-
-
     public void loadNavHeader() {
 
-        // name, website
+        // name
          txtName.setText(user.getMyFacebookName());
-
-
         if(user.getMyFacebookName().equals("Guest"))
         {
             Glide.with(this).load(R.drawable.ic_user)
@@ -360,8 +322,6 @@ public class PlacesAround extends AppCompatActivity implements
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imgProfile);
         }else{
-            // navigationView.
-            // Loading profile image
             Glide.with(this).load(user.getMyProfilePicture())
                     .crossFade()
                     .thumbnail(0.5f)
@@ -400,7 +360,6 @@ public class PlacesAround extends AppCompatActivity implements
         mRecyclerView.setVisibility(View.GONE);
          int radius = getResources().getIntArray(R.array.place_around_radius)[mSpinner.getSelectedItemPosition()];
         //friendListJSONArray
-
 
         Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, mLocation, radius).getAllAsync(new GetAllListener<Place>() {
             @Override
