@@ -45,15 +45,12 @@
             android:name=".screens.AddReview"
             android:label="@string/title_activity_add_review"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".screens.FacebookLogin"
-            android:label="@string/title_activity_facebook_login"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".screens.AboutUsActivity" />
         <activity android:name=".screens.PrivacyPolicyActivity" />
         <activity
             android:name=".screens.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings"/>
+
     </application>
 
 </manifest>

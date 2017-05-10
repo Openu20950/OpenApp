@@ -31,17 +31,12 @@
                 android:theme="@style/AppTheme.Toolbar"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
-
-
-
                 <Spinner
                     android:id="@+id/radius_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical" />
             </android.support.v7.widget.Toolbar>
-
-
 
         </android.support.design.widget.AppBarLayout>
 
@@ -75,13 +70,7 @@
             app:backgroundTint="@android:color/holo_red_light"
             app:srcCompat="@drawable/ic_search" />
 
-
-
-
     </android.support.design.widget.CoordinatorLayout>
-
-
-
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
