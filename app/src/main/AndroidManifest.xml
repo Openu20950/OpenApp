@@ -45,8 +45,12 @@
         <activity
             android:name=".screens.FacebookLogin"
             android:label="@string/title_activity_facebook_login"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screens.AboutUsActivity" />
+        <activity android:name=".screens.PrivacyPolicyActivity" />
+        <activity
+            android:name=".screens.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
         <activity
             android:name=".screens.AugmentedReality"
             android:configChanges="orientation|keyboardHidden|screenSize"
