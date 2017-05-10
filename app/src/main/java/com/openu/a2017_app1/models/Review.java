@@ -1,8 +1,5 @@
 package com.openu.a2017_app1.models;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-
 /**
  * Created by noam on 28/12/2016.
  */
@@ -67,10 +64,7 @@ public class Review extends Model {
 
     public  String getFacebookId(){return (String)this.getAttribute(FIELD_FACEBOOK_ID);}
 
-    public void setFacebookId(String myFacebookId)
-    {
-        this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);
-    }
+    public void setFacebookId(String myFacebookId) {this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);}
 
     public String getAuthor(){return (String)this.getAttribute(FIELD_FACEBOOK_NAME);}
 

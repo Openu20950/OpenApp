@@ -58,7 +58,6 @@ public class AddPlace extends AppCompatActivity {
     private EditText mDescription;
     private EditText mPhone;
     private ImageView mPhoto;
-
     private LocationPoint mLocation;
     private String myFacebookId;
     private Bitmap mCapturedPhoto;

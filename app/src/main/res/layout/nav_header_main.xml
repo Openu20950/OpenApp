@@ -14,7 +14,6 @@
         android:id="@+id/img_header_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:scaleType="fitXY"
         android:src="@drawable/nav_menu_header_bg" />
 
@@ -37,26 +36,30 @@
             android:layout_height="23dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-
             android:layout_alignTop="@+id/linearLayout" />
 
         <ImageView
             android:id="@+id/img_profile"
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
+            android:layout_width="89dp"
+            android:layout_height="53dp"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
-
-            app:srcCompat="@drawable/ic_user" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textStyle="bold" />
+            app:srcCompat="@drawable/ic_user"
+            android:layout_weight="0.58" />
 
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="300dp"
+        android:layout_height="20dp"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="31dp"
+        android:layout_marginStart="31dp" />
 </RelativeLayout>

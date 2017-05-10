@@ -72,10 +72,7 @@ public class Place extends Model {
         return (String)this.getAttribute(FIELD_DESCRIPTION);
     }
 
-    public void setDescription(String description)
-    {
-        this.setAttribute(FIELD_DESCRIPTION,description);
-    }
+    public void setDescription(String description) {this.setAttribute(FIELD_DESCRIPTION,description);}
 
     public String getCategory()
     {
@@ -89,10 +86,7 @@ public class Place extends Model {
 
     public  String getFacebookId(){return (String)this.getAttribute(FIELD_FACEBOOK_ID);}
 
-    public void setFacebookId(String myFacebookId)
-    {
-        this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);
-    }
+    public void setFacebookId(String myFacebookId) {this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);}
 
     public QueryBuilder<Review> getReviews()
     {
