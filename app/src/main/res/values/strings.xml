@@ -21,5 +21,7 @@
     <string name="saving">Saving...</string>
     <string name="comment">Comment</string>
     <string name="facebook_app_id">824975167660275</string>
-    <string name="title_activity_facebook_login">FacebookLogin</string>
+    <string name="title_activity_facebook_login">Facebook Login</string>
+    <string name="title_activity_augmented_reality">Augmented Reality</string>
+    <string name="no_camera">There is no camera in this device</string>
 </resources>

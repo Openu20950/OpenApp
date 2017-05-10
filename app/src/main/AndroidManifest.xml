@@ -7,8 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -27,11 +28,12 @@
         <activity
             android:name=".screens.PlacesAround"
             android:label="@string/title_activity_places_around"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screens.AddPlace"
             android:label="@string/title_activity_add_place"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            </activity>
         <activity
             android:name=".screens.PlaceInfo"
             android:label="@string/title_activity_place_info"
@@ -44,9 +46,14 @@
             android:name=".screens.FacebookLogin"
             android:label="@string/title_activity_facebook_login"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".screens.AugmentedReality"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_augmented_reality"
+            android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
