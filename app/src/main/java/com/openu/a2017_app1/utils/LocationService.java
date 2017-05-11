@@ -1,16 +1,15 @@
-package com.openu.a2017_app1.services;
+package com.openu.a2017_app1.utils;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -19,7 +18,7 @@ import com.openu.a2017_app1.models.LocationPoint;
 import static com.google.android.gms.location.LocationServices.FusedLocationApi;
 
 /**
- * Created by User on 30/03/2017.
+ * Created by Raz on 30/03/2017.
  *
  * Class that helps to get the location and location updates.
  */
@@ -83,8 +82,23 @@ public class LocationService {
      * @param callback
      */
     public void requestLocationUpdates(LocationListener callback) {
+        requestLocationUpdates(callback, LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+    }
+
+    /**
+     * Requests a locations updates from the service.
+     *
+     * This method needs a location permission. Be sure that the user allow the app to get the location, otherwise `SecurityException` may thrown.
+     * @param callback
+     * @param LocationRequestPriority
+     */
+    public void requestLocationUpdates(LocationListener callback, int LocationRequestPriority) {
+        LocationRequest myLocationRequest = new LocationRequest();
+        myLocationRequest.setInterval(10000);
+        myLocationRequest.setFastestInterval(5000);
+        myLocationRequest.setPriority(LocationRequestPriority);
         //noinspection MissingPermission
-        FusedLocationApi.requestLocationUpdates(mGoogleApiClient, LocationRequest.create(), callback);
+        FusedLocationApi.requestLocationUpdates(mGoogleApiClient, myLocationRequest, callback);
     }
 
 }

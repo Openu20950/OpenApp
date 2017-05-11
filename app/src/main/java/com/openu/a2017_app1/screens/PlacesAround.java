@@ -51,8 +51,8 @@ import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
+import com.openu.a2017_app1.utils.LocationService;
 import com.openu.a2017_app1.services.CircleTransform;
-import com.openu.a2017_app1.services.LocationService;
 import com.openu.a2017_app1.services.UserLoginService;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,8 +121,6 @@ public class PlacesAround extends AppCompatActivity implements
                     user.setMyFacebookName("Guest");
                     loadNavHeader();
                 }
-
-
             }
         };
 
@@ -193,8 +191,6 @@ public class PlacesAround extends AppCompatActivity implements
             }
         });
 
-
-
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.places_list);
@@ -249,7 +245,10 @@ public class PlacesAround extends AppCompatActivity implements
                     case R.id.nav_map:
                         drawer.closeDrawers();
                         return true;
-
+                    case R.id.nab_augmented_reality:
+                        startActivity(new Intent(PlacesAround.this, AugmentedReality.class));
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_settings:
                         startActivity(new Intent(PlacesAround.this, SettingsActivity.class));
                         drawer.closeDrawers();
@@ -264,7 +263,6 @@ public class PlacesAround extends AppCompatActivity implements
                        //    startActivity(new Intent(MainActivity.this, PrivacyPolicyActivity.class));
                         drawer.closeDrawers();
                         return true;
-
                 }
 
                 //Checking if the item is in checked state or not, if not make it in checked state
@@ -335,6 +333,8 @@ public class PlacesAround extends AppCompatActivity implements
 
 
     }
+
+
 
 
     private void loadPlaces(boolean shouldWarn) {
@@ -523,7 +523,5 @@ public class PlacesAround extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-
 
 }

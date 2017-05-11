@@ -8,7 +8,9 @@
     <color name="secondary_text">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
-    <color name="colorPrimary">#d32f2f</color>
+
+    <color name="black_overlay">#66000000</color>
+    <!--<color name="colorPrimary">#d32f2f</color>
     <color name="colorPrimaryDark">#c72c2c</color>
-    <color name="colorAccent">#FFFFFF</color>
+    <color name="colorAccent">#FFFFFF</color>-->
 </resources>

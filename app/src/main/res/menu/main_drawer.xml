@@ -2,8 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-
-
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
@@ -12,7 +10,10 @@
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map"
             android:title="@string/nav_photos" />
-
+        <item
+            android:id="@+id/nab_augmented_reality"
+            android:icon="@drawable/ic_ar"
+            android:title="@string/nab_augmented_reality" />
     </group>
 
     <item android:title="Other">

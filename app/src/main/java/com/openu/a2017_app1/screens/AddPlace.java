@@ -105,16 +105,9 @@ public class AddPlace extends AppCompatActivity {
                 place.setPhone(mPhone.getText().toString().trim());
                 place.setLocation(mLocation);
                 place.setFacebookId(myFacebookId);
-                if(mCapturedPhoto!=null)
-                {
+                if(mCapturedPhoto!=null) {
                     place.setPhoto(mCapturedPhoto);
-                }else{
-                    Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-                    Bitmap bmp = Bitmap.createBitmap(5, 5, conf);
-                    place.setPhoto(bmp);
                 }
-
-
                 place.saveAsync(new ModelSaveListener() {
                     @Override
                     public void onSave(boolean succeeded, Object id) {
