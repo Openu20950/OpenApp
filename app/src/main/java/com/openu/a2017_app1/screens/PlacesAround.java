@@ -45,6 +45,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.openu.a2017_app1.ExploreMode.ExploreMapActivity;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
 import com.openu.a2017_app1.models.LocationPoint;
@@ -243,6 +244,7 @@ public class PlacesAround extends AppCompatActivity implements
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_map:
+                        startActivity(new Intent(PlacesAround.this, ExploreMapActivity.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nab_augmented_reality:

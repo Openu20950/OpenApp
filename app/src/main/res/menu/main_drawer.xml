@@ -14,6 +14,7 @@
             android:id="@+id/nab_augmented_reality"
             android:icon="@drawable/ic_ar"
             android:title="@string/nab_augmented_reality" />
+
     </group>
 
     <item android:title="Other">
