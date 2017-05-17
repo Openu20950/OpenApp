@@ -1,9 +1,13 @@
 package com.openu.a2017_app1.screens;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -20,7 +24,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +44,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,6 +53,7 @@ import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
+import com.openu.a2017_app1.services.NotificationServices;
 import com.openu.a2017_app1.utils.LocationService;
 import com.openu.a2017_app1.services.CircleTransform;
 import com.openu.a2017_app1.services.UserLoginService;
@@ -61,11 +64,8 @@ import java.util.List;
 public class PlacesAround extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
 
+    public static List<String> list;
     private static final int LOCATION_REQUEST = 0;
-    // index to identify current nav menu item
-    public static int navItemIndex = 0;
-    // tags used to attach the fragments
-    private static final String TAG_HOME = "home";
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Spinner mSpinner;
@@ -84,7 +84,6 @@ public class PlacesAround extends AppCompatActivity implements
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +91,8 @@ public class PlacesAround extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        boolean on_off_notif = prefs.getBoolean("notifications_place_around",true);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
@@ -100,7 +101,6 @@ public class PlacesAround extends AppCompatActivity implements
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)navHeader.findViewById(R.id.login_button);
         user=new UserLoginService(this);
-
 
         if(Profile.getCurrentProfile()!=null)
         {
@@ -206,6 +206,15 @@ public class PlacesAround extends AppCompatActivity implements
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_around_radius_text, R.layout.drop_title);
         adapter.setDropDownViewResource(R.layout.drop_list);
         mSpinner.setAdapter(adapter);
+        if(getIntent().getExtras()!=null)
+        {
+            String compareValue = (String)getIntent().getExtras().get("radius_notif");
+            if (compareValue!=null) {
+                int spinnerPosition = adapter.getPosition(compareValue);
+                mSpinner.setSelection(spinnerPosition);
+            }
+        }
+
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -223,9 +232,18 @@ public class PlacesAround extends AppCompatActivity implements
         loadNavHeader();
         setUpNavigationView();
         mService = new LocationService(this, this);
-    }
-    private void selectNavMenu() {
-        navigationView.getMenu().getItem(navItemIndex).setChecked(true);
+
+        list=user.getFreindsList();
+        if(on_off_notif)
+        {
+
+                Intent intent = new Intent(this, NotificationServices.class);
+                intent.putStringArrayListExtra("userFriendList",(ArrayList)user.getFreindsList());
+                startService(intent);
+
+        }else{
+            stopService(new Intent(this, NotificationServices.class));
+        }
     }
 
     private void setUpNavigationView() {
@@ -454,6 +472,7 @@ public class PlacesAround extends AppCompatActivity implements
         }
     }
 
+
     private static class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHolder> {
 
         private List<Place> mPlacesList;
@@ -524,4 +543,7 @@ public class PlacesAround extends AppCompatActivity implements
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+
 }
+
+
