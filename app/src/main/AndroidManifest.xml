@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
 
 
     <uses-feature
@@ -51,8 +51,11 @@
             android:name=".screens.AddReview"
             android:label="@string/title_activity_add_review"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".screens.AboutUsActivity" />
+
         <activity android:name=".screens.PrivacyPolicyActivity" />
+
         <activity
             android:name=".screens.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -61,8 +64,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_augmented_reality"
             android:theme="@style/FullscreenTheme" />
-
-
 
 
         <service
