@@ -183,7 +183,13 @@ public class PlacesAround extends AppCompatActivity implements
             public void onClick(View view) {
                 if(!user.getMyFacebookName().equals("Guest"))
                 {
-                    friendFilter=true;
+                    if(!friendFilter)
+                    {
+                        friendFilter = true;
+                    }else{
+                        friendFilter = false;
+                    }
+
                     loadPlaces(false);
 
                 }
@@ -225,6 +231,7 @@ public class PlacesAround extends AppCompatActivity implements
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
@@ -409,7 +416,7 @@ public class PlacesAround extends AppCompatActivity implements
                         }
                     }
                     adapter = new PlacesAdapter(newItems);
-                    friendFilter=false;
+
                 }else{
                     adapter = new PlacesAdapter(items);
                 }
