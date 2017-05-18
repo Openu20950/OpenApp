@@ -211,6 +211,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindPreferenceSummaryToValue(findPreference("place_around_radius"));
+
         }
 
         @Override
@@ -253,4 +255,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (getTitle().equals("Settings")) {
+            startActivity(new Intent(SettingsActivity.this, PlacesAround.class));
+            return true;
+        }
+        return false;
+    }
+
 }
