@@ -1,29 +1,40 @@
 language: android
 android:
-   components:
-   - tools
-   - tools #Running this twice get's the latest build tools (https://github.com/codepath/android_guides/wiki/Setting-up-Travis-CI)
-   - platform-tools
-   - android-25
-   - build-tools-25.0.0
-   - extra
-   - extra-google-google_play_services
-   - extra-google-m2repository
-   - extra-android-m2repository
-   - addon-google_apis-google-25
-   licenses:
-   - android-sdk-license-.+
-   - '.+'
-    
+  components:
+  - tools
+  - tools
+  - platform-tools
+  - android-25
+  - build-tools-25.0.0
+  - extra
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - addon-google_apis-google-25
+  licenses:
+  - android-sdk-license-.+
+  - ".+"
 jdk: oraclejdk8
-
 sudo: required
-
-script:
-   - chmod +x gradlew
-   - ./gradlew clean build
-   
 before_install:
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+- echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+- chmod +x gradlew
+script:
+- "./gradlew clean build -PdisablePreDex --stacktrace"
+after_success:
+- find . -name *apk
+- sh set_tags.sh
+notifications:
+  email: true
+deploy:
+  provider: releases
+  api_key:
+    secure: n2m1PVem61mWVul6NOe1iuCkiVrR0BGmhiDuIZ56JfEES3cYFmDkcqlBiO8cop+tyKrO4VkB+4xpCZjG88xLJRKO9pa4DxpWe0S6KGGijZnP4VBIkZj3tLcvHnG38TgudkizIEPDe/DZxhOEL74DjyNKlJjShduSXrhQ/25Ltzqw3UBWSVhxc5Ae8jq0w5gubKc6EwAhZf/W/+9U58nKakUnLZgR4hrx7n066HZPCJZB5DNL6gdj2qlx33IRbLjiudSuCz1czCLrGnSGu/n1ZwGk0IoxwfLDhHJx9ommP4nSJfnHooR6bmzQab1W0/C0N4l1KCGs5mIlUn/IFSukw2hR95h2mv1I+OIi6+BR7LJb5UD9Q4XwjgaSQKrYCyoGtqLszXimQvw3O54cz2dns9z5CO0YArAUk5C2hWnzUqRdznhzJNybv8hBSXmCpbw/jmmtobu8dv4IDA9Ex2cdfBUBC7hAq/Raz4w1N+yhFEvxpkWVVBdgWyy9NGW5T5AcApYXMHLvSo/xtf3+l76BrY3fm2gIonqnVG/kTUdpbDiR7GsTXNK+N5T5V10hvUT951wSRb2vvYELF5i84kOLCk3Q7FtOou+MHNtsa9WuEgil9rE3sPSJm075mCgZNyTuVSGX4018nliIWoNSoM/Nvixyn4AMypaFbtIoYL2/Xtg=
+  file: "app/build/outputs/apk/app-debug.apk"
+  file_glob: "true"
+  skip_cleanup: "true"
+  on:
+    branch: master
+    repo: Openu20950/2017-app1

@@ -1,32 +1,14 @@
 package com.openu.a2017_app1.services;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Parcelable;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import android.content.Context;
+import android.net.Uri;
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.openu.a2017_app1.R;
-import com.openu.a2017_app1.screens.PlacesAround;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

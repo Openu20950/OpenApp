@@ -36,6 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical" />
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
