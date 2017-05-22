@@ -1,6 +1,7 @@
 package com.openu.a2017_app1.ExploreMode;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
@@ -12,7 +13,9 @@ import android.test.AndroidTestRunner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Property;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,9 +38,13 @@ import com.openu.a2017_app1.data.GetAllListener;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
+import com.openu.a2017_app1.models.Review;
+import com.openu.a2017_app1.screens.PlaceInfo;
 import com.openu.a2017_app1.screens.PlacesAround;
 import com.openu.a2017_app1.utils.LocationService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,17 +58,22 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
     private LocationService mService;
     private static final int LOCATION_REQUEST = 0;
 
+    HashMap<Marker, String> markers = new HashMap<Marker, String>();
+    Marker lastPressed = null;
+
     private LocationPoint mLocation;
     private GoogleApiClient mGoogleApiClient;
     private EditText mapSearchBox;
+
+    int placenum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        mLocation = new LocationPoint();
-        mLocation.setLatitude(32.117033);
-        mLocation.setLongitude(34.809126);
+        //mLocation = new LocationPoint();
+        //mLocation.setLatitude(32.117033);
+        //mLocation.setLongitude(34.809126);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_explore_map);
@@ -72,7 +84,7 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
             Toast.makeText(ExploreMapActivity.this, "Still null", Toast.LENGTH_SHORT).show();
 
         }else {*/
-            mapSearchBox.addTextChangedListener(new TextWatcher() {
+           /* mapSearchBox.addTextChangedListener(new TextWatcher() {
 
                 public void afterTextChanged(Editable s) {
                 }
@@ -85,7 +97,26 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
                                           int before, int count) {
                     SearchSingle();
                 }
-            });
+            });*/
+
+
+
+        mapSearchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    SearchSingle();
+                    return true;
+                }
+                return false;
+            }
+
+
+
+
+
+
+        });
 
 
 
@@ -125,11 +156,64 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        Toast.makeText(this, "map ready", Toast.LENGTH_SHORT).show();
+
+        Model.getQuery(Place.class).getAllAsync(new GetAllListener<Place>() {
+            @Override
+            public void onItemsReceived(List<Place> items) {
+                mMap.clear();
+                for (Place item : items) {
+                    placenum++;
+                    //showMessage("map ready with " + placenum + " results");
+                    markers.put(
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(item.getLocation().getLatitude(), item.getLocation().getLongitude())).title(item.getName())
+                            .snippet("Reviews: " + item.getReviews().count())), item.getId());
+
+                }
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(final Marker marker) {
+
+                // Retrieve the data from the marker.
+                Integer clickCount = (Integer) marker.getTag();
+                showMessage("clicked " + marker.getTitle());
+                // Check if a click count was set, then display the click count.
+                if (clickCount != null) {
+                    clickCount = clickCount + 1;
+                    marker.setTag(clickCount);
+                    showMessage(marker.getTitle() + " has been clicked " + clickCount + " times.");
+                }
+
+                if(lastPressed != null && lastPressed.equals(marker)){
+                    Intent myIntent = new Intent(ExploreMapActivity.this, PlaceInfo.class);
+                    myIntent.putExtra(PlaceInfo.EXTRA_PLACE_ID, markers.get(marker));
+                    //myIntent.putExtra(Place.FIELD_FACEBOOK_ID,user.getMyFacebookId());
+                    //myIntent.putExtra(Review.FIELD_FACEBOOK_NAME,user.getMyFacebookName());
+                    //myIntent.putExtra(Review.FIELD_USER_PICTURE,user.getMyProfilePicture().toString());
+                    ExploreMapActivity.this.startActivity(myIntent);
+                    return true;
+                }
+
+                lastPressed = marker;
+
+                // Return false to indicate that we have not consumed the event and that we wish
+                // for the default behavior to occur (which is for the camera to move such that the
+                // marker is centered and for the marker's info window to open, if it has one).
+                return false;
+            }
+        });
+
+        Toast.makeText(this, "map ready with " + placenum + " results", Toast.LENGTH_SHORT).show();
         if (mLocation != null && mMap != null) {
             CenterOnLocalPlaces(mLocation);
             Toast.makeText(this, "centering through map", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showMessage(String msg){
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private void CenterOnLocalPlaces(LocationPoint loc){
@@ -138,7 +222,7 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
         mMap.moveCamera(CameraUpdateFactory.zoomTo(15));
         //mMap.moveCamera(CameraUpdateFactory.zoomIn());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(loc.getLatitude(), loc.getLongitude())));
-        Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, loc, 2000).getAllAsync(new GetAllListener<Place>() {
+       /* Model.getQuery(Place.class).getAllAsync(new GetAllListener<Place>() {
             @Override
             public void onItemsReceived(List<Place> items) {
                 mMap.clear();
@@ -147,29 +231,10 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
                     .snippet("Reviews: " + item.getReviews().count()));
                 }
             }
-        });
+        });*/
     }
 
-    public boolean onMarkerClick(final Marker marker) {
 
-        // Retrieve the data from the marker.
-        Integer clickCount = (Integer) marker.getTag();
-
-        // Check if a click count was set, then display the click count.
-        if (clickCount != null) {
-            clickCount = clickCount + 1;
-            marker.setTag(clickCount);
-            Toast.makeText(this,
-                    marker.getTitle() +
-                            " has been clicked " + clickCount + " times.",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        // Return false to indicate that we have not consumed the event and that we wish
-        // for the default behavior to occur (which is for the camera to move such that the
-        // marker is centered and for the marker's info window to open, if it has one).
-        return false;
-    }
 
     public void SearchMultiple(String searchText){
         List<android.location.Address> results = null;

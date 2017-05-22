@@ -34,7 +34,9 @@
                 android:id="@+id/mapSearchBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search" />
+                android:hint="@string/search"
+                android:inputType="text"
+                android:imeOptions="actionSearch" />/>
             <!--
             <EditText
                 android:id="@+id/searchView1"
