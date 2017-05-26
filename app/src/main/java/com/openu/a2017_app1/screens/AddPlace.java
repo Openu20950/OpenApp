@@ -111,13 +111,18 @@ public class AddPlace extends AppCompatActivity {
                 }
                 place.saveAsync(new ModelSaveListener() {
                     @Override
-                    public void onSave(boolean succeeded, Object id) {
-                        if (succeeded) {
-                            finish();
-                        } else {
-                            Snackbar.make(addBtn, R.string.failed_to_save_place, Snackbar.LENGTH_LONG).show();
-                        }
-                        addBtn.setEnabled(true);
+                    public void onSave(final boolean succeeded, Object id) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (succeeded) {
+                                    finish();
+                                } else {
+                                    Snackbar.make(addBtn, R.string.failed_to_save_place, Snackbar.LENGTH_LONG).show();
+                                }
+                                addBtn.setEnabled(true);
+                            }
+                        });
                     }
                 });
             }
