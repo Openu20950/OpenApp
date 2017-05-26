@@ -1,7 +1,5 @@
 package com.openu.a2017_app1.screens;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -506,7 +504,9 @@ public class PlacesAround extends AppCompatActivity implements
             holder.placeName.setText(place.getName());
             holder.category.setText(place.getCategory());
             holder.rating.setRating((float) place.getReviews().average(Review.FIELD_SCORE));
-            holder.photo.setImageBitmap(place.getPhoto());
+            if (place.getPhoto() != null) {
+                holder.photo.setImageBitmap(place.getPhoto());
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
