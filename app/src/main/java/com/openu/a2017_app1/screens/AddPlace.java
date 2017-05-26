@@ -94,6 +94,7 @@ public class AddPlace extends AppCompatActivity {
         addBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                addBtn.setEnabled(false);
                 if (mPlaceName.getText().toString().trim().length() == 0) {
                     Snackbar.make(mPlaceName, R.string.place_name_cannot_be_empty, Snackbar.LENGTH_LONG).show();
                 }
@@ -116,6 +117,7 @@ public class AddPlace extends AppCompatActivity {
                         } else {
                             Snackbar.make(addBtn, R.string.failed_to_save_place, Snackbar.LENGTH_LONG).show();
                         }
+                        addBtn.setEnabled(true);
                     }
                 });
             }
