@@ -19,7 +19,7 @@ import java.util.List;
 
 class ParseQueryBuilder<T extends IModel> implements QueryBuilder<T> {
 
-    private static final int METERS_TO_KILOMETERS = 100;
+    private static final int METERS_TO_KILOMETERS = 1000;
 
     private ParseQuery<ParseObject> query;
     private Class<T> clazz;
