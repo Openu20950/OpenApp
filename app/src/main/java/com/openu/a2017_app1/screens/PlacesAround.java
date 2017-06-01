@@ -1,7 +1,5 @@
 package com.openu.a2017_app1.screens;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,14 +14,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +75,10 @@ public class PlacesAround extends AppCompatActivity implements
     private LocationService mService;
     private Snackbar mNoLocationService;
     private UserLoginService user;
-    private boolean friendFilter=false;
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
+    private SwitchCompat switcher;
     private ImageView imgProfile;
     private TextView txtName;
     private Toolbar toolbar;
@@ -120,6 +121,14 @@ public class PlacesAround extends AppCompatActivity implements
 
                 if (currentAccessToken == null){
                     user.setMyFacebookName("Guest");
+                    switcher.setEnabled(false);
+                    if(switcher.isChecked())
+                    {
+                        switcher.setChecked(false);
+                        loadPlaces(false);
+                    }
+
+
                     loadNavHeader();
                 }
             }
@@ -150,6 +159,7 @@ public class PlacesAround extends AppCompatActivity implements
                 user.setMyFacebookId(loginResult.getAccessToken().getUserId());
                 user.graphRequest();
                 mProfileTracker.startTracking();
+                switcher.setEnabled(true);
             }
 
             @Override
@@ -177,26 +187,32 @@ public class PlacesAround extends AppCompatActivity implements
             }
         });
 
-        FloatingActionButton searchFbutton=(FloatingActionButton) findViewById(R.id.search);
 
-        searchFbutton.setOnClickListener(new View.OnClickListener() {
+
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.nav_switch);
+        View actionView = MenuItemCompat.getActionView(menuItem);
+
+        switcher = (SwitchCompat) actionView.findViewById(R.id.switcher);
+
+
+        switcher.setChecked(false);
+        if(user.getMyFacebookName().equals("Guest"))
+        {
+            switcher.setEnabled(false);
+        }
+        switcher.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 if(!user.getMyFacebookName().equals("Guest"))
                 {
-                    if(!friendFilter)
-                    {
-                        friendFilter = true;
-                    }else{
-                        friendFilter = false;
-                    }
 
                     loadPlaces(false);
 
                 }
-
             }
         });
+
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -215,11 +231,22 @@ public class PlacesAround extends AppCompatActivity implements
         mSpinner.setAdapter(adapter);
         if(getIntent().getExtras()!=null)
         {
+
             String compareValue = (String)getIntent().getExtras().get("radius_notif");
+            boolean friendFilter = (boolean)getIntent().getExtras().get("friend_filter");
+            if(friendFilter)
+            {
+                switcher.setChecked(true);
+            }else{
+                switcher.setChecked(false);
+            }
+
             if (compareValue!=null) {
                 int spinnerPosition = adapter.getPosition(compareValue);
                 mSpinner.setSelection(spinnerPosition);
             }
+
+
         }
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -276,6 +303,15 @@ public class PlacesAround extends AppCompatActivity implements
                         startActivity(new Intent(PlacesAround.this, AugmentedReality.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_switch:
+                        switcher.setChecked(!switcher.isChecked());
+                        if(!user.getMyFacebookName().equals("Guest"))
+                        {
+
+                            loadPlaces(false);
+
+                        }
+                        return true;
                     case R.id.nav_settings:
                         startActivity(new Intent(PlacesAround.this, SettingsActivity.class));
                         drawer.closeDrawers();
@@ -292,12 +328,6 @@ public class PlacesAround extends AppCompatActivity implements
                         return true;
                 }
 
-                //Checking if the item is in checked state or not, if not make it in checked state
-                if (menuItem.isChecked()) {
-                    menuItem.setChecked(false);
-                } else {
-                    menuItem.setChecked(true);
-                }
 
                 return true;
             }
@@ -392,7 +422,7 @@ public class PlacesAround extends AppCompatActivity implements
             @Override
             public void onItemsReceived(List<Place> items) {
                 PlacesAdapter adapter;
-                if(friendFilter)
+                if(switcher.isChecked())
                 {
                     List<Place> newItems=new ArrayList<Place>();
                     List<Review> reviews=new ArrayList<Review>();
