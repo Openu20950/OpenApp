@@ -536,7 +536,9 @@ public class PlacesAround extends AppCompatActivity implements
             holder.placeName.setText(place.getName());
             holder.category.setText(place.getCategory());
             holder.rating.setRating((float) place.getReviews().average(Review.FIELD_SCORE));
-            holder.photo.setImageBitmap(place.getPhoto());
+            if (place.getPhoto() != null) {
+                holder.photo.setImageBitmap(place.getPhoto());
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
