@@ -44,7 +44,7 @@ public class NotificationServices extends Service{
     private List<Place> places;
     private LocationListener locationListener = new LocationListener() {
         @Override
-        public void onLocationChanged(Location location) {
+        public synchronized void onLocationChanged(Location location) {
 
             SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(NotificationServices.this);
 
@@ -252,11 +252,12 @@ public class NotificationServices extends Service{
         String strRingtonePreference = prefs.getString("notifications_new_message_ringtone", "DEFAULT_SOUND");
         Uri defaultSoundUri = Uri.parse(strRingtonePreference);
         boolean vib = prefs.getBoolean("notifications_new_message_vibrate", true);
-        long [] v={0,0};
+        long [] v={0,0,0};
         if (vib)
         {
             v [0] = 500;
             v[1] = 1000;
+            v[2] = 500;
         }
         mBuilder =
                 new NotificationCompat.Builder(NotificationServices.this)
