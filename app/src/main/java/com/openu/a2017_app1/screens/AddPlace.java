@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -35,10 +37,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.openu.a2017_app1.R;
+import com.openu.a2017_app1.data.FindListener;
 import com.openu.a2017_app1.models.LocationPoint;
+import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.ModelSaveListener;
 import com.openu.a2017_app1.models.Place;
 
@@ -52,7 +57,10 @@ public class AddPlace extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     public static final String EXTRA_LOCATION = "location";
+    public static final String EXTRA_PLACE_ID = "place_id";
+    private static final int CAMERA_REQUEST = 1;
 
+    private Place mPlace;
     private EditText mPlaceName;
     private Spinner mCategory;
     private EditText mDescription;
@@ -67,30 +75,58 @@ public class AddPlace extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
 
-        mLocation = (LocationPoint) getIntent().getExtras().get(EXTRA_LOCATION);
-        myFacebookId=(String) getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+        mDescription = (EditText) findViewById(R.id.description);
+        mPhone = (EditText) findViewById(R.id.phone);
+        mPhoto = (ImageView) findViewById(R.id.photo);
+        mCategory = (Spinner) findViewById(R.id.category);
         mPlaceName = (EditText) findViewById(R.id.place_name);
 
-        mCategory = (Spinner) findViewById(R.id.category);
+        final Button addBtn = (Button) findViewById(R.id.add_place_button);
+
+        String placeId = getIntent().getExtras().getString(EXTRA_PLACE_ID);
+        if (placeId != null) {
+            addBtn.setEnabled(false);
+            Model.getQuery(Place.class).findAsync(placeId, new FindListener<Place>() {
+                @Override
+                public void onItemFound(Place item) {
+                    mPlace = item;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            addBtn.setEnabled(true);
+                            mPlaceName.setText(mPlace.getName());
+                            mDescription.setText(mPlace.getDescription());
+                            mPhone.setText(mPlace.getPhone());
+                            if (mPlace.getPhoto() != null) {
+                                mPhoto.setImageBitmap(mPlace.getPhoto());
+                            }
+                            mCategory.setSelection(Arrays.asList(getResources().getStringArray(R.array.place_categories)).indexOf(mPlace.getCategory()));
+                        }
+                    });
+                }
+            });
+        } else {
+            mPlace = new Place();
+        }
+
+        mLocation = (LocationPoint) getIntent().getExtras().get(EXTRA_LOCATION);
+        myFacebookId=(String) getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.place_categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mCategory.setAdapter(adapter);
 
-        mDescription = (EditText) findViewById(R.id.description);
-        mPhone = (EditText) findViewById(R.id.phone);
-        mPhoto = (ImageView) findViewById(R.id.photo);
-
         mPhoto.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                if (ContextCompat.checkSelfPermission(AddPlace.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+                    ActivityCompat.requestPermissions(AddPlace.this, new String[] {  android.Manifest.permission.CAMERA  }, CAMERA_REQUEST );
+                    return;
                 }
+                OpenCamera();
             }
         });
 
-        final Button addBtn = (Button) findViewById(R.id.add_place_button);
         addBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,17 +134,20 @@ public class AddPlace extends AppCompatActivity {
                     Snackbar.make(mPlaceName, R.string.place_name_cannot_be_empty, Snackbar.LENGTH_LONG).show();
                 }
 
-                Place place = new Place();
-                place.setName(mPlaceName.getText().toString().trim());
-                place.setCategory(mCategory.getSelectedItem().toString());
-                place.setDescription(mDescription.getText().toString().trim());
-                place.setPhone(mPhone.getText().toString().trim());
-                place.setLocation(mLocation);
-                place.setFacebookId(myFacebookId);
-                if(mCapturedPhoto!=null) {
-                    place.setPhoto(mCapturedPhoto);
+                mPlace.setName(mPlaceName.getText().toString().trim());
+                mPlace.setCategory(mCategory.getSelectedItem().toString());
+                mPlace.setDescription(mDescription.getText().toString().trim());
+                mPlace.setPhone(mPhone.getText().toString().trim());
+                if (mPlace.getLocation() == null) {
+                    mPlace.setLocation(mLocation);
                 }
-                place.saveAsync(new ModelSaveListener() {
+                if (mPlace.getFacebookId() == null) {
+                    mPlace.setFacebookId(myFacebookId);
+                }
+                if(mCapturedPhoto != null) {
+                    mPlace.setPhoto(mCapturedPhoto);
+                }
+                mPlace.saveAsync(new ModelSaveListener() {
                     @Override
                     public void onSave(boolean succeeded, Object id) {
                         if (succeeded) {
@@ -120,6 +159,24 @@ public class AddPlace extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void OpenCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    OpenCamera();
+                }
+            }
+        }
     }
 
     @Override

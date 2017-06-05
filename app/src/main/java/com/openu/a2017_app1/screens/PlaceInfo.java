@@ -15,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,10 +127,22 @@ public class PlaceInfo extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_place_info, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+            case R.id.edit:
+            {
+                Intent myIntent = new Intent(this, AddPlace.class);
+                myIntent.putExtra(AddPlace.EXTRA_PLACE_ID, mPlaceId);
+                this.startActivity(myIntent);
+            }
         }
         return true;
     }

@@ -120,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/add_place"
+                    android:text="@string/save_place"
                     android:textStyle="bold" />
 
             </LinearLayout>
