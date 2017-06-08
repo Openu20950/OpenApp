@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -30,6 +31,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -68,6 +71,7 @@ public class PlacesAround extends AppCompatActivity implements
 
     public static List<String> list;
     private static final int LOCATION_REQUEST = 0;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private Spinner mSpinner;
@@ -264,6 +268,17 @@ public class PlacesAround extends AppCompatActivity implements
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
         }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                loadPlaces(false);
+            }
+        });
+
+
         loadNavHeader();
         setUpNavigationView();
         mService = new LocationService(this, this);
@@ -471,7 +486,7 @@ public class PlacesAround extends AppCompatActivity implements
             }
         });
 
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     protected void onStart() {
