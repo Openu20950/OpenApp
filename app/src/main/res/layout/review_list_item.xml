@@ -65,4 +65,14 @@
         android:layout_alignLeft="@+id/author"
         android:layout_alignStart="@+id/author" />
 
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/description"
+        android:layout_alignStart="@+id/description"
+        android:layout_below="@+id/description"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitXY" />
+
 </RelativeLayout>

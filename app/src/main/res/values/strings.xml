@@ -126,5 +126,9 @@
     <string name="no_camera">This device has no camera</string>
     <string name="nab_augmented_reality">Augmented Reality</string>
 
+    <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 
 </resources>
