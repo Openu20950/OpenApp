@@ -42,6 +42,8 @@ import java.util.concurrent.ExecutionException;
 
 public class AddReview extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     public static final String EXTRA_PLACE_ID = "place";
 
     private EditText mComment;
@@ -52,6 +54,8 @@ public class AddReview extends AppCompatActivity {
     private String myFacebookId;
     private String myFacebookName;
     private String myPicture;
+    private ImageView mPhoto;
+    private Bitmap mCapturedPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,16 @@ public class AddReview extends AppCompatActivity {
         myPicture = (String)getIntent().getExtras().get(Review.FIELD_USER_PICTURE);
         mComment = (EditText) findViewById(R.id.comment);
         mRating = (RatingBar) findViewById(R.id.rating);
+        mPhoto = (ImageView) findViewById(R.id.photo);
+        mPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
 
 
         mAddBtn = (Button) findViewById(R.id.add_review_button);
@@ -99,8 +113,9 @@ public class AddReview extends AppCompatActivity {
         review.setPlace(mPlace);
         review.setFacebookId(myFacebookId);
         review.setAuthor(myFacebookName);
-        if(myPicture!=null)
-            review.setUserPic(myPicture);
+        if(mCapturedPhoto != null) {
+            review.setPhoto(mCapturedPhoto);
+        }
 
         review.saveAsync(new ModelSaveListener() {
             @Override
@@ -130,9 +145,13 @@ public class AddReview extends AppCompatActivity {
         return errors;
     }
 
-
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mPhoto.setImageBitmap(mCapturedPhoto = imageBitmap);
+        }
+    }
 
 }
