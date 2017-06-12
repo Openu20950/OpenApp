@@ -1,7 +1,6 @@
 package com.openu.a2017_app1.screens;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,32 +19,25 @@ import android.opengl.GLU;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
-import com.openu.a2017_app1.models.ArItem;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
-import com.openu.a2017_app1.models.ModelSaveListener;
+import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.screens.ar.ArDrawableItem;
 import com.openu.a2017_app1.utils.LocationService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -59,6 +51,7 @@ import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 public class AugmentedReality extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private static final int CAMERA_REQUEST = 1;
+    private static final int DISTANCE = 50;
     private SurfaceHolder mSurfaceHolder;
     private GLSurfaceView mGlSurface;
     private LocationService mLocationService;
@@ -71,7 +64,7 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
     private Object mCurrentLocationLocker = new Object();
     private LocationPoint mCurrentLocation;
     private Object mItemsLocker = new Object();
-    private List<ArItem> mItems;
+    private List<ArDrawableItem> mItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +86,7 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
         mGlSurface.getHolder().setFormat( PixelFormat.TRANSLUCENT );
         mGlSurface.setRenderer(new Renderer());
 
+        final Bitmap defaultIcon =  BitmapFactory.decodeResource(getResources(), R.drawable.ic_place);
         mLocationService = new LocationService(this, new GoogleApiClient.ConnectionCallbacks() {
             @Override
             public void onConnected(@Nullable Bundle bundle) {
@@ -102,59 +96,25 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
                     public void onLocationChanged(Location location) {
                         synchronized (mCurrentLocationLocker) {
                             mCurrentLocation = LocationPoint.fromLocation(location);
+                            Model.getQuery(Place.class)/*.whereNear(Place.FIELD_LOCATION, mCurrentLocation, DISTANCE)*/.getAllAsync(new GetAllListener<Place>() {
+                                @Override
+                                public void onItemsReceived(List<Place> items) {
+                                    synchronized (mItemsLocker) {
+                                        mItems = new ArrayList<>();
+                                        for (Place item : items) {
+                                            Bitmap bitmap = item.getPhoto() != null ? item.getPhoto().copy(Bitmap.Config.ARGB_8888, true) : defaultIcon.copy(Bitmap.Config.ARGB_8888, true);
+                                            textOnBitmap(item.getName(), bitmap);
+                                            mItems.add(new ArDrawableItem(bitmap, item.getLocation()));
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 });
             }
             @Override
             public void onConnectionSuspended(int i) {  }
-        });
-
-        ((FloatingActionButton)findViewById(R.id.fab)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                synchronized (mCurrentLocationLocker) {
-                    if (mCurrentLocation == null) return;
-                }
-                final Integer[] drawables = new Integer[]{
-                        R.drawable.ic_sticker_left,
-                        R.drawable.ic_sticker_right,
-                        R.drawable.ic_sticker_down
-                };
-                new AlertDialog.Builder(AugmentedReality.this)
-                        .setAdapter(new StickersAdapter(AugmentedReality.this, drawables), new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                final ArItem item = new ArItem();
-                                synchronized (mCurrentLocationLocker) {
-                                    item.setLocation(mCurrentLocation);
-                                }
-                                item.setOrientation(mPhoneDirection[0]);
-                                item.setSticker(drawables[which]);
-                                item.saveAsync(new ModelSaveListener() {
-                                    @Override
-                                    public void onSave(boolean succeeded, Object id) {
-                                        if (succeeded) {
-                                            synchronized (mItemsLocker) {
-                                                mItems.add(item);
-                                            }
-                                        }
-                                    }
-                                });
-                            }
-                        })
-                        .show();
-            }
-        });
-
-        Model.getQuery(ArItem.class).getAllAsync(new GetAllListener<ArItem>() {
-            @Override
-            public void onItemsReceived(List<ArItem> items) {
-                synchronized (mItemsLocker) {
-                    mItems = items;
-                }
-            }
         });
     }
 
@@ -239,6 +199,21 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
         }
     }
 
+    public void textOnBitmap(String text, Bitmap bitmap) {
+        Paint paintFront = new Paint(ANTI_ALIAS_FLAG);
+        paintFront.setTextSize(36);
+        paintFront.setColor(Color.WHITE);
+        paintFront.setTextAlign(Paint.Align.LEFT);
+        Paint paintBack = new Paint(ANTI_ALIAS_FLAG);
+        paintBack.setTextSize(36);
+        paintBack.setColor(Color.BLACK);
+        paintBack.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paintFront.ascent(); // ascent() is negative
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawText(text, 2, baseline + 2, paintBack);
+        canvas.drawText(text, 0, baseline, paintFront);
+    }
+
     private class SensorListener implements SensorEventListener {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -274,7 +249,7 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
         }
         @Override
         public void onDrawFrame(GL10 gl) {
-            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+           gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
             gl.glMatrixMode(GL10.GL_MODELVIEW);
             gl.glLoadIdentity();
@@ -289,56 +264,17 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
             synchronized (mCurrentLocationLocker) {
                 synchronized (mItemsLocker) {
                     if (mCurrentLocation != null && mItems != null) {
-                        for (ArItem item : mItems) {
-                            ArDrawableItem arItem;
-                            if (item.getSticker() > 0) {
-                                arItem = new ArDrawableItem(BitmapFactory.decodeResource(getResources(), item.getSticker()));
-                            } else {
-                                arItem = new ArDrawableItem(textAsBitmap(item.getText()));
-                            }
+                        for (ArDrawableItem item : mItems) {
                             float angle = (float) mCurrentLocation.bearingTo(item.getLocation());
-
                             gl.glPushMatrix();
                             gl.glRotatef(-angle, 0, 1, 0);
-                            gl.glTranslatef(0, 0, -20);
-                            gl.glRotatef(-item.getOrientation(), 0, 1, 0);
-                            arItem.draw(gl);
+                            gl.glTranslatef(0, 0, -20f);//(float) -(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6 + 20));
+                            item.draw(gl);
                             gl.glPopMatrix();
                         }
                     }
                 }
             }
-        }
-
-        public Bitmap textAsBitmap(String text) {
-            Paint paint = new Paint(ANTI_ALIAS_FLAG);
-            paint.setTextSize(12);
-            paint.setColor(Color.BLACK);
-            paint.setTextAlign(Paint.Align.LEFT);
-            float baseline = -paint.ascent(); // ascent() is negative
-            int width = (int) (paint.measureText(text) + 0.5f); // round
-            int height = (int) (baseline + paint.descent() + 0.5f);
-            Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(image);
-            Paint rectPaint = new Paint();
-            rectPaint.setStyle(Paint.Style.FILL);
-            rectPaint.setColor(Color.argb(100, 100, 100, 100));
-            canvas.drawRect(0, 0, width, height, rectPaint);
-            canvas.drawText(text, 0, baseline, paint);
-            return image;
-        }
-    }
-
-    private static class StickersAdapter extends ArrayAdapter<Integer> {
-
-        public StickersAdapter(@NonNull Context context, Integer[] drawables) {
-            super(context, 0, drawables);
-        }
-
-        public View getView(int position, View convertView, ViewGroup container) {
-            ImageView imageView = new ImageView(getContext());
-            imageView.setImageResource(getItem(position));
-            return imageView;
         }
     }
 }
