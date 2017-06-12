@@ -235,9 +235,10 @@ public class PlacesAround extends AppCompatActivity implements
         mSpinner.setAdapter(adapter);
         if(getIntent().getExtras()!=null)
         {
-
+            boolean friendFilter = false;
             String compareValue = (String)getIntent().getExtras().get("radius_notif");
-            boolean friendFilter = (boolean)getIntent().getExtras().get("friend_filter");
+            if(getIntent().getExtras().get("friend_filter")!=null)
+                friendFilter = (boolean)getIntent().getExtras().get("friend_filter");
             if(friendFilter)
             {
                 switcher.setChecked(true);
