@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">2017-app1</string>
+    <string name="app_name">OpenUp</string>
     <string name="title_activity_explore_map">Explore Mode</string>
     <string name="title_activity_places_around">Places Around</string>
     <string name="title_activity_add_place">Add Place</string>
@@ -129,6 +129,13 @@
     <string name="title_activity_fullscreen_image">FullscreenImageActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+
+
+
+
+
 
 
 </resources>

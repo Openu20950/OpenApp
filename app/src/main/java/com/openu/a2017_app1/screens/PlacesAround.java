@@ -31,14 +31,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.AccessToken;
@@ -58,10 +57,11 @@ import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
-import com.openu.a2017_app1.services.NotificationServices;
-import com.openu.a2017_app1.utils.LocationService;
 import com.openu.a2017_app1.services.CircleTransform;
+import com.openu.a2017_app1.services.NotificationServices;
 import com.openu.a2017_app1.services.UserLoginService;
+import com.openu.a2017_app1.utils.LocationService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +96,7 @@ public class PlacesAround extends AppCompatActivity implements
         setContentView(R.layout.activity_places_around);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setTitle(R.string.title_activity_places_around);
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         boolean on_off_notif = prefs.getBoolean("notifications_place_around",true);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -235,9 +235,10 @@ public class PlacesAround extends AppCompatActivity implements
         mSpinner.setAdapter(adapter);
         if(getIntent().getExtras()!=null)
         {
-
+            boolean friendFilter = false;
             String compareValue = (String)getIntent().getExtras().get("radius_notif");
-            boolean friendFilter = (boolean)getIntent().getExtras().get("friend_filter");
+            if(getIntent().getExtras().get("friend_filter")!=null)
+                friendFilter = (boolean)getIntent().getExtras().get("friend_filter");
             if(friendFilter)
             {
                 switcher.setChecked(true);
@@ -381,7 +382,7 @@ public class PlacesAround extends AppCompatActivity implements
     }
 
 
-    public void loadNavHeader() {
+    private void loadNavHeader() {
 
         // name
          txtName.setText(user.getMyFacebookName());
