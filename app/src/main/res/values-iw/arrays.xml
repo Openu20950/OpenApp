@@ -1,0 +1,16 @@
+<resources>
+
+
+    <string-array name="place_around_radius_text">
+        <item>100מ</item>
+        <item>300מ</item>
+        <item>500מ</item>
+        <item>1000מ</item>
+    </string-array>
+    <integer-array name="place_around_radius">
+        <item>100</item>
+        <item>300</item>
+        <item>500</item>
+        <item>1000</item>
+    </integer-array>
+</resources>
