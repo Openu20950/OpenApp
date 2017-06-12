@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">2017-app1</string>
+    <string name="app_name">OpenUp</string>
     <string name="title_activity_explore_map">Explore Mode</string>
     <string name="title_activity_places_around">Places Around</string>
     <string name="title_activity_add_place">Add Place</string>
@@ -125,6 +125,13 @@
     <string name="title_activity_augmented_reality">Augmented Reality</string>
     <string name="no_camera">This device has no camera</string>
     <string name="nab_augmented_reality">Augmented Reality</string>
+
+
+
+
+
+
+
 
 
 </resources>
