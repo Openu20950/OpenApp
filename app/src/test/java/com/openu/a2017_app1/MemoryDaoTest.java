@@ -26,7 +26,6 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 /**
  * Created by Raz on 09/01/2017.
  */
@@ -85,7 +84,6 @@ public class MemoryDaoTest extends UnitTest {
         }
         return models;
     }
-
 
     @Test
     public void save_one_model() {

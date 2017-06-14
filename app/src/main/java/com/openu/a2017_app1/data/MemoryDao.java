@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 
 import com.openu.a2017_app1.models.IModel;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

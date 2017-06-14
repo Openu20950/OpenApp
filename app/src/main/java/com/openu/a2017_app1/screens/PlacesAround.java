@@ -65,7 +65,6 @@ import com.openu.a2017_app1.utils.LocationService;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PlacesAround extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks {
 
@@ -132,7 +131,6 @@ public class PlacesAround extends AppCompatActivity implements
                         loadPlaces(false);
                     }
 
-
                     loadNavHeader();
                 }
             }
@@ -150,7 +148,6 @@ public class PlacesAround extends AppCompatActivity implements
 
                     loadNavHeader();
                 }
-
 
             }
         };
@@ -176,9 +173,7 @@ public class PlacesAround extends AppCompatActivity implements
                 Toast.makeText(drawer.getContext(),"Login attempt failed.", Toast.LENGTH_SHORT).show();
             }
 
-
         });
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -192,13 +187,11 @@ public class PlacesAround extends AppCompatActivity implements
         });
 
 
-
         Menu menu = navigationView.getMenu();
         MenuItem menuItem = menu.findItem(R.id.nav_switch);
         View actionView = MenuItemCompat.getActionView(menuItem);
 
         switcher = (SwitchCompat) actionView.findViewById(R.id.switcher);
-
 
         switcher.setChecked(false);
         if(user.getMyFacebookName().equals("Guest"))
@@ -216,7 +209,6 @@ public class PlacesAround extends AppCompatActivity implements
                 }
             }
         });
-
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -251,7 +243,6 @@ public class PlacesAround extends AppCompatActivity implements
                 mSpinner.setSelection(spinnerPosition);
             }
 
-
         }
 
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -265,7 +256,6 @@ public class PlacesAround extends AppCompatActivity implements
             }
         });
 
-
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( this, new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LOCATION_REQUEST );
         }
@@ -278,7 +268,6 @@ public class PlacesAround extends AppCompatActivity implements
                 loadPlaces(false);
             }
         });
-
 
         loadNavHeader();
         setUpNavigationView();
@@ -344,11 +333,9 @@ public class PlacesAround extends AppCompatActivity implements
                         return true;
                 }
 
-
                 return true;
             }
         });
-
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
@@ -381,7 +368,6 @@ public class PlacesAround extends AppCompatActivity implements
         super.onBackPressed();
     }
 
-
     private void loadNavHeader() {
 
         // name
@@ -404,9 +390,7 @@ public class PlacesAround extends AppCompatActivity implements
 
         }
 
-
     }
-
 
 
 
@@ -527,7 +511,6 @@ public class PlacesAround extends AppCompatActivity implements
         }
     }
 
-
     private static class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.MyViewHolder> {
 
         private List<Place> mPlacesList;
@@ -548,6 +531,8 @@ public class PlacesAround extends AppCompatActivity implements
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
+            if (holder.IsBinded) return;
+            holder.IsBinded = true;
             final Place place = mPlacesList.get(position);
             holder.placeName.setText(place.getName());
             holder.category.setText(place.getCategory());
@@ -579,6 +564,8 @@ public class PlacesAround extends AppCompatActivity implements
             public TextView placeName, category;
             public RatingBar rating;
             public ImageView photo;
+            public boolean IsBinded;
+
 
             public MyViewHolder(View view) {
                 super(view);
@@ -594,13 +581,10 @@ public class PlacesAround extends AppCompatActivity implements
         }
     }
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-
 }
-
 

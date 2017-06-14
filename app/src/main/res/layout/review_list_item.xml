@@ -36,6 +36,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/icon"
         android:layout_toRightOf="@+id/icon"
         android:text="Author"
         android:textStyle="bold"

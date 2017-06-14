@@ -1,6 +1,5 @@
 package com.openu.a2017_app1.services;
 
-
 import android.content.Context;
 import android.net.Uri;
 import com.facebook.AccessToken;
@@ -31,8 +30,6 @@ public class UserLoginService implements Serializable {
         myProfilePicture = Uri.EMPTY;
 
     }
-
-
 
 
 
