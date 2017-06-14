@@ -29,7 +29,6 @@ import com.openu.a2017_app1.screens.PlacesAround;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created by noam on 15/05/2017.
  */
@@ -101,10 +100,8 @@ public class NotificationServices extends Service{
                                     PendingIntent contentIntent = PendingIntent.getActivity(NotificationServices.this, 0,
                                             activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
                                     mBuilder.setContentIntent(contentIntent);
                                     mBuilder.setAutoCancel(true);
-
 
                                     mNotificationManager =
                                             (NotificationManager) getSystemService(
@@ -127,16 +124,13 @@ public class NotificationServices extends Service{
                                 PendingIntent contentIntent = PendingIntent.getActivity(NotificationServices.this, 0,
                                         activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
                                 mBuilder.setContentIntent(contentIntent);
                                 mBuilder.setAutoCancel(true);
-
 
                                 mNotificationManager =
                                         (NotificationManager) getSystemService(
                                                 Context.NOTIFICATION_SERVICE);
                                 mNotificationManager.notify(1, mBuilder.build());
-
 
                             }
 
@@ -144,7 +138,6 @@ public class NotificationServices extends Service{
 
                     }
                 });
-
 
             }
 
@@ -163,7 +156,6 @@ public class NotificationServices extends Service{
         }
     };
 
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -171,14 +163,12 @@ public class NotificationServices extends Service{
         return null;
     }
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("MyService", "onStart: " + intent);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         places=new ArrayList<Place>() ;
-
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -207,7 +197,6 @@ public class NotificationServices extends Service{
         locationManager.removeUpdates(locationListener);
         locationManager=null;
     }
-
 
     private boolean listsAreEquivelent(List<Place> a, List<Place> b) {
         if (a == null) {
@@ -244,7 +233,6 @@ public class NotificationServices extends Service{
         }
         return true;
     }
-
 
     private void setmNotificationManager()
     {

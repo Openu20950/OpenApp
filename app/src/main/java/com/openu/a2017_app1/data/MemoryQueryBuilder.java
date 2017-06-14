@@ -3,7 +3,6 @@ package com.openu.a2017_app1.data;
 import com.openu.a2017_app1.models.IModel;
 import com.openu.a2017_app1.models.LocationPoint;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

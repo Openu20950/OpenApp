@@ -1,6 +1,5 @@
 package com.openu.a2017_app1.models;
 
-
 import android.support.annotation.Nullable;
 
 import com.openu.a2017_app1.data.DaoFactory;
@@ -10,7 +9,6 @@ import com.openu.a2017_app1.data.SaveListener;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * Created by noam on 28/12/2016.

@@ -88,7 +88,6 @@ public class AddReview extends AppCompatActivity {
             }
         });
 
-
         mAddBtn = (Button) findViewById(R.id.add_review_button);
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override

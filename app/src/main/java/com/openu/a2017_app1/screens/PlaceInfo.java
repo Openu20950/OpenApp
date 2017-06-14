@@ -38,7 +38,6 @@ import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.services.CircleTransform;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
