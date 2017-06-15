@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * Created by noam on 15/05/2017.
  */
@@ -185,21 +184,16 @@ public class  NotificationServices extends Service  {
         return null;
     }
 
-    @Override
-    public void onCreate()
-    {
-        IS_SERVICE_RUNNING = true;
-        h = new Handler();
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        places=new ArrayList<Place>() ;
-        setmNotificationManager();
-    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         IS_SERVICE_RUNNING = true;
-
+        h = new Handler();
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        places=new ArrayList<Place>() ;
+        setmNotificationManager();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
