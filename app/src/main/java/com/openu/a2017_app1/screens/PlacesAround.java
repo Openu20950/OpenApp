@@ -1,5 +1,7 @@
 package com.openu.a2017_app1.screens;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -88,7 +90,7 @@ public class PlacesAround extends AppCompatActivity implements
     private ProfileTracker mProfileTracker;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
-
+    private Intent intentNotificationServices;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -274,15 +276,27 @@ public class PlacesAround extends AppCompatActivity implements
         mService = new LocationService(this, this);
 
         list=user.getFreindsList();
+
+
         if(on_off_notif)
         {
 
+            if(!isMyServiceRunning() && !NotificationServices.IS_SERVICE_RUNNING)
+            {
+
+
                 Intent intent = new Intent(this, NotificationServices.class);
-                intent.putStringArrayListExtra("userFriendList",(ArrayList)user.getFreindsList());
                 startService(intent);
+                NotificationServices.IS_SERVICE_RUNNING = true;
+            }
+
 
         }else{
+            NotificationServices.IS_SERVICE_RUNNING = false;
             stopService(new Intent(this, NotificationServices.class));
+
+
+
         }
     }
 
@@ -586,5 +600,17 @@ public class PlacesAround extends AppCompatActivity implements
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+
+    private boolean isMyServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+
+            if (NotificationServices.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
