@@ -63,7 +63,7 @@ public class  NotificationServices extends Service  {
 
                     radius=Integer.parseInt(radius_notif);
 
-                    if(location!=null) {
+                    if(location!=null && IS_SERVICE_RUNNING ) {
                         LocationPoint myLocation=new LocationPoint();
                         myLocation.setLatitude(location.getLatitude());
                         myLocation.setLongitude(location.getLongitude());

@@ -296,18 +296,17 @@ public class PlacesAround extends AppCompatActivity implements
             {
 
 
-                intentNotificationServices = new Intent(this, NotificationServices.class);
-                this.startService(intentNotificationServices);
+                Intent intent = new Intent(this, NotificationServices.class);
+                startService(intent);
                 NotificationServices.IS_SERVICE_RUNNING = true;
             }
 
 
         }else{
-            if(intentNotificationServices!=null)
-            {
-                this.stopService(intentNotificationServices);
-                NotificationServices.IS_SERVICE_RUNNING = false;
-            }
+            NotificationServices.IS_SERVICE_RUNNING = false;
+            stopService(new Intent(this, NotificationServices.class));
+
+
 
         }
     }
