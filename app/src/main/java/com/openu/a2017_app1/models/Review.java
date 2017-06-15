@@ -1,5 +1,7 @@
 package com.openu.a2017_app1.models;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by noam on 28/12/2016.
  */
@@ -12,46 +14,41 @@ public class Review extends Model {
     public static final String FIELD_FACEBOOK_ID = "facebook_user_id";
     public static final String FIELD_FACEBOOK_NAME = "name";
     public static final String FIELD_USER_PICTURE = "user_picture";
+    public static final String FIELD_PHOTO = "photo";
+
     /**
      * default constructor
      */
-    public Review()
-    {
+    public Review() {
 
     }
 
     /**
-     *
      * @return
      */
-    public Place getPlace()
-    {
-        return (Place)this.getAttribute(FIELD_PLACE);
+    public Place getPlace() {
+        return (Place) this.getAttribute(FIELD_PLACE);
     }
 
     /**
-     *
      * @param place
      */
-    public void setPlace(Place place)
-    {
-        this.setAttribute(FIELD_PLACE,place);
+    public void setPlace(Place place) {
+        this.setAttribute(FIELD_PLACE, place);
     }
 
     /**
      * @return
      */
-    public String getComment()
-    {
-        return (String)this.getAttribute(FIELD_COMMENT);
+    public String getComment() {
+        return (String) this.getAttribute(FIELD_COMMENT);
     }
 
     /**
      * @param cooment
      */
-    public void setComment(String cooment)
-    {
-        this.setAttribute(FIELD_COMMENT,cooment);
+    public void setComment(String cooment) {
+        this.setAttribute(FIELD_COMMENT, cooment);
     }
 
     public int getScore() {
@@ -62,15 +59,35 @@ public class Review extends Model {
         this.setAttribute(FIELD_SCORE, score);
     }
 
-    public  String getFacebookId(){return (String)this.getAttribute(FIELD_FACEBOOK_ID);}
+    public String getFacebookId() {
+        return (String) this.getAttribute(FIELD_FACEBOOK_ID);
+    }
 
-    public void setFacebookId(String myFacebookId) {this.setAttribute(FIELD_FACEBOOK_ID,myFacebookId);}
+    public void setFacebookId(String myFacebookId) {
+        this.setAttribute(FIELD_FACEBOOK_ID, myFacebookId);
+    }
 
-    public String getAuthor(){return (String)this.getAttribute(FIELD_FACEBOOK_NAME);}
+    public String getAuthor() {
+        return (String) this.getAttribute(FIELD_FACEBOOK_NAME);
+    }
 
-    public void setAuthor(String author){this.setAttribute(FIELD_FACEBOOK_NAME,author);}
+    public void setAuthor(String author) {
+        this.setAttribute(FIELD_FACEBOOK_NAME, author);
+    }
 
-    public void setUserPic(String userPic){this.setAttribute(FIELD_USER_PICTURE,userPic);}
+    public void setUserPic(String userPic) {
+        this.setAttribute(FIELD_USER_PICTURE, userPic);
+    }
 
-    public String getUserPic(){return (String)this.getAttribute(FIELD_USER_PICTURE);}
+    public String getUserPic() {
+        return (String) this.getAttribute(FIELD_USER_PICTURE);
+    }
+
+    public Bitmap getPhoto() {
+        return (Bitmap) this.getAttribute(FIELD_PHOTO);
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.setAttribute(FIELD_PHOTO, photo);
+    }
 }

@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * Created by noam on 15/05/2017.
  */
@@ -121,6 +120,15 @@ public class  NotificationServices extends Service  {
                                                             Context.NOTIFICATION_SERVICE);
                                             mNotificationManager.notify(1, mBuilder.build());
 
+                                    mBuilder.setContentIntent(contentIntent);
+                                    mBuilder.setAutoCancel(true);
+
+                                    mNotificationManager =
+                                            (NotificationManager) getSystemService(
+                                                    Context.NOTIFICATION_SERVICE);
+                                    mNotificationManager.notify(1, mBuilder.build());
+
+
                                         }
                                     }
 
@@ -138,6 +146,7 @@ public class  NotificationServices extends Service  {
                                                 activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
+
                                         mBuilder.setContentIntent(contentIntent);
                                         mBuilder.setAutoCancel(true);
 
@@ -152,6 +161,15 @@ public class  NotificationServices extends Service  {
 
                                 }
 
+                                mBuilder.setContentIntent(contentIntent);
+                                mBuilder.setAutoCancel(true);
+
+                                mNotificationManager =
+                                        (NotificationManager) getSystemService(
+                                                Context.NOTIFICATION_SERVICE);
+                                mNotificationManager.notify(1, mBuilder.build());
+
+
                             }
                         });
 
@@ -161,6 +179,9 @@ public class  NotificationServices extends Service  {
                 }
 
             }, 1000);
+
+            }
+
 
         }
 
@@ -176,7 +197,6 @@ public class  NotificationServices extends Service  {
         public void onProviderDisabled(String provider) {
         }
     };
-
 
     @Nullable
     @Override
@@ -199,7 +219,6 @@ public class  NotificationServices extends Service  {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         IS_SERVICE_RUNNING = true;
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -231,7 +250,6 @@ public class  NotificationServices extends Service  {
         }
 
     }
-
 
     private boolean listsAreEquivelent(List<Place> a, List<Place> b) {
         if (a == null) {
@@ -268,7 +286,6 @@ public class  NotificationServices extends Service  {
         }
         return true;
     }
-
 
     private void setmNotificationManager()
     {

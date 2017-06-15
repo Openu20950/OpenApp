@@ -3,7 +3,6 @@ import android.graphics.Bitmap;
 
 import com.openu.a2017_app1.data.QueryBuilder;
 
-
 /**
  * Created by noam on 28/12/2016.
  */
@@ -30,7 +29,6 @@ public class Place extends Model {
     {
         return (String)this.getAttribute(FIELD_NAME);
     }
-
 
     public void setName(String name)
     {

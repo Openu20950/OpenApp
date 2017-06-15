@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">2017-app1</string>
+    <string name="title_activity_explore_map">Explore Mode</string>
+    <string name="title_activity_places_around">מקומות מסביב</string>
+    <string name="title_activity_add_place">הוספת מקום</string>
+    <string name="title_activity_facebook_friend_list">חברים בפייסבוק</string>
+    <string name="place_name">שם מקום</string>
+    <string name="description_optional">תיאור (אופציונלי)</string>
+    <string name="phone">טלפון (אופציונלי)</string>
+    <string name="add_place">הוסף מקום</string>
+    <string name="place_name_cannot_be_empty">שם המקום לא יכול להיות ריק!</string>
+    <string name="location_service_off">נדרשת הרשאה על המיקום!</string>
+    <string name="turn_on">הפעל</string>
+    <string name="failed_to_save_place">לא הצלחנו לשמור את המקום. אנא נסה שוב מאוחר יותר.</string>
+    <string name="failed_to_save_review">לא הצלחנו לשמור את הביקורת. אנא נסה שוב מאוחר יותר.</string>
+    <string name="title_activity_place_info">מידע</string>
+    <string name="action_settings">הגדרות</string>
+    <string name="title">כותרת</string>
+    <string name="description">תיאור</string>
+    <string name="title_activity_add_review">הוספת ביקורת</string>
+    <string name="add_review">הוסף ביקורת</string>
+    <string name="saving">שומר...</string>
+    <string name="comment">הערה</string>
+    <string name="facebook_app_id">824975167660275</string>
+    <string name="title_activity_facebook_login">התחברות עם פייסבוק</string>
+
+
+    <string name="navigation_drawer_open">פתח תפריט</string>
+    <string name="navigation_drawer_close">סגור תפריט</string>
+    <string name="openDrawer">פתח תפריט</string>
+    <string name="closeDrawer">סגור תפריט</string>
+
+    <!-- Explore mode strings -->
+
+    <string name="search">חיפוש</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">בית</string>
+    <string name="nav_photos">מפה</string>
+    <string name="nav_settings">הגדרות</string>
+    <string name="nav_about_us">אודותינו</string>
+
+
+    <string name="activity_title_about_us">אודותינו</string>
+    <string name="activity_title_privacy_policy">מדיניות פרטיות</string>
+    <string name="action_clear_all">נקה הכל</string>
+    <string name="action_logout">התנתק</string>
+    <string name="action_mark_all_read">סמן הכל כנקרא</string>
+    <string name="privacy_policy">מדיניות פרטיות</string>
+    <string name="title_activity_settings">הגדרות</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">כללי</string>
+
+    <string name="pref_title_social_recommendations">אפשר המלצות חברתיות</string>
+    <string name="pref_description_social_recommendations">המלצות על אנשים לפי היסטוריית השיחות שלך</string>
+
+    <string name="pref_title_display_name">שם תצוגה</string>
+    <string name="pref_default_display_name">ג\'ון סמיט</string>
+
+    <string name="pref_title_add_friends_to_messages">הוסף חבירם להודעות</string>
+    <string-array name="pref_example_list_titles">
+        <item>תמיד</item>
+        <item>כשאפשר</item>
+        <item>אף פעם</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">מידע &amp; סנכרון</string>
+
+    <string name="pref_title_sync_frequency">תדירות סינכרון</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 דקות</item>
+        <item>30 דקות</item>
+        <item>1 שעה</item>
+        <item>3 שעות</item>
+        <item>6 שעות</item>
+        <item>אף פעם</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">הגדרות סנכרון</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">התראות</string>
+
+    <string name="pref_title_place_around_notifications">התראות למקומות מסביב</string>
+    <string name="pref_title_my_radius">רדיוס של מקומות מסביב</string>
+    <string name="pref_title_friends_only">התראות מחברים בלבד</string>
+    <string name="pref_title_ringtone">צלצול</string>
+    <string name="pref_ringtone_silent">שקט</string>
+
+    <string name="pref_title_vibrate">רטט</string>
+    <string name="title_activity_augmented_reality">מציאות רבודה</string>
+    <string name="no_camera">למכשיר זה אין מצלמה</string>
+    <string name="nab_augmented_reality">מציאות רבודה</string>
+
+
+</resources>
