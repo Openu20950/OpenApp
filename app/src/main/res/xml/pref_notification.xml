@@ -12,8 +12,8 @@
             android:key="place_around_radius"
             android:title="@string/pref_title_my_radius"
             android:summary="List of radius"
-            android:entries="@array/listentries"
-            android:entryValues="@array/listvalues"
+            android:entries="@array/place_around_radius_text"
+            android:entryValues="@array/place_around_radius"
             android:defaultValue="100"
             />
     <SwitchPreference

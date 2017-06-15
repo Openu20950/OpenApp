@@ -1,5 +1,6 @@
 package com.openu.a2017_app1.screens;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -36,7 +37,6 @@ import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
 import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.services.CircleTransform;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,7 +115,7 @@ public class PlaceInfo extends AppCompatActivity {
             }
         };
         mRecyclerView.addOnScrollListener(mScroller);
-        mAdapter = new ReviewsAdapter();
+        mAdapter = new ReviewsAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -197,13 +197,15 @@ public class PlaceInfo extends AppCompatActivity {
     private static class ReviewsAdapter extends RecyclerView.Adapter<PlaceInfo.ReviewsAdapter.MyViewHolder> {
 
         private List<Review> mReviewsList;
+        private final Activity mOwner;
 
-        public ReviewsAdapter() {
-            this(new ArrayList<Review>());
+        public ReviewsAdapter(Activity owner) {
+            this(new ArrayList<Review>(), owner);
         }
 
-        public ReviewsAdapter(List<Review> reviewsList) {
+        public ReviewsAdapter(List<Review> reviewsList, Activity owner) {
             this.mReviewsList = reviewsList;
+            mOwner = owner;
         }
 
         @Override
@@ -221,6 +223,19 @@ public class PlaceInfo extends AppCompatActivity {
             holder.description.setText(review.getComment());
             holder.since.setText(DateUtils.getRelativeTimeSpanString(review.getCreatedAt().getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
             holder.ratingBar.setRating(review.getScore());
+            if (review.getPhoto() != null) {
+                holder.photo.setImageBitmap(review.getPhoto());
+                holder.photo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent myIntent = new Intent(mOwner, FullscreenImageActivity.class);
+                        myIntent.putExtra(FullscreenImageActivity.EXTRA_PHOTO, review.getPhoto());
+                        mOwner.startActivity(myIntent);
+                    }
+                });
+            } else {
+                holder.photo.setVisibility(View.GONE);
+            }
             if(review.getUserPic()!=null && !review.getUserPic().equals(Uri.EMPTY.toString()))
             {
                 Glide.with(holder.user.getContext()).load(Uri.parse(review.getUserPic()))
@@ -246,6 +261,7 @@ public class PlaceInfo extends AppCompatActivity {
             public TextView since, author, description;
             public ImageView user;
             public RatingBar ratingBar;
+            public ImageView photo;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -254,6 +270,7 @@ public class PlaceInfo extends AppCompatActivity {
                 description = (TextView) view.findViewById(R.id.description);
                 user = (ImageView) view.findViewById(R.id.icon);
                 ratingBar = (RatingBar) view.findViewById(R.id.rating);
+                photo = (ImageView) view.findViewById(R.id.photo);
             }
         }
     }

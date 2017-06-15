@@ -1,6 +1,5 @@
 package com.openu.a2017_app1.screens;
 
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -162,7 +161,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
 
-
     /**
      * This fragment shows notification preferences only. It is used when the
      * activity is showing a two-pane settings UI.
@@ -194,7 +192,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
 
 
 

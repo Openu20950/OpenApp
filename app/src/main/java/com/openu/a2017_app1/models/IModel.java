@@ -24,5 +24,4 @@ public interface IModel extends Serializable {
 
     public void saveAsync(final ModelSaveListener listener);
 
-
 }

@@ -70,7 +70,6 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         //mLocation = new LocationPoint();
         //mLocation.setLatitude(32.117033);
         //mLocation.setLongitude(34.809126);
@@ -100,7 +99,6 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
             });*/
 
 
-
         mapSearchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -114,10 +112,7 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
 
 
 
-
-
         });
-
 
 
 
@@ -128,10 +123,8 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
         mService = new LocationService(this, this);
     }
-
 
 
 
@@ -233,7 +226,6 @@ public class ExploreMapActivity extends FragmentActivity implements  OnMapReadyC
             }
         });*/
     }
-
 
 
     public void SearchMultiple(String searchText){

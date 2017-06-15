@@ -3,6 +3,8 @@ package com.openu.a2017_app1.screens.ar;
 import android.graphics.Bitmap;
 import android.opengl.GLUtils;
 
+import com.openu.a2017_app1.models.LocationPoint;
+
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -14,14 +16,15 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class ArDrawableItem {
     private final Bitmap mBitmap;
+    private LocationPoint mLocation;
     private boolean mLoaded = false;
     private int[] textures;
 
     private static final float[] VERTEX_COORDINATES = new float[] {
-            -1, -1, 0.0f,
-            +1, -1, 0.0f,
-            -1, +1, 0.0f,
-            +1, +1, 0.0f
+            -2, -1, 0.0f,
+            +2, -1, 0.0f,
+            -2, +1, 0.0f,
+            +2, +1, 0.0f
     };
 
     private static final float[] TEXTURE_COORDINATES = new float[] {
@@ -36,8 +39,9 @@ public class ArDrawableItem {
     private static final Buffer VERTEX_BUFFER = ByteBuffer.allocateDirect(VERTEX_COORDINATES.length * 4)
             .order(ByteOrder.nativeOrder()).asFloatBuffer().put(VERTEX_COORDINATES).rewind();
 
-    public ArDrawableItem(Bitmap bitmap) {
+    public ArDrawableItem(Bitmap bitmap, LocationPoint location) {
         mBitmap = bitmap;
+        mLocation = location;
     }
 
     private void load(GL10 gl) {
@@ -53,7 +57,7 @@ public class ArDrawableItem {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
 
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap, 0);
-        //mBitmap.recycle();
+        mBitmap.recycle();
         mLoaded = true;
     }
 
@@ -77,6 +81,8 @@ public class ArDrawableItem {
         gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
     }
 
+    public LocationPoint getLocation() {
+        return mLocation;
+    }
 }
-
 
