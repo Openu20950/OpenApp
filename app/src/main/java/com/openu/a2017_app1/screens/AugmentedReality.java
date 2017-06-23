@@ -105,16 +105,22 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
                             mCurrentLocation = LocationPoint.fromLocation(location);
                             Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, mCurrentLocation, mRadius).getAllAsync(new GetAllListener<Place>() {
                                 @Override
-                                public void onItemsReceived(List<Place> items) {
-                                    synchronized (mItemsLocker) {
-                                        mItems = new ArrayList<>();
-                                        for (Place item : items) {
-                                            Bitmap bitmap = item.getPhoto() != null ? item.getPhoto().copy(Bitmap.Config.ARGB_8888, true) : defaultIcon.copy(Bitmap.Config.ARGB_8888, true);
-                                            textOnBitmap(item.getName(), bitmap, 0);
-                                            textOnBitmap(String.valueOf(item.getReviews().average(Review.FIELD_SCORE)), bitmap, 30);
-                                            mItems.add(new ArDrawableItem(bitmap, item.getLocation()));
+                                public void onItemsReceived(final List<Place> items) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ArrayList<ArDrawableItem> places = new ArrayList<>();
+                                            for (Place item : items) {
+                                                Bitmap bitmap = item.getPhoto() != null ? item.getPhoto().copy(Bitmap.Config.ARGB_8888, true) : defaultIcon.copy(Bitmap.Config.ARGB_8888, true);
+                                                textOnBitmap(item.getName(), bitmap, 0);
+                                                textOnBitmap(String.valueOf(item.getReviews().average(Review.FIELD_SCORE)), bitmap, 30);
+                                                places.add(new ArDrawableItem(bitmap, item.getLocation()));
+                                            }
+                                            synchronized (mItemsLocker) {
+                                                mItems = places;
+                                            }
                                         }
-                                    }
+                                    }).start();
                                 }
                             });
                         }
@@ -209,17 +215,17 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
 
     public void textOnBitmap(String text, Bitmap bitmap, int height) {
         Paint paintFront = new Paint(ANTI_ALIAS_FLAG);
-        paintFront.setTextSize(36);
+        paintFront.setTextSize(24);
         paintFront.setColor(Color.WHITE);
         paintFront.setTextAlign(Paint.Align.LEFT);
         Paint paintBack = new Paint(ANTI_ALIAS_FLAG);
-        paintBack.setTextSize(36);
+        paintBack.setTextSize(24);
         paintBack.setColor(Color.BLACK);
         paintBack.setTextAlign(Paint.Align.LEFT);
         float baseline = -paintFront.ascent(); // ascent() is negative
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawText(text, height + 2, baseline + height + 2, paintBack);
-        canvas.drawText(text, height, baseline + height, paintFront);
+        canvas.drawText(text, 2, baseline + height + 2, paintBack);
+        canvas.drawText(text, 0, baseline + height, paintFront);
     }
 
     private class SensorListener implements SensorEventListener {
@@ -276,7 +282,7 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
                             float angle = (float) mCurrentLocation.bearingTo(item.getLocation());
                             gl.glPushMatrix();
                             gl.glRotatef(-angle, 0, 1, 0);
-                            gl.glTranslatef(0, 0, -20f);//(float) -(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6 + 20));
+                            gl.glTranslatef(0, (float)Math.min(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6, 10), (float)-Math.min(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6, 20) - 20);//;
                             item.draw(gl);
                             gl.glPopMatrix();
                         }

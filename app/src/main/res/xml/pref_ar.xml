@@ -4,8 +4,8 @@
          when checked/unchecked. -->
 
         <EditTextPreference
-            android:defaultValue="true"
-            android:key="notifications_place_around"
+            android:defaultValue="50"
+            android:key="ar_radius"
             android:inputType="number"
             android:numeric="integer"
             android:title="@string/pref_ar_radius" />
