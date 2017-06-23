@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenUp</string>
+    <string name="app_name">OpenApp</string>
     <string name="title_activity_explore_map">Explore Mode</string>
     <string name="title_activity_places_around">Places Around</string>
     <string name="title_activity_add_place">Add Place</string>

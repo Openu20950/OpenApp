@@ -14,11 +14,14 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import android.widget.Toast;
+
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
 import com.openu.a2017_app1.models.LocationPoint;
@@ -29,11 +32,13 @@ import com.openu.a2017_app1.screens.PlacesAround;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by noam on 15/05/2017.
  */
 
-public class NotificationServices extends Service{
+public class  NotificationServices extends Service  {
+    public static boolean IS_SERVICE_RUNNING = false;
 
     private NotificationCompat.Builder mBuilder;
     private NotificationManager mNotificationManager;
@@ -41,105 +46,120 @@ public class NotificationServices extends Service{
     private boolean all_or_friends;
     private int radius;
     private List<Place> places;
-    private LocationListener locationListener = new LocationListener() {
+    private Handler h ;
+
+    private LocationListener locationListener = new  LocationListener() {
         @Override
-        public synchronized void onLocationChanged(Location location) {
+        public synchronized void onLocationChanged(final Location location) {
+            h.postDelayed (new Runnable(){
 
-            SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(NotificationServices.this);
+                public void run(){
 
-            all_or_friends = prefs.getBoolean("friend_only",false);
-            String radius_notif = prefs.getString("place_around_radius","100");
+                    SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(NotificationServices.this);
 
-            radius=Integer.parseInt(radius_notif);
+                    all_or_friends = prefs.getBoolean("friend_only",false);
+                    String radius_notif = prefs.getString("place_around_radius","100");
 
-            if(location!=null) {
-                LocationPoint myLocation=new LocationPoint();
-                myLocation.setLatitude(location.getLatitude());
-                myLocation.setLongitude(location.getLongitude());
-                setmNotificationManager();
+                    radius=Integer.parseInt(radius_notif);
 
-                Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, myLocation, radius).getAllAsync(new GetAllListener<Place>() {
-                    @Override
-                    public void onItemsReceived(List<Place> items) {
-                        if(all_or_friends)
-                        {
-                            if(PlacesAround.list!=null && items.size()>0)
-                            {
-                                List<Place> newItems=new ArrayList<Place>();
-                                List<Review> reviews=new ArrayList<Review>();
-                                for(Place p:items)
+                    if(location!=null && IS_SERVICE_RUNNING ) {
+                        LocationPoint myLocation=new LocationPoint();
+                        myLocation.setLatitude(location.getLatitude());
+                        myLocation.setLongitude(location.getLongitude());
+
+
+                        Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, myLocation, radius).getAllAsync(new GetAllListener<Place>() {
+                            @Override
+                            public void onItemsReceived(List<Place> items) {
+                                if(all_or_friends)
                                 {
-                                    reviews=p.getReviews().getAll();
-                                    for (int i=0;i<PlacesAround.list.size();i++)
+                                    if(PlacesAround.list!=null && items.size()>0)
                                     {
-                                        String id=PlacesAround.list.get(i);
-
-                                        if(p.getFacebookId().equals(id))
+                                        List<Place> newItems=new ArrayList<Place>();
+                                        List<Review> reviews=new ArrayList<Review>();
+                                        for(Place p:items)
                                         {
-                                            newItems.add(p);
-                                        }
-
-                                        for(Review r:reviews)
-                                        {
-                                            if(r.getFacebookId().equals(id))
+                                            reviews=p.getReviews().getAll();
+                                            for (int i=0;i<PlacesAround.list.size();i++)
                                             {
-                                                newItems.add(p);
+                                                String id=PlacesAround.list.get(i);
+
+                                                if(p.getFacebookId().equals(id))
+                                                {
+                                                    newItems.add(p);
+                                                }
+
+                                                for(Review r:reviews)
+                                                {
+                                                    if(r.getFacebookId().equals(id))
+                                                    {
+                                                        newItems.add(p);
+                                                    }
+                                                }
                                             }
                                         }
+
+                                        if(newItems.size()>0 && listsAreEquivelent(newItems,places)==false)
+                                        {
+                                            places = new ArrayList<Place>();
+                                            places.addAll(newItems) ;
+
+                                            Intent activityIntent = new Intent(NotificationServices.this, PlacesAround.class);
+                                            activityIntent.putExtra("radius_notif",radius+"m");
+                                            activityIntent.putExtra("friend_filter",true);
+                                            PendingIntent contentIntent = PendingIntent.getActivity(NotificationServices.this, 0,
+                                                    activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                                            mBuilder.setContentIntent(contentIntent);
+                                            mBuilder.setAutoCancel(true);
+
+
+                                            mNotificationManager =
+                                                    (NotificationManager) getSystemService(
+                                                            Context.NOTIFICATION_SERVICE);
+                                            mNotificationManager.notify(1, mBuilder.build());
+
+                                        }
                                     }
+
+                                }else{
+                                    if(items.size()>0 && listsAreEquivelent(items,places)==false)
+                                    {
+                                        places = new ArrayList<Place>();
+                                        places.addAll(items) ;
+
+                                        Intent activityIntent = new Intent(NotificationServices.this, PlacesAround.class);
+                                        activityIntent.putExtra("radius_notif",radius+"m");
+                                        activityIntent.putExtra("friend_filter",false);
+
+                                        PendingIntent contentIntent = PendingIntent.getActivity(NotificationServices.this, 0,
+                                                activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+                                        mBuilder.setContentIntent(contentIntent);
+                                        mBuilder.setAutoCancel(true);
+
+
+                                        mNotificationManager =
+                                                (NotificationManager) getSystemService(
+                                                        Context.NOTIFICATION_SERVICE);
+                                        mNotificationManager.notify(1, mBuilder.build());
+
+
+                                    }
+
                                 }
 
-                                if(newItems.size()>0 && listsAreEquivelent(newItems,places)==false)
-                                {
-                                    places = new ArrayList<Place>();
-                                    places.addAll(newItems) ;
-
-                                    Intent activityIntent = new Intent(NotificationServices.this, PlacesAround.class);
-                                    activityIntent.putExtra("radius_notif",radius+"m");
-                                    activityIntent.putExtra("friend_filter",true);
-                                    PendingIntent contentIntent = PendingIntent.getActivity(NotificationServices.this, 0,
-                                            activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                    mBuilder.setContentIntent(contentIntent);
-                                    mBuilder.setAutoCancel(true);
-
-                                    mNotificationManager =
-                                            (NotificationManager) getSystemService(
-                                                    Context.NOTIFICATION_SERVICE);
-                                    mNotificationManager.notify(1, mBuilder.build());
-
-                                }
                             }
+                        });
 
-                        }else{
-                            if(items.size()>0 && listsAreEquivelent(items,places)==false)
-                            {
-                                places = new ArrayList<Place>();
-                                places.addAll(items) ;
-
-                                Intent activityIntent = new Intent(NotificationServices.this, PlacesAround.class);
-                                activityIntent.putExtra("radius_notif",radius+"m");
-                                activityIntent.putExtra("friend_filter",false);
-
-                                PendingIntent contentIntent = PendingIntent.getActivity(NotificationServices.this, 0,
-                                        activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                mBuilder.setContentIntent(contentIntent);
-                                mBuilder.setAutoCancel(true);
-
-                                mNotificationManager =
-                                        (NotificationManager) getSystemService(
-                                                Context.NOTIFICATION_SERVICE);
-                                mNotificationManager.notify(1, mBuilder.build());
-
-                            }
-
-                        }
 
                     }
-                });
 
-            }
+                }
+
+            }, 1000);
 
         }
 
@@ -156,6 +176,7 @@ public class NotificationServices extends Service{
         }
     };
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -163,13 +184,16 @@ public class NotificationServices extends Service{
         return null;
     }
 
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("MyService", "onStart: " + intent);
 
+        IS_SERVICE_RUNNING = true;
+        h = new Handler();
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         places=new ArrayList<Place>() ;
-
+        setmNotificationManager();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -194,9 +218,14 @@ public class NotificationServices extends Service{
         {
             mNotificationManager.cancelAll();
         }
-        locationManager.removeUpdates(locationListener);
-        locationManager=null;
+        if(locationManager!=null)
+        {
+            locationManager.removeUpdates(locationListener);
+            locationManager=null;
+        }
+
     }
+
 
     private boolean listsAreEquivelent(List<Place> a, List<Place> b) {
         if (a == null) {
@@ -234,6 +263,7 @@ public class NotificationServices extends Service{
         return true;
     }
 
+
     private void setmNotificationManager()
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NotificationServices.this);
@@ -255,4 +285,6 @@ public class NotificationServices extends Service{
                         .setSound(defaultSoundUri)
                         .setVibrate(v);
     }
+
+
 }
