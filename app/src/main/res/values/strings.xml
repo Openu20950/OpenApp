@@ -114,12 +114,15 @@
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_header_ar">Argument Reality</string>
 
     <string name="pref_title_place_around_notifications">Place around notifications</string>
     <string name="pref_title_my_radius">Places around radius</string>
     <string name="pref_title_friends_only">Friends only notifications</string>
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_ar_radius">Radius</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_augmented_reality">Augmented Reality</string>
