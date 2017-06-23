@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A 'parent' preference, which enables/disables child preferences (below)
+         when checked/unchecked. -->
+
+        <EditTextPreference
+            android:defaultValue="50"
+            android:key="ar_radius"
+            android:inputType="number"
+            android:numeric="integer"
+            android:title="@string/pref_ar_radius" />
+
+</PreferenceScreen>

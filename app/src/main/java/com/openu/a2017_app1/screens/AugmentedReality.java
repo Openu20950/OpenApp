@@ -1,6 +1,7 @@
 package com.openu.a2017_app1.screens;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,7 @@ import android.location.Location;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -33,7 +35,9 @@ import com.openu.a2017_app1.data.GetAllListener;
 import com.openu.a2017_app1.models.LocationPoint;
 import com.openu.a2017_app1.models.Model;
 import com.openu.a2017_app1.models.Place;
+import com.openu.a2017_app1.models.Review;
 import com.openu.a2017_app1.screens.ar.ArDrawableItem;
+import com.openu.a2017_app1.services.NotificationServices;
 import com.openu.a2017_app1.utils.LocationService;
 
 import java.io.IOException;
@@ -51,7 +55,6 @@ import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 public class AugmentedReality extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private static final int CAMERA_REQUEST = 1;
-    private static final int DISTANCE = 50;
     private SurfaceHolder mSurfaceHolder;
     private GLSurfaceView mGlSurface;
     private LocationService mLocationService;
@@ -65,6 +68,7 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
     private LocationPoint mCurrentLocation;
     private Object mItemsLocker = new Object();
     private List<ArDrawableItem> mItems;
+    private int mRadius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +77,9 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
             Toast.makeText(this, R.string.no_camera, Toast.LENGTH_LONG).show();
             finish();
         }
+
+        SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
+        mRadius = Integer.parseInt(prefs.getString("ar_radius","50"));
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensorManager.registerListener(new SensorListener(), mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_NORMAL);
@@ -96,17 +103,24 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
                     public void onLocationChanged(Location location) {
                         synchronized (mCurrentLocationLocker) {
                             mCurrentLocation = LocationPoint.fromLocation(location);
-                            Model.getQuery(Place.class)/*.whereNear(Place.FIELD_LOCATION, mCurrentLocation, DISTANCE)*/.getAllAsync(new GetAllListener<Place>() {
+                            Model.getQuery(Place.class).whereNear(Place.FIELD_LOCATION, mCurrentLocation, mRadius).getAllAsync(new GetAllListener<Place>() {
                                 @Override
-                                public void onItemsReceived(List<Place> items) {
-                                    synchronized (mItemsLocker) {
-                                        mItems = new ArrayList<>();
-                                        for (Place item : items) {
-                                            Bitmap bitmap = item.getPhoto() != null ? item.getPhoto().copy(Bitmap.Config.ARGB_8888, true) : defaultIcon.copy(Bitmap.Config.ARGB_8888, true);
-                                            textOnBitmap(item.getName(), bitmap);
-                                            mItems.add(new ArDrawableItem(bitmap, item.getLocation()));
+                                public void onItemsReceived(final List<Place> items) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ArrayList<ArDrawableItem> places = new ArrayList<>();
+                                            for (Place item : items) {
+                                                Bitmap bitmap = item.getPhoto() != null ? item.getPhoto().copy(Bitmap.Config.ARGB_8888, true) : defaultIcon.copy(Bitmap.Config.ARGB_8888, true);
+                                                textOnBitmap(item.getName(), bitmap, 0);
+                                                textOnBitmap(String.valueOf(item.getReviews().average(Review.FIELD_SCORE)), bitmap, 30);
+                                                places.add(new ArDrawableItem(bitmap, item.getLocation()));
+                                            }
+                                            synchronized (mItemsLocker) {
+                                                mItems = places;
+                                            }
                                         }
-                                    }
+                                    }).start();
                                 }
                             });
                         }
@@ -199,19 +213,19 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
         }
     }
 
-    public void textOnBitmap(String text, Bitmap bitmap) {
+    public void textOnBitmap(String text, Bitmap bitmap, int height) {
         Paint paintFront = new Paint(ANTI_ALIAS_FLAG);
-        paintFront.setTextSize(36);
+        paintFront.setTextSize(24);
         paintFront.setColor(Color.WHITE);
         paintFront.setTextAlign(Paint.Align.LEFT);
         Paint paintBack = new Paint(ANTI_ALIAS_FLAG);
-        paintBack.setTextSize(36);
+        paintBack.setTextSize(24);
         paintBack.setColor(Color.BLACK);
         paintBack.setTextAlign(Paint.Align.LEFT);
         float baseline = -paintFront.ascent(); // ascent() is negative
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawText(text, 2, baseline + 2, paintBack);
-        canvas.drawText(text, 0, baseline, paintFront);
+        canvas.drawText(text, 2, baseline + height + 2, paintBack);
+        canvas.drawText(text, 0, baseline + height, paintFront);
     }
 
     private class SensorListener implements SensorEventListener {
@@ -268,7 +282,7 @@ public class AugmentedReality extends AppCompatActivity implements SurfaceHolder
                             float angle = (float) mCurrentLocation.bearingTo(item.getLocation());
                             gl.glPushMatrix();
                             gl.glRotatef(-angle, 0, 1, 0);
-                            gl.glTranslatef(0, 0, -20f);//(float) -(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6 + 20));
+                            gl.glTranslatef(0, (float)Math.min(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6, 10), (float)-Math.min(mCurrentLocation.distanceTo(item.getLocation()) * 1000 * 0.6, 20) - 20);//;
                             item.draw(gl);
                             gl.glPopMatrix();
                         }
