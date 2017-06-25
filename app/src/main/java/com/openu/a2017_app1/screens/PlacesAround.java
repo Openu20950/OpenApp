@@ -52,7 +52,7 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.openu.a2017_app1.ExploreMode.ExploreMapActivity;
+import com.openu.a2017_app1.screens.ExploreMapActivity;
 import com.openu.a2017_app1.R;
 import com.openu.a2017_app1.data.GetAllListener;
 import com.openu.a2017_app1.models.LocationPoint;
