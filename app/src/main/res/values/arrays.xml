@@ -7,6 +7,15 @@
         <item>500m</item>
         <item>1000m</item>
     </string-array>
+
+    <string-array name="place_around_radius_string">
+        <item>100</item>
+        <item>300</item>
+        <item>500</item>
+        <item>1000</item>
+    </string-array>
+
+
     <integer-array name="place_around_radius">
         <item>100</item>
         <item>300</item>

@@ -44,7 +44,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
 
-            if (preference instanceof ListPreference) {
+            if (preference instanceof ListPreference ) {
                 // For list preferences, look up the correct display value in
                 // the preference's 'entries' list.
                 ListPreference listPreference = (ListPreference) preference;
@@ -224,7 +224,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (getTitle().equals("Settings")) {
+        if (getTitle().equals("Settings") || getTitle().equals("הגדרות")) {
             startActivity(new Intent(SettingsActivity.this, PlacesAround.class));
             return true;
         }

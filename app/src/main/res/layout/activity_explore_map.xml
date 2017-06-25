@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.openu.a2017_app1.ExploreMode.ExploreMapActivity">
+    tools:context="com.openu.a2017_app1.screens.ExploreMapActivity">
 
 
 
@@ -16,28 +16,26 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
+    <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:theme="@style/AppTheme.Toolbar"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+        android:weightSum="1">
             <!--
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/search" />
-             -->
-            <EditText
-                android:id="@+id/mapSearchBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/search"
-                android:inputType="text"
-                android:imeOptions="actionSearch" />/>
-            <!--
+             --><![CDATA[
+
+            />
+            />
+
+            ]]><!--
             <EditText
                 android:id="@+id/searchView1"
                 android:layout_width="250dp"
@@ -51,18 +49,38 @@
                 android:background="@android:color/white" >
             </EditText>
             -->
-        </android.support.v7.widget.Toolbar>
 
 
+    <EditText
+        android:id="@+id/mapSearchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Destination"
+        android:imeOptions="actionSearch"
+        android:inputType="text" />
 
-    </android.support.design.widget.AppBarLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <!--
+    <EditText
+        android:id="@+id/mapSecondSearchBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Origin"
+        android:imeOptions="actionSearch"
+        android:inputType="text" />
+-->
+
+</android.support.design.widget.AppBarLayout>
     <!--
         <com.google.android.gms.maps.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context="com.openu.a2017_app1.ExploreMode.ExploreMapActivity"></com.google.android.gms.maps.MapView>
+            tools:context="com.openu.a2017_app1.screens.ExploreMapActivity"></com.google.android.gms.maps.MapView>
     -->
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -73,7 +91,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
-
     <!--
     <fragment
         android:id="@+id/map"
@@ -81,6 +98,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.openu.a2017_app1.ExploreMode.ExploreMapActivity" />
+        tools:context="com.openu.a2017_app1.screens.ExploreMapActivity" />
         -->
 </android.support.design.widget.CoordinatorLayout>
