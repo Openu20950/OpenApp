@@ -280,7 +280,7 @@ public class  NotificationServices extends Service  {
         mBuilder =
                 new NotificationCompat.Builder(NotificationServices.this)
                         .setSmallIcon(R.drawable.ic_place_notification)
-                        .setContentTitle("Notification")
+                        .setContentTitle("OpenApp")
                         .setContentText("There are new places to visit around you")
                         .setSound(defaultSoundUri)
                         .setVibrate(v);

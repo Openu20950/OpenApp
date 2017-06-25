@@ -9,19 +9,20 @@
             android:title="@string/pref_title_place_around_notifications" />
 
         <ListPreference
+            android:defaultValue="100"
             android:key="place_around_radius"
             android:title="@string/pref_title_my_radius"
             android:summary="List of radius"
             android:entries="@array/place_around_radius_text"
-            android:entryValues="@array/place_around_radius"
-            android:defaultValue="100"
+            android:entryValues="@array/place_around_radius_string"
             />
-    <SwitchPreference
 
-        android:dependency="notifications_place_around"
-        android:key="friend_only"
-        android:title="@string/pref_title_friends_only"
-        android:defaultValue="false"/>
+        <SwitchPreference
+
+            android:dependency="notifications_place_around"
+            android:key="friend_only"
+            android:title="@string/pref_title_friends_only"
+            android:defaultValue="false"/>
 
 
     <!-- Allows the user to choose a ringtone in the 'notification' category. -->
