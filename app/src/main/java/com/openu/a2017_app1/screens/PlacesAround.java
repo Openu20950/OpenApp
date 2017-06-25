@@ -311,9 +311,6 @@ public class PlacesAround extends AppCompatActivity implements
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.nav_home:
-                        drawer.closeDrawers();
-                        return true;
                     case R.id.nav_map:
                         startActivity(new Intent(PlacesAround.this, ExploreMapActivity.class));
                         drawer.closeDrawers();

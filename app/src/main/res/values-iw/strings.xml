@@ -35,7 +35,7 @@
     <string name="search">חיפוש</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_home">בית</string>
+
     <string name="nav_photos">מפה</string>
     <string name="nav_settings">הגדרות</string>
     <string name="nav_about_us">אודותינו</string>
