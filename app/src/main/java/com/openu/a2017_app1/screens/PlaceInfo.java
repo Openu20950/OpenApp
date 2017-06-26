@@ -132,13 +132,6 @@ public class PlaceInfo extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mAdapter.getItems().clear();
-        loadReviews(0);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_place_info, menu);
         return true;
