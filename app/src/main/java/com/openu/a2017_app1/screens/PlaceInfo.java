@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +49,7 @@ public class PlaceInfo extends AppCompatActivity {
 
     private static final int PAGE_SIZE = 50;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private ReviewsAdapter mAdapter;
@@ -117,6 +119,16 @@ public class PlaceInfo extends AppCompatActivity {
         mRecyclerView.addOnScrollListener(mScroller);
         mAdapter = new ReviewsAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_info);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                mAdapter.getItems().clear();
+                loadReviews(0);
+            }
+        });
     }
 
     @Override
@@ -192,6 +204,8 @@ public class PlaceInfo extends AppCompatActivity {
                 });
             }
         });
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private static class ReviewsAdapter extends RecyclerView.Adapter<PlaceInfo.ReviewsAdapter.MyViewHolder> {
