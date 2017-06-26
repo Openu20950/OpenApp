@@ -35,7 +35,6 @@
     <string name="search">Search</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_home">Home</string>
     <string name="nav_photos">Map</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
