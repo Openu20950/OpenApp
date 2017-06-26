@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">2017-app1</string>
+    <string name="app_name">OpenApp</string>
     <string name="title_activity_explore_map">Explore Mode</string>
     <string name="title_activity_places_around">מקומות מסביב</string>
     <string name="title_activity_add_place">הוספת מקום</string>
