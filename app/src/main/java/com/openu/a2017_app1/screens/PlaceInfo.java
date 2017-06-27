@@ -66,6 +66,8 @@ public class PlaceInfo extends AppCompatActivity {
     private String myFacebookId;
     private String myFacebookName;
     private String myPicture;
+    private ArrayList<String> friend_list;
+    private boolean friend_filter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,11 @@ public class PlaceInfo extends AppCompatActivity {
             }
         });
 
+        friend_filter = (boolean)getIntent().getExtras().get("friend_filter");
+        if(friend_filter)
+        {
+            friend_list = (ArrayList<String>)getIntent().getExtras().get("friend_list");
+        }
         myFacebookId = (String)getIntent().getExtras().get(Place.FIELD_FACEBOOK_ID);
         myFacebookName = (String)getIntent().getExtras().get(Review.FIELD_FACEBOOK_NAME);
         myPicture = (String)getIntent().getExtras().get(Review.FIELD_USER_PICTURE);
@@ -129,6 +136,8 @@ public class PlaceInfo extends AppCompatActivity {
                 loadReviews(0);
             }
         });
+
+        loadReviews(0);
     }
 
     @Override
@@ -187,12 +196,41 @@ public class PlaceInfo extends AppCompatActivity {
                         mProgressBar.setVisibility(View.GONE);
                         mRecyclerView.setVisibility(View.VISIBLE);
 
-                        if (items.size() < PAGE_SIZE) {
-                            mRecyclerView.removeOnScrollListener(mScroller);
+                        if(friend_filter && friend_list!=null)
+                        {
+                            List<Review> friendsItem = new ArrayList<Review>();
+                            for (int i=0;i<friend_list.size();i++)
+                            {
+                                String id=friend_list.get(i);
+
+                                for(Review r:items)
+                                {
+                                    if(r.getFacebookId().equals(id))
+                                    {
+                                        friendsItem.add(r);
+                                    }
+                                }
+                            }
+
+                            if (friendsItem.size() < PAGE_SIZE) {
+                                mRecyclerView.removeOnScrollListener(mScroller);
+                            }
+
+                            mAdapter.getItems().addAll(friendsItem);
+                            mAdapter.notifyDataSetChanged();
+
+                        }else{
+                            if (items.size() < PAGE_SIZE) {
+                                mRecyclerView.removeOnScrollListener(mScroller);
+                            }
+
+                            mAdapter.getItems().addAll(items);
+                            mAdapter.notifyDataSetChanged();
+
                         }
 
-                        mAdapter.getItems().addAll(items);
-                        mAdapter.notifyDataSetChanged();
+
+
                     }
                 });
             }
