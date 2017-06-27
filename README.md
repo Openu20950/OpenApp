@@ -18,9 +18,7 @@ To download and set up the sample application in Android Studio:
 
 2) Import the project in Android Studio:
 Click File > New > Import Project.
-
 In the "Select Eclipse or Gradle Project to Import" window, navigate to the directory where you have clone the project. 
-
 Select the "2017-app1-master" folder and click OK.
 
 3) Android Studio may prompt you to install the latest version of various Android libraries, especially com.android.gms.play-services in   this case. Click "Install Repository and sync project" and follow the instructions.
