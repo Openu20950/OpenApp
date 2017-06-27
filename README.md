@@ -4,11 +4,9 @@ OpenApp is an social recommendation app that can help you to find intersting pla
 
 ## Installation guidelines
 ### End users
-To install this application in yours android phone you need to install the apk file (The Latest release) from here:             https://github.com/Openu20950/2017-app1/releases on yours phone.
+To install this application in yours android phone you need to install the [latest apk](https://github.com/Openu20950/2017-app1/releases) file on yours phone.
   
-In order to use the Facebook login in the app you need to follow the instruction in this link:
-https://developers.facebook.com/quickstarts/ 
-and Select the android platform to get started. 
+In order to use the Facebook login in the app you need to follow the instruction in [this](https://developers.facebook.com/quickstarts/) and Select the android platform to get started. 
   
 ### Developers
 To download and set up the sample application in Android Studio:
