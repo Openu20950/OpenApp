@@ -13,25 +13,23 @@ and Select the android platform to get started.
 ### Developers
 To download and set up the sample application in Android Studio:
 
-Clone our repository with git command:
+1) Clone our repository with git command:
 `git clone https://github.com/Openu20950/2017-app1.git`
 
-Import the project in Android Studio:
+2) Import the project in Android Studio:
 Click File > New > Import Project.
 
 In the "Select Eclipse or Gradle Project to Import" window, navigate to the directory where you have clone the project. 
 
 Select the "2017-app1-master" folder and click OK.
 
-Android Studio may prompt you to install the latest version of various Android libraries, especially com.android.gms.play-services in   this case. Click "Install Repository and sync project" and follow the instructions.
+3) Android Studio may prompt you to install the latest version of various Android libraries, especially com.android.gms.play-services in   this case. Click "Install Repository and sync project" and follow the instructions.
 
-Connect your device over USB. You should see a notification that says ‘USB Debugging Enabled’. 
+4) Connect your device over USB. You should see a notification that says ‘USB Debugging Enabled’. 
 If you don’t see this notification follow Step 2 here to enable USB debugging on your device, then plug your device in again.
 Run the app either by clicking the green arrow in the bar, or go to Run > Run 'app'. 
-  
-## Tips For Maintainer 
- 
-https://github.com/Openu20950/2017-app1/wiki/Tips-for-maintainers
+
+See also [Tips for Maintainers](https://github.com/Openu20950/2017-app1/wiki/Tips-for-maintainers)
 
 ## Tips For Students 
 
