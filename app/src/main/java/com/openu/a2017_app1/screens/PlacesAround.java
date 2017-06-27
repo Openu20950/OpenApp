@@ -98,8 +98,11 @@ public class PlacesAround extends AppCompatActivity implements
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.title_activity_places_around);
+
+
         SharedPreferences prefs= PreferenceManager.getDefaultSharedPreferences(this);
         boolean on_off_notif = prefs.getBoolean("notifications_place_around",true);
+        boolean all_or_friends = prefs.getBoolean("friend_only",false);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
@@ -108,6 +111,10 @@ public class PlacesAround extends AppCompatActivity implements
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)navHeader.findViewById(R.id.login_button);
         user=new UserLoginService(this);
+
+
+
+
 
         if(Profile.getCurrentProfile()!=null)
         {
@@ -193,24 +200,36 @@ public class PlacesAround extends AppCompatActivity implements
         MenuItem menuItem = menu.findItem(R.id.nav_switch);
         View actionView = MenuItemCompat.getActionView(menuItem);
 
+
+
         switcher = (SwitchCompat) actionView.findViewById(R.id.switcher);
 
-        switcher.setChecked(false);
-        if(user.getMyFacebookName().equals("Guest"))
-        {
-            switcher.setEnabled(false);
-        }
         switcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!user.getMyFacebookName().equals("Guest"))
                 {
 
+
                     loadPlaces(false);
 
                 }
             }
         });
+
+        switcher.setChecked(false);
+        if(user.getMyFacebookName().equals("Guest"))
+        {
+            switcher.setEnabled(false);
+        }else{
+            if(all_or_friends)
+            {
+                switcher.setChecked(true);
+            }
+        }
+
+
+
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -436,7 +455,7 @@ public class PlacesAround extends AppCompatActivity implements
                 if(switcher.isChecked())
                 {
                     List<Place> newItems=new ArrayList<Place>();
-                    List<Review> reviews=new ArrayList<Review>();
+                    List<Review> reviews;
                     for(Place p:items)
                     {
                         reviews=p.getReviews().getAll();
@@ -472,6 +491,11 @@ public class PlacesAround extends AppCompatActivity implements
                         myIntent.putExtra(Place.FIELD_FACEBOOK_ID,user.getMyFacebookId());
                         myIntent.putExtra(Review.FIELD_FACEBOOK_NAME,user.getMyFacebookName());
                         myIntent.putExtra(Review.FIELD_USER_PICTURE,user.getMyProfilePicture().toString());
+                        myIntent.putExtra("friend_filter",switcher.isChecked());
+                        if(switcher.isChecked())
+                        {
+                            myIntent.putStringArrayListExtra("friend_list", (ArrayList<String>) user.getFreindsList());
+                        }
                         PlacesAround.this.startActivity(myIntent);
                     }
                 });
