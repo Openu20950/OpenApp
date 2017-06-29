@@ -1,8 +1,11 @@
 # OpenApp [![Build Status](https://travis-ci.com/Openu20950/2017-app1.svg?token=PQrEfnoMbHXxzcgKUEQH&branch=master)](https://travis-ci.com/Openu20950/2017-app1) 
 
-OpenApp is an social recommendation app that can help you to find intersting places and see which places recommended by your friends and other users.
+OpenApp is an social recommendation app for Android that can help you to find intersting places and see which places recommended by your friends and other users.
 
 ## Installation guidelines
+
+**Note: ** You must to enable "Unknown Sources" setting under "Security Settings" in your phone in order to install the APK. The reson is that the app are not in Play Store.
+
 ### End users
 To install this application in yours android phone you need to install the [latest apk](https://github.com/Openu20950/2017-app1/releases) file on yours phone.
   
