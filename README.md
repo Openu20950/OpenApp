@@ -4,7 +4,7 @@ OpenApp is an social recommendation app for Android that can help you to find in
 
 ## Installation guidelines
 
-**Note:** You must to enable "Unknown Sources" setting under "Security Settings" in your phone in order to install the APK. The reson is that the app are not in Play Store.
+**Note:** You must to enable "Unknown Sources" setting under "Security Settings" in your phone in order to install the APK. The reason is that the app are not in Play Store.
 
 ### End users
 To install this application in yours android phone you need to install the [latest apk](https://github.com/Openu20950/2017-app1/releases) file on yours phone.
