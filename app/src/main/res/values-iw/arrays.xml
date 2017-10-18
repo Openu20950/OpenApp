@@ -14,4 +14,98 @@
         <item>500</item>
         <item>1000</item>
     </string-array>
+
+    <string-array name="place_categories">
+        <item>חשבונאות</item>
+        <item>שדה תעופה</item>
+        <item>פארק שעשועים</item>
+        <item>אקווריום</item>
+        <item>גלריית אומנות</item>
+        <item>כספומט</item>
+        <item>מאפייה</item>
+        <item>בנק</item>
+        <item>בר</item>
+        <item>סלון יופי</item>
+        <item>חנות אופניים</item>
+        <item>חנות ספרים</item>
+        <item>אולם באולינג</item>
+        <item>תחנת אוטובוס</item>
+        <item>בית קפה</item>
+        <item>אתר מחנאות</item>
+        <item>מסחר מכוניות</item>
+        <item>השכרת מכוניות</item>
+        <item>מוסך</item>
+        <item>שטיפת רכב</item>
+        <item>קזינו</item>
+        <item>בית עלמין</item>
+        <item>בית תפילה</item>
+        <item>בית עירייה</item>
+        <item>חנות בגדים</item>
+        <item>חנות נוחות</item>
+        <item>בית משפט</item>
+        <item>רופא שיניים</item>
+        <item>חנות כלבו</item>
+        <item>רופא</item>
+        <item>חשמלאי</item>
+        <item>חנות חשמל</item>
+        <item>שגרירות</item>
+        <item>תחנת מכבי אש</item>
+        <item>מוכר פרחים</item>
+        <item>בית לוויות</item>
+        <item>חנות רהיטים</item>
+        <item>תחנת דלק</item>
+        <item>מכון כושר</item>
+        <item>מספרה</item>
+        <item>חנות חומרה</item>
+        <item>בית מקדש הינדי</item>
+        <item>חנות לבית</item>
+        <item>בית חולים</item>
+        <item>סוכנות ביטוח</item>
+        <item>חנות תכשיטים</item>
+        <item>כביסה</item>
+        <item>משרד עורכי דין</item>
+        <item>ספרייה</item>
+        <item>חנות משקאות</item>
+        <item>משרד ממשלתי</item>
+        <item>פרוץ מנעולים</item>
+        <item>מקום ללינה</item>
+        <item>משלוחי אוכל</item>
+        <item>טייק אוויי</item>
+        <item>מסגד</item>
+        <item>השכרת סרטים</item>
+        <item>אולם קולנוע</item>
+        <item>חברת הובלות</item>
+        <item>מוזיאון</item>
+        <item>מועדון לילה</item>
+        <item>צייר</item>
+        <item>פארק</item>
+        <item>חניה</item>
+        <item>חנות חיות</item>
+        <item>בית מרקחת</item>
+        <item>פיזוטרפיסט</item>
+        <item>שרברב</item>
+        <item>משטרה</item>
+        <item>סניף דואר</item>
+        <item>סוכנות נדלן</item>
+        <item>מסעדה</item>
+        <item>קבלן</item>
+        <item>פארק רכבי פנאי</item>
+        <item>בית ספר</item>
+        <item>חנות נעליים</item>
+        <item>קניון</item>
+        <item>ספא</item>
+        <item>איצטדיון</item>
+        <item>אחסון</item>
+        <item>חנות</item>
+        <item>תחנת רכבת תחתית</item>
+        <item>בית כנסת</item>
+        <item>תחנת מוניות</item>
+        <item>תחנת רכבת</item>
+        <item>תחנת נסיעות</item>
+        <item>סוכנות נסיעות</item>
+        <item>אוניברסיטה</item>
+        <item>וטרינר</item>
+        <item>גן חיות</item>
+        <item>אחר</item>
+    </string-array>
 </resources>
