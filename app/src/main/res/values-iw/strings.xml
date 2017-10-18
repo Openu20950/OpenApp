@@ -45,6 +45,7 @@
     <string name="activity_title_privacy_policy">מדיניות פרטיות</string>
     <string name="action_clear_all">נקה הכל</string>
     <string name="action_logout">התנתק</string>
+    <string name="title_friends_filter">סינון חברים</string>
     <string name="action_mark_all_read">סמן הכל כנקרא</string>
     <string name="privacy_policy">מדיניות פרטיות</string>
     <string name="title_activity_settings">הגדרות</string>
@@ -125,6 +126,8 @@
     <string name="title_activity_augmented_reality">מציאות רבודה</string>
     <string name="no_camera">למכשיר זה אין מצלמה</string>
     <string name="nab_augmented_reality">מציאות רבודה</string>
+
+    <string name="ar_look_arround">הסתכל סביבך עם הטלפון כדי לראות מקומות מסביבך</string>
 
 
 </resources>
