@@ -1,4 +1,4 @@
-# OpenApp [![Build Status](https://travis-ci.com/Openu20950/OpenApp.svg?token=PQrEfnoMbHXxzcgKUEQH&branch=master)](https://travis-ci.com/Openu20950/2017-app1) 
+# OpenApp [![Build Status](https://travis-ci.com/Openu20950/OpenApp.svg?token=PQrEfnoMbHXxzcgKUEQH&branch=master)](https://travis-ci.com/Openu20950/OpenApp)
 
 OpenApp is an social recommendation app for Android that can help you to find intersting places and see which places recommended by your friends and other users.
 
