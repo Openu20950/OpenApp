@@ -15,7 +15,7 @@ In order to use the Facebook login in the app you need to follow the instruction
 To download and set up the sample application in Android Studio:
 
 1) Clone our repository with git command:
-`git clone https://github.com/Openu20950/2017-app1.git`
+`git clone https://github.com/Openu20950/OpenApp.git`
 
 2) Import the project in Android Studio:
 Click File > New > Import Project.
